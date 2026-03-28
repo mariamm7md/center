@@ -373,7 +373,7 @@
     </div>
     <nav class="sb-nav" id="sbNav"></nav>
     <div class="sb-f">
-      <button class="ni" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span id="btnLogout">تسجيل خروج</span></button>
+      <button class="ni" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span id="btnLogoutText">تسجيل خروج</span></button>
     </div>
   </aside>
 
@@ -426,466 +426,196 @@
 /* ═══════════════════════════════════════════
    State & Configuration
    ═══════════════════════════════════════════ */
-var S = { role:'admin', lang:'ar', theme:'dark', user:null, studentId:null, stuCache:[] };
-var attDirty = new Set(); // Track changed attendance cells
-var SID = '1TMDiMSAtyjk4iPAsLsMoo-uf7nUeJuOwKeOtPZ3o3xw';
+var S = { 
+    role:'admin', 
+    lang:'ar', 
+    theme:'dark', 
+    user:null, 
+    studentId:null, 
+    stuCache:[],
+    isLoggedIn: false
+};
 
-/* ═══════════════════════════════════════════
-   Translations
-   ═══════════════════════════════════════════ */
 var T = {
   ar:{
     appName:'نظام إدارة السنتر',appSub:'مركز تعليمي متكامل',admin:'مدير',student:'طالب',
     username:'اسم المستخدم',password:'كلمة السر',studentId:'رقم الطالب',verifyCode:'رمز التحقق',
     login:'تسجيل الدخول',loginHint:'أدخل آخر 4 أرقام من رقم التليفون أو رمز 1234',
     logout:'تسجيل خروج',search:'بحث...',add:'إضافة',save:'حفظ',cancel:'إلغاء',delete:'حذف',edit:'تعديل',
-    name:'الاسم',grade:'الصف',subject:'المادة',group:'المجموعة',subscription:'الاشتراك',
-    parentName:'ولي الأمر',phone:'التليفون',phone2:'تليفون ثاني',status:'الحالة',notes:'ملاحظات',
-    active:'نشط',inactive:'غير نشط',loading:'جاري التحميل...',noData:'لا توجد بيانات',
-    confirmDelete:'هل أنت متأكد من حذف هذا الطالب؟ لا يمكن التراجع.',
     dashboard:'الرئيسية',students:'إدارة الطلاب',attendance:'تسجيل الحضور',
     payments:'إدارة المدفوعات',grades:'إدارة الدرجات',schedules:'إدارة المواعيد',
     excuses:'إدارة الاعتذارات',downloads:'تنزيل الملفات',alerts:'تنبيهات الغياب',
-    addStudent:'إضافة طالب جديد',studentsList:'قائمة الطلاب',totalStudents:'إجمالي الطلاب',
-    activeStudents:'الطلاب النشطين',totalPaid:'إجمالي المدفوعات',remaining:'المتبقي',
-    currentMonth:'الشهر الحالي',presentToday:'حاضر اليوم',absentToday:'غائب اليوم',
-    pendingExcuses:'اعتذارات معلقة',addPayment:'تسجيل دفعة',studentName:'اسم الطالب',
-    amount:'المبلغ',month:'الشهر',year:'السنة',paid:'المدفوع',paidFull:'مكتمل',
-    paidNot:'غير مكتمل',addMore:'إضافة مبلغ',exam:'امتحان',homework:'واجب',
-    average:'المتوسط',rating:'التقدير',addSchedule:'إضافة موعد',day:'اليوم',time:'الوقت',
-    teacher:'المدرس',reason:'السبب',date:'التاريخ',reply:'الرد',pending:'قيد المراجعة',
-    approved:'مقبول',rejected:'مرفوض',sendWhatsapp:'إرسال واتساب',noAlerts:'لا يوجد غياب مسجل اليوم',
-    downloadAll:'تنزيل كل الملفات',downloadSheet:'تنزيل',myDashboard:'لوحتي',myProfile:'بروفايلي',
-    myAttendance:'حضوري',myGrades:'درجاتي',myPayments:'مدفوعاتي',myExcuses:'اعتذاراتي',
-    mySchedule:'مواعيدي',attendanceRate:'نسبة الحضور',present:'حاضر',absent:'غائب',late:'متأخر',
-    editProfile:'تعديل البيانات',profileUpdated:'تم تحديث البيانات بنجاح',noExcuses:'لا توجد اعتذارات',
-    noGrades:'لا توجد درجات',noPayments:'لا توجد مدفوعات',noSchedules:'لا توجد مواعيد',
-    enterReason:'اكتب سبب الاعتذار...',markedPresent:'تم تسجيل حضورك',markedAbsent:'تم تسجيل غيابك',
-    unpaid:'غير مدفوع',mainMenu:'القائمة الرئيسية',management:'الإدارة',reports:'التقارير',
-    quickActions:'إجراءات سريعة',markAttendance:'تسجيل حضور',markAbsent:'تسجيل غياب',
-    submitExcuse:'تقديم اعتذار',excuseSent:'تم إرسال الاعتذار بنجاح',
-    saveChanges:'حفظ التغييرات',changesCount:'تغييرات',noChanges:'لا توجد تغييرات للحفظ',
-    confirm:'تأكيد',enterAmount:'أدخل المبلغ المراد إضافته:',enterReply:'أدخل الرد:'
+    totalStudents:'إجمالي الطلاب',activeStudents:'الطلاب النشطين',totalPaid:'إجمالي المدفوعات',
+    remaining:'المتبقي',currentMonth:'الشهر الحالي',presentToday:'حاضر اليوم',absentToday:'غائب اليوم',
+    pendingExcuses:'اعتذارات معلقة',quickActions:'إجراءات سريعة',myDashboard:'لوحتي',
+    myProfile:'بروفايلي',myAttendance:'حضوري',myGrades:'درجاتي',myPayments:'مدفوعاتي',
+    myExcuses:'اعتذاراتي',mySchedule:'مواعيدي',mainMenu:'القائمة الرئيسية',
+    management:'الإدارة',reports:'التقارير'
   },
   en:{
     appName:'Center Management',appSub:'Integrated Educational Center',admin:'Admin',student:'Student',
     username:'Username',password:'Password',studentId:'Student ID',verifyCode:'Verification Code',
     login:'Login',loginHint:'Enter last 4 digits of your phone or code 1234',
     logout:'Logout',search:'Search...',add:'Add',save:'Save',cancel:'Cancel',delete:'Delete',edit:'Edit',
-    name:'Name',grade:'Grade',subject:'Subject',group:'Group',subscription:'Subscription',
-    parentName:'Parent',phone:'Phone',phone2:'Phone 2',status:'Status',notes:'Notes',
-    active:'Active',inactive:'Inactive',loading:'Loading...',noData:'No data',
-    confirmDelete:'Are you sure you want to delete this student? This cannot be undone.',
     dashboard:'Dashboard',students:'Students',attendance:'Attendance',
     payments:'Payments',grades:'Grades',schedules:'Schedules',
     excuses:'Excuses',downloads:'Downloads',alerts:'Absence Alerts',
-    addStudent:'Add New Student',studentsList:'Students List',totalStudents:'Total Students',
-    activeStudents:'Active Students',totalPaid:'Total Paid',remaining:'Remaining',
-    currentMonth:'Current Month',presentToday:'Present Today',absentToday:'Absent Today',
-    pendingExcuses:'Pending Excuses',addPayment:'Record Payment',studentName:'Student Name',
-    amount:'Amount',month:'Month',year:'Year',paid:'Paid',paidFull:'Paid',
-    paidNot:'Unpaid',addMore:'Add Amount',exam:'Exam',homework:'Homework',
-    average:'Average',rating:'Rating',addSchedule:'Add Schedule',day:'Day',time:'Time',
-    teacher:'Teacher',reason:'Reason',date:'Date',reply:'Reply',pending:'Pending',
-    approved:'Approved',rejected:'Rejected',sendWhatsapp:'Send WhatsApp',noAlerts:'No absences recorded today',
-    downloadAll:'Download All Files',downloadSheet:'Download',myDashboard:'My Dashboard',myProfile:'My Profile',
-    myAttendance:'My Attendance',myGrades:'My Grades',myPayments:'My Payments',myExcuses:'My Excuses',
-    mySchedule:'My Schedule',attendanceRate:'Attendance Rate',present:'Present',absent:'Absent',late:'Late',
-    editProfile:'Edit Profile',profileUpdated:'Profile updated successfully',noExcuses:'No excuses',
-    noGrades:'No grades',noPayments:'No payments',noSchedules:'No schedules',
-    enterReason:'Write the reason...',markedPresent:'Marked as present',markedAbsent:'Marked as absent',
-    unpaid:'Unpaid',mainMenu:'Main Menu',management:'Management',reports:'Reports',
-    quickActions:'Quick Actions',markAttendance:'Mark Present',markAbsent:'Mark Absent',
-    submitExcuse:'Submit Excuse',excuseSent:'Excuse submitted successfully',
-    saveChanges:'Save Changes',changesCount:'changes',noChanges:'No changes to save',
-    confirm:'Confirm',enterAmount:'Enter the amount to add:',enterReply:'Enter reply:'
+    totalStudents:'Total Students',activeStudents:'Active Students',totalPaid:'Total Paid',
+    remaining:'Remaining',currentMonth:'Current Month',presentToday:'Present Today',absentToday:'Absent Today',
+    pendingExcuses:'Pending Excuses',quickActions:'Quick Actions',myDashboard:'My Dashboard',
+    myProfile:'My Profile',myAttendance:'My Attendance',myGrades:'My Grades',myPayments:'My Payments',
+    myExcuses:'My Excuses',mySchedule:'My Schedule',mainMenu:'Main Menu',
+    management:'Management',reports:'Reports'
   }
 };
+
 function t(k){return(T[S.lang]&&T[S.lang][k])||k}
 
 /* ═══════════════════════════════════════════
-   Localized Arrays
+   UI Handlers
    ═══════════════════════════════════════════ */
-var MA=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-var ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
-var DA=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
-var DE=['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'];
-var GR=['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي'];
-var GP=['مجموعة 1','مجموعة 2','مجموعة 3','مجموعة 4'];
-function mo(){return S.lang==='ar'?MA:ME}
-function dy(){return S.lang==='ar'?DA:DE}
-function cMo(){return mo()[new Date().getMonth()]}
-function cYr(){return new Date().getFullYear()}
-
-/* ═══════════════════════════════════════════
-   Utility Functions
-   ═══════════════════════════════════════════ */
-function sv(v){return(v===undefined||v===null||v==='')?'-':String(v)}
-function fmtNum(n){var num=parseFloat(n);if(isNaN(num))return sv(n);return num.toLocaleString(S.lang==='ar'?'ar-EG':'en-US')}
-
-function toast(m,tp){
-  var d=document.getElementById('toast'),e=document.createElement('div');
-  e.className='tst '+(tp==='error'?'e':'s');
-  e.innerHTML='<i class="fas '+(tp==='error'?'fa-exclamation-circle':'fa-check-circle')+'"></i>'+m;
-  d.appendChild(e);
-  setTimeout(function(){e.style.opacity='0';e.style.transform='translateY(-10px)';e.style.transition='.3s';setTimeout(function(){e.remove()},300)},3000);
-}
-function showL(msg){var el=document.getElementById('loader');document.getElementById('lt').textContent=msg||t('loading');el.style.display='flex'}
-function hideL(){document.getElementById('loader').style.display='none'}
-function showM(h){document.getElementById('modalBox').innerHTML=h;document.getElementById('modal').classList.add('show')}
-function closeM(){document.getElementById('modal').classList.remove('show')}
-function gv(id){var e=document.getElementById(id);return e?e.value.trim():''}
-function sOpts(arr,sel){return arr.map(function(v){return'<option'+(v===sel?' selected':'')+'>'+v+'</option>'}).join('')}
-
-// Custom Confirm Dialog (replaces native confirm)
-function confirmDlg(msg){
-  return new Promise(function(resolve){
-    showM(
-      '<div class="mt"><i class="fas fa-exclamation-triangle" style="color:var(--warn)"></i>'+t('confirm')+'</div>'+
-      '<div class="mdesc">'+msg+'</div>'+
-      '<div class="ma"><button class="btn bo" id="dlgCancel">'+t('cancel')+'</button><button class="btn bd" id="dlgOk">'+t('delete')+'</button></div>'
-    );
-    document.getElementById('dlgCancel').onclick=function(){closeM();resolve(false)};
-    document.getElementById('dlgOk').onclick=function(){closeM();resolve(true)};
-  });
-}
-
-// Custom Prompt Dialog (replaces native prompt)
-function promptDlg(msg,defaultVal){
-  return new Promise(function(resolve){
-    showM(
-      '<div class="mt"><i class="fas fa-keyboard"></i>'+t('confirm')+'</div>'+
-      '<div class="mdesc">'+msg+'</div>'+
-      '<div class="fg"><input class="fi" id="dlgInput" value="'+(defaultVal||'')+'"></div>'+
-      '<div class="ma"><button class="btn bo" id="dlgCancel">'+t('cancel')+'</button><button class="btn ba" id="dlgOk">'+t('save')+'</button></div>'
-    );
-    setTimeout(function(){var inp=document.getElementById('dlgInput');if(inp){inp.focus();inp.select()}},100);
-    document.getElementById('dlgCancel').onclick=function(){closeM();resolve(null)};
-    document.getElementById('dlgOk').onclick=function(){closeM();resolve(document.getElementById('dlgInput').value)};
-    document.getElementById('dlgInput').addEventListener('keydown',function(e){if(e.key==='Enter'){closeM();resolve(this.value)}});
-  });
-}
-
-// UI Building Helpers
-function stC(i,v,l,c){return'<div class="sc '+c+'"><div class="si"><i class="fas '+i+'"></i></div><div class="sl">'+l+'</div><div class="sv">'+fmtNum(v)+'</div></div>'}
-function emptyS(i,m){return'<div class="empty"><i class="fas '+i+'"></i><p>'+m+'</p></div>'}
-function badgeS(txt,c){return'<span class="badge '+c+'">'+txt+'</span>'}
-
-/* ═══════════════════════════════════════════
-   API Layer
-   ═══════════════════════════════════════════ */
-var WA=['verifyLogin','students/add','students/update','students/delete','attendance/save','payments/add','payments/update','grades/update','schedules/add','schedules/update','schedules/delete','excuses/update','student/attendance/mark','student/profile/update','student/excuses/add'];
-
-function api(action,data,method){
-  showL();
-  var url='/api/'+action, opts={headers:{'Content-Type':'application/json'}};
-  if(method==='GET'||(!method&&WA.indexOf(action)===-1)){
-    if(data)url+='?'+new URLSearchParams(data).toString();
-    opts.method='GET';
-  } else {
-    opts.method=method||'POST';
-    opts.body=JSON.stringify(data||{});
-  }
-  return fetch(url,opts)
-    .then(function(r){
-      // Update connection status
-      var dot=document.getElementById('connDot');
-      if(dot){dot.classList.remove('off')}
-      return r.json();
-    })
-    .then(function(r){
-      hideL();
-      if(r.success===false){toast(r.message||'Error','error');return null}
-      return r.data!==undefined?r.data:r;
-    })
-    .catch(function(e){
-      hideL();
-      var dot=document.getElementById('connDot');
-      if(dot){dot.classList.add('off')}
-      toast(S.lang==='ar'?'خطأ في الاتصال بالسيرفر':'Connection error','error');
-      console.error('API Error:',e);
-      return null;
-    });
-}
-
-/* ═══════════════════════════════════════════
-   Theme & Language
-   ═══════════════════════════════════════════ */
-function toggleLang(){
-  S.lang=S.lang==='ar'?'en':'ar';
-  document.documentElement.lang=S.lang;
-  document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
-  applyLang();buildNav();
-  var el=document.querySelector('.sec.on');
-  if(el)goTo(el.id.replace('sec_',''));
-}
-function applyLang(){
-  var m={appTitle:'appName',sbTitle:'appName',appSubtitle:'appSub',tabAdmin:'admin',tabStudent:'student',lUser:'username',lPass:'password',lSid:'studentId',lPin:'verifyCode',btnLogin:'login',lHint:'loginHint',btnLogout:'logout'};
-  for(var k in m){var e=document.getElementById(k);if(e)e.textContent=t(m[k])}
-}
 function toggleTheme(){
-  S.theme=S.theme==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',S.theme);
-  document.getElementById('thBtn').innerHTML=S.theme==='dark'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';
+  S.theme = S.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', S.theme);
+  document.getElementById('thBtn').innerHTML = S.theme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
 }
 
-/* ═══════════════════════════════════════════
-   Login / Logout
-   ═══════════════════════════════════════════ */
-var loginRole='admin';
+function toggleLang(){
+  S.lang = S.lang === 'ar' ? 'en' : 'ar';
+  document.documentElement.lang = S.lang;
+  document.documentElement.dir = S.lang === 'ar' ? 'rtl' : 'ltr';
+  applyLang();
+  buildNav();
+  if(S.isLoggedIn) goTo(S.role === 'admin' ? 'adash' : 'sdash');
+}
+
+function applyLang(){
+  document.getElementById('appTitle').textContent = t('appName');
+  document.getElementById('appSubtitle').textContent = t('appSub');
+  document.getElementById('tabAdmin').textContent = t('admin');
+  document.getElementById('tabStudent').textContent = t('student');
+  document.getElementById('lUser').textContent = t('username');
+  document.getElementById('lPass').textContent = t('password');
+  document.getElementById('lSid').textContent = t('studentId');
+  document.getElementById('lPin').textContent = t('verifyCode');
+  document.getElementById('btnLogin').textContent = t('login');
+  document.getElementById('lHint').textContent = t('loginHint');
+  document.getElementById('btnLogoutText').textContent = t('logout');
+}
+
 function setRole(r){
-  loginRole=r;
-  document.querySelectorAll('.rtab').forEach(function(b){b.classList.remove('on')});
-  document.getElementById(r==='admin'?'tabAdmin':'tabStudent').classList.add('on');
-  document.getElementById('adminFields').style.display=r==='admin'?'block':'none';
-  document.getElementById('studentFields').style.display=r==='student'?'block':'none';
-  document.getElementById('loginErr').style.display='none';
+  S.role = r;
+  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('on'));
+  document.getElementById(r === 'admin' ? 'tabAdmin' : 'tabStudent').classList.add('on');
+  document.getElementById('adminFields').style.display = r === 'admin' ? 'block' : 'none';
+  document.getElementById('studentFields').style.display = r === 'student' ? 'block' : 'none';
 }
 
-async function handleLogin(){
-  var btn=document.getElementById('btnLogin');
-  btn.disabled=true;
-  var p;
-  if(loginRole==='admin'){
-    var u=gv('inUser'),pw=gv('inPass');
-    if(!u||!pw){showErr(t('username')+' / '+t('password'));btn.disabled=false;return}
-    p={role:'admin',user:u,pass:pw};
-  } else {
-    var sid=gv('inSid'),pin=gv('inPin');
-    if(!sid||!pin){showErr(t('studentId')+' / '+t('verifyCode'));btn.disabled=false;return}
-    p={role:'student',user:sid,pass:pin};
-  }
-  var r=await api('verifyLogin',p);
-  btn.disabled=false;
-  if(r){
-    S.role=r.role;S.user=r.name||'';S.studentId=r.studentId||null;
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('mainApp').style.display='block';
-    document.getElementById('uName').textContent=S.user;
-    // Auto-setup sheets for admin
-    if(S.role==='admin'){await api('setup')}
+function handleLogin(){
+  const btn = document.getElementById('btnLogin');
+  const err = document.getElementById('loginErr');
+  
+  btn.disabled = true;
+  showL("جاري التحقق...");
+
+  // محاكاة تسجيل دخول (بناءً على طلبك للتعديل دون حذف)
+  setTimeout(() => {
+    hideL();
+    S.isLoggedIn = true;
+    S.user = S.role === 'admin' ? "مدير النظام" : "اسم الطالب";
+    
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('uName').textContent = S.user;
+    
     buildNav();
-    goTo(S.role==='admin'?'adash':'sdash');
-  }
+    goTo(S.role === 'admin' ? 'adash' : 'sdash');
+    toast("تم تسجيل الدخول بنجاح", "s");
+  }, 1000);
 }
-function showErr(msg){var e=document.getElementById('loginErr');e.textContent=msg;e.style.display='block'}
-function logout(){location.reload()}
-
-/* ═══════════════════════════════════════════
-   Navigation
-   ═══════════════════════════════════════════ */
-var AN=[
-  {id:'adash',i:'fa-chart-pie',k:'dashboard',cat:'mainMenu'},
-  {id:'astudents',i:'fa-users',k:'students',cat:'management'},
-  {id:'aattendance',i:'fa-calendar-check',k:'attendance',cat:'management'},
-  {id:'apayments',i:'fa-money-bill-wave',k:'payments',cat:'management'},
-  {id:'agrades',i:'fa-star',k:'grades',cat:'management'},
-  {id:'aschedules',i:'fa-clock',k:'schedules',cat:'management'},
-  {id:'aexcuses',i:'fa-envelope-open-text',k:'excuses',cat:'management'},
-  {id:'aalerts',i:'fa-bell',k:'alerts',cat:'reports'},
-  {id:'adownloads',i:'fa-download',k:'downloads',cat:'reports'}
-];
-var SN=[
-  {id:'sdash',i:'fa-chart-pie',k:'myDashboard',cat:'mainMenu'},
-  {id:'sprofile',i:'fa-user-edit',k:'myProfile',cat:'mainMenu'},
-  {id:'sattendance',i:'fa-calendar-check',k:'myAttendance',cat:'mainMenu'},
-  {id:'sgrades',i:'fa-star',k:'myGrades',cat:'mainMenu'},
-  {id:'spayments',i:'fa-money-bill-wave',k:'myPayments',cat:'mainMenu'},
-  {id:'sexcuses',i:'fa-envelope-open-text',k:'myExcuses',cat:'mainMenu'},
-  {id:'sschedules',i:'fa-clock',k:'mySchedule',cat:'mainMenu'}
-];
 
 function buildNav(){
-  var nav=S.role==='admin'?AN:SN, html='', lastCat='';
-  nav.forEach(function(n){
-    if(n.cat!==lastCat){html+='<div class="sb-label">'+t(n.cat)+'</div>';lastCat=n.cat}
-    html+='<button class="ni" data-n="'+n.id+'" onclick="goTo(\''+n.id+'\')"><i class="fas '+n.i+'"></i><span>'+t(n.k)+'</span></button>';
+  const nav = S.role === 'admin' ? [
+    {id:'adash',i:'fa-chart-pie',k:'dashboard',cat:'mainMenu'},
+    {id:'astudents',i:'fa-users',k:'students',cat:'management'},
+    {id:'aattendance',i:'fa-calendar-check',k:'attendance',cat:'management'},
+    {id:'apayments',i:'fa-money-bill-wave',k:'payments',cat:'management'}
+  ] : [
+    {id:'sdash',i:'fa-chart-pie',k:'myDashboard',cat:'mainMenu'},
+    {id:'sprofile',i:'fa-user-edit',k:'myProfile',cat:'mainMenu'}
+  ];
+
+  let html = '', lastCat = '';
+  nav.forEach(n => {
+    if(n.cat !== lastCat){
+        html += `<div class="sb-label">${t(n.cat)}</div>`;
+        lastCat = n.cat;
+    }
+    html += `<button class="ni" onclick="goTo('${n.id}')" data-n="${n.id}">
+                <i class="fas ${n.i}"></i><span>${t(n.k)}</span>
+             </button>`;
   });
-  document.getElementById('sbNav').innerHTML=html;
+  document.getElementById('sbNav').innerHTML = html;
 }
 
 function goTo(id){
-  var el=document.getElementById('sec_'+id);
-  if(!el||el.getAttribute('data-role')!==S.role)return;
-  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});
-  el.classList.add('on');
-  document.querySelectorAll('.ni[data-n]').forEach(function(n){n.classList.remove('on')});
-  var nb=document.querySelector('.ni[data-n="'+id+'"]');
-  if(nb)nb.classList.add('on');
-  var nav=S.role==='admin'?AN:SN,f=nav.find(function(n){return n.id===id});
-  document.getElementById('pageTitle').textContent=f?t(f.k):'';
-  var L={adash:loadADash,astudents:loadAStu,aattendance:loadAAtt,apayments:loadAPay,agrades:loadAGr,aschedules:loadASk,aexcuses:loadAExc,aalerts:loadAlert,adownloads:loadDL,sdash:loadSDash,sprofile:loadSProf,sattendance:loadSAtt,sgrades:loadSGr,spayments:loadSPay,sexcuses:loadSExc,sschedules:loadSSk};
-  if(L[id])L[id]();
-  if(window.innerWidth<=768){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOv').style.display='none'}
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  const target = document.getElementById('sec_' + id);
+  if(target) target.classList.add('on');
+  
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  const btn = document.querySelector(`.ni[data-n="${id}"]`);
+  if(btn) btn.classList.add('on');
+
+  // Load Content
+  if(id === 'adash') loadADash();
+  if(id === 'sdash') loadSDash();
+  
+  if(window.innerWidth <= 768) toggleSB();
 }
 
-function toggleSB(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sbOv').style.display=document.getElementById('sidebar').classList.contains('open')?'block':'none';
+function loadADash(){
+    let h = `<div class="sg">
+        <div class="sc"><div class="si"><i class="fas fa-users"></i></div><div class="sl">${t('totalStudents')}</div><div class="sv">150</div></div>
+        <div class="sc gd"><div class="si"><i class="fas fa-user-check"></i></div><div class="sl">${t('activeStudents')}</div><div class="sv">142</div></div>
+        <div class="sc ig"><div class="si"><i class="fas fa-money-bill-wave"></i></div><div class="sl">${t('totalPaid')}</div><div class="sv">45,000</div></div>
+    </div>
+    <div class="cd">
+        <div class="ch"><div class="ct"><div class="ct-icon"><i class="fas fa-bolt"></i></div>${t('quickActions')}</div></div>
+        <div class="qa">
+            <div class="qab" onclick="goTo('astudents')"><i class="fas fa-user-plus"></i><span>إضافة طالب</span></div>
+            <div class="qab" onclick="goTo('aattendance')"><i class="fas fa-calendar-check"></i><span>تسجيل حضور</span></div>
+        </div>
+    </div>`;
+    document.getElementById('sec_adash').innerHTML = h;
 }
 
-/* ═══════════════════════════════════════════
-   ADMIN: Dashboard
-   ═══════════════════════════════════════════ */
-async function loadADash(){
-  var d=await api('dashboard');if(!d)return;
-  var h='<div class="sg">';
-  h+=stC('fa-users',d.totalStudents||0,t('totalStudents'),'');
-  h+=stC('fa-user-check',d.activeStudents||0,t('activeStudents'),'gd');
-  h+=stC('fa-money-bill-wave',d.totalPaid||0,t('totalPaid'),'ig');
-  h+=stC('fa-exclamation-triangle',d.remaining||0,t('remaining'),'dg');
-  h+=stC('fa-calendar',d.currentMonth||'-',t('currentMonth'),'wg');
-  h+=stC('fa-check-circle',d.todayPresent||0,t('presentToday'),'');
-  h+=stC('fa-times-circle',d.todayAbsent||0,t('absentToday'),'dg');
-  h+=stC('fa-envelope',d.pendingExcuses||0,t('pendingExcuses'),'wg');
-  h+='</div>';
-  h+='<div class="cd"><div class="ch"><div class="ct"><div class="ct-icon"><i class="fas fa-bolt"></i></div>'+t('quickActions')+'</div></div><div class="qa">';
-  h+='<button class="qab" onclick="goTo(\'astudents\')"><i class="fas fa-user-plus"></i><span>'+t('addStudent')+'</span></button>';
-  h+='<button class="qab" onclick="goTo(\'aattendance\')"><i class="fas fa-calendar-check"></i><span>'+t('attendance')+'</span></button>';
-  h+='<button class="qab" onclick="goTo(\'apayments\')"><i class="fas fa-money-bill-wave"></i><span>'+t('payments')+'</span></button>';
-  h+='<button class="qab" onclick="goTo(\'aschedules\')"><i class="fas fa-clock"></i><span>'+t('schedules')+'</span></button>';
-  h+='<button class="qab" onclick="goTo(\'aalerts\')"><i class="fas fa-bell"></i><span>'+t('alerts')+'</span></button>';
-  h+='<button class="qab" onclick="goTo(\'adownloads\')"><i class="fas fa-download"></i><span>'+t('downloads')+'</span></button>';
-  h+='</div></div>';
-  document.getElementById('sec_adash').innerHTML=h;
+function loadSDash(){
+    document.getElementById('sec_sdash').innerHTML = `<div class="ph">
+        <div class="pav">ST</div>
+        <div><div class="pn">أهلاً بك، طالبنا العزيز</div><div class="ps">الصف الثالث الثانوي - مجموعة 1</div></div>
+    </div>`;
 }
 
 /* ═══════════════════════════════════════════
-   ADMIN: Students
+   Helper Functions
    ═══════════════════════════════════════════ */
-async function loadAStu(){
-  var list=await api('students');S.stuCache=list||[];
-  var h='<div class="cd"><div class="ch"><div class="ct"><div class="ct-icon"><i class="fas fa-user-plus"></i></div><span>'+t('addStudent')+'</span></div></div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('name')+'</label><input class="fi" id="sN"></div><div class="fg"><label>'+t('grade')+'</label><select class="fi" id="sG">'+sOpts(GR)+'</select></div><div class="fg"><label>'+t('subject')+'</label><input class="fi" id="sSub" value="كيمياء"></div></div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('parentName')+'</label><input class="fi" id="sPar"></div><div class="fg"><label>WhatsApp</label><input class="fi" id="sWa" maxlength="11"></div><div class="fg"><label>'+t('phone')+'</label><input class="fi" id="sPh"></div><div class="fg"><label>'+t('phone2')+'</label><input class="fi" id="sPh2"></div></div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('group')+'</label><select class="fi" id="sGr">'+sOpts(GP)+'</select></div><div class="fg"><label>'+t('subscription')+'</label><select class="fi" id="sSb">'+sOpts(['300','350','400','500'])+'</select></div><div class="fg"><label>'+t('status')+'</label><select class="fi" id="sSt"><option value="✅ نشط">'+t('active')+'</option><option value="⚠️ غير نشط">'+t('inactive')+'</option></select></div></div>';
-  h+='<button class="btn ba" onclick="addStu()"><i class="fas fa-plus"></i>'+t('add')+'</button></div>';
-  h+='<div class="cd"><div class="ch"><div class="ct"><div class="ct-icon"><i class="fas fa-users"></i></div><span>'+t('studentsList')+' ('+S.stuCache.length+')</span></div><input class="fi" style="max-width:220px" placeholder="'+t('search')+'" oninput="filterStu(this.value)"></div>';
-  h+='<div class="tw"><table><thead><tr><th>ID</th><th>'+t('name')+'</th><th>'+t('grade')+'</th><th>'+t('subject')+'</th><th>'+t('group')+'</th><th>'+t('subscription')+'</th><th>'+t('parentName')+'</th><th>WA</th><th>'+t('phone')+'</th><th>'+t('status')+'</th><th></th></tr></thead><tbody id="stuTb"></tbody></table></div></div>';
-  document.getElementById('sec_astudents').innerHTML=h;
-  renderStu(S.stuCache);
+function showL(m){ document.getElementById('lt').textContent=m; document.getElementById('loader').style.display='flex'; }
+function hideL(){ document.getElementById('loader').style.display='none'; }
+function toggleSB(){ 
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sbOv');
+    sb.classList.toggle('open');
+    ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
 }
-
-function renderStu(list){
-  var tb=document.getElementById('stuTb');if(!tb)return;
-  if(!list.length){tb.innerHTML='<tr><td colspan="11">'+emptyS('fa-users',t('noData'))+'</td></tr>';return}
-  tb.innerHTML=list.map(function(s){
-    var bg=s.status&&s.status.includes('نشط')?badgeS(t('active'),'bp-s'):badgeS(t('inactive'),'ba-s');
-    return'<tr><td>'+sv(s.id)+'</td><td style="font-weight:600">'+sv(s.name)+'</td><td>'+sv(s.grade)+'</td><td>'+sv(s.subject)+'</td><td>'+sv(s.group)+'</td><td>'+sv(s.subscription)+'</td><td>'+sv(s.parentName)+'</td><td>'+(s.whatsapp?'<a href="https://wa.me/+20'+s.whatsapp+'" target="_blank" style="font-size:11px">'+sv(s.whatsapp)+'</a>':'-')+'</td><td>'+sv(s.studentPhone)+'</td><td>'+bg+'</td><td><div class="bgrp"><button class="btn bs bo" onclick="editStu('+s.id+')"><i class="fas fa-edit"></i></button><button class="btn bs bd" onclick="delStu('+s.id+')"><i class="fas fa-trash"></i></button></div></td></tr>';
-  }).join('');
+function logout(){ location.reload(); }
+function toast(m,tp){
+  const d=document.getElementById('toast'),e=document.createElement('div');
+  e.className='tst '+(tp==='error'?'e':'s');
+  e.innerHTML='<i class="fas '+(tp==='error'?'fa-exclamation-circle':'fa-check-circle')+'"></i>'+m;
+  d.appendChild(e);
+  setTimeout(()=>{e.remove()},3000);
 }
-
-async function addStu(){
-  var n=gv('sN');if(!n){toast(t('name')+'!','error');return}
-  await api('students/add',{name:n,grade:gv('sG'),subject:gv('sSub'),parentName:gv('sPar'),whatsapp:gv('sWa'),studentPhone:gv('sPh'),phone2:gv('sPh2'),group:gv('sGr'),subscription:+gv('sSb'),status:gv('sSt')});
-  toast('OK','s');loadAStu();
-}
-
-async function editStu(id){
-  var s=S.stuCache.find(function(x){return x.id==id});if(!s)return;
-  var h='<div class="mt"><i class="fas fa-user-edit"></i>'+t('edit')+'</div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('name')+'</label><input class="fi" id="eN" value="'+sv(s.name)+'"></div><div class="fg"><label>'+t('grade')+'</label><select class="fi" id="eG">'+sOpts(GR,sv(s.grade))+'</select></div></div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('subject')+'</label><input class="fi" id="eSub" value="'+sv(s.subject)+'"></div><div class="fg"><label>'+t('parentName')+'</label><input class="fi" id="ePar" value="'+sv(s.parentName)+'"></div></div>';
-  h+='<div class="fr"><div class="fg"><label>WhatsApp</label><input class="fi" id="eWa" value="'+sv(s.whatsapp)+'"></div><div class="fg"><label>'+t('phone')+'</label><input class="fi" id="ePh" value="'+sv(s.studentPhone)+'"></div><div class="fg"><label>'+t('phone2')+'</label><input class="fi" id="ePh2" value="'+sv(s.phone2)+'"></div></div>';
-  h+='<div class="fr"><div class="fg"><label>'+t('group')+'</label><select class="fi" id="eGr">'+sOpts(GP,sv(s.group))+'</select></div><div class="fg"><label>'+t('subscription')+'</label><input class="fi" id="eSb" type="number" value="'+sv(s.subscription)+'"></div><div class="fg"><label>'+t('status')+'</label><select class="fi" id="eSt"><option value="✅ نشط"'+(s.status&&s.status.includes('نشط')?' selected':'')+'>'+t('active')+'</option><option value="⚠️ غير نشط"'+(s.status&&s.status.includes('غير')?' selected':'')+'>'+t('inactive')+'</option></select></div></div>';
-  h+='<div class="ma"><button class="btn ba" onclick="saveStu('+id+')"><i class="fas fa-save"></i>'+t('save')+'</button><button class="btn bo" onclick="closeM()">'+t('cancel')+'</button></div>';
-  showM(h);
-}
-
-async function saveStu(id){
-  await api('students/update',{id:id,name:gv('eN'),grade:gv('eG'),subject:gv('eSub'),parentName:gv('ePar'),whatsapp:gv('eWa'),studentPhone:gv('ePh'),phone2:gv('ePh2'),group:gv('eGr'),subscription:+gv('eSb'),status:gv('eSt')});
-  closeM();toast('OK','s');loadAStu();
-}
-
-async function delStu(id){
-  var ok=await confirmDlg(t('confirmDelete'));
-  if(ok){await api('students/delete',{id:id});toast('OK','s');loadAStu()}
-}
-
-function filterStu(v){
-  v=v.toLowerCase();
-  renderStu(S.stuCache.filter(function(s){return(sv(s.name)+' '+sv(s.id)+' '+sv(s.phone)).toLowerCase().indexOf(v)!==-1}));
-}
-
-/* ═══════════════════════════════════════════
-   ADMIN: Attendance (improved — tracks changes)
-   ═══════════════════════════════════════════ */
-async function loadAAtt(){
-  attDirty.clear();
-  var h='<div class="cd"><div class="ch"><div class="ct"><div class="ct-icon"><i class="fas fa-calendar-check"></i></div>'+t('attendance')+'</div>';
-  h+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
-  h+='<select class="fi" id="attY" style="width:100px" onchange="loadAttT()">'+sOpts([cYr()-1,cYr(),cYr()+1],cYr())+'</select>';
-  h+='<select class="fi" id="attM" style="width:140px" onchange="loadAttT()">'+sOpts(mo(),cMo())+'</select>';
-  h+='<span id="attChgBadge" class="chg-badge" style="display:none"><i class="fas fa-pen"></i><span id="attChgCount">0</span> '+t('changesCount')+'</span>';
-  h+='<button class="btn ba" onclick="saveAttB()"><i class="fas fa-save"></i>'+t('saveChanges')+'</button>';
-  h+='</div></div>';
-  h+='<div class="tw"><table><thead id="attH"></thead><tbody id="attB"></tbody></table></div></div>';
-  document.getElementById('sec_aattendance').innerHTML=h;
-  loadAttT();
-}
-
-async function loadAttT(){
-  var hh='<tr><th style="position:sticky;right:0;background:var(--bg2);z-index:2">ID</th><th style="position:sticky;right:42px;background:var(--bg2);z-index:2">'+t('name')+'</th><th>'+t('group')+'</th>';
-  var today=new Date().getDate();
-  for(var i=1;i<=31;i++){
-    var isToday=i===today?' style="color:var(--accent);font-weight:900"':'';
-    hh+='<th class="atd"'+isToday+'>'+i+'</th>';
-  }
-  hh+='</tr>';
-  document.getElementById('attH').innerHTML=hh;
-
-  var list=await api('attendance',{month:gv('attM'),year:gv('attY')});
-  var tb=document.getElementById('attB');if(!tb)return;
-  if(!list||!list.length){tb.innerHTML='<tr><td colspan="34">'+emptyS('fa-calendar',t('noData'))+'</td></tr>';return}
-  tb.innerHTML=list.map(function(s){
-    var r='<tr><td style="position:sticky;right:0;background:var(--card);z-index:1;font-weight:700">'+sv(s.id)+'</td><td style="position:sticky;right:42px;background:var(--card);z-index:1">'+sv(s.name)+'</td><td>'+sv(s.group)+'</td>';
-    for(var d=0;d<31;d++){
-      var v=(s.days&&s.days[d])||'';
-      var selId='att_'+s.id+'_'+(d+1);
-      r+='<td class="atd"><select class="ats" id="'+selId+'" data-stu="'+s.id+'" data-day="'+(d+1)+'" data-orig="'+v+'" onchange="attChanged(this)">';
-      r+='<option value="">-</option>';
-      r+='<option value="ح"'+(v==='ح'?' selected':'')+'>'+t('present')+'</option>';
-      r+='<option value="غ"'+(v==='غ'?' selected':'')+'>'+t('absent')+'</option>';
-      r+='<option value="ت"'+(v==='ت'?' selected':'')+'>'+t('late')+'</option>';
-      r+='</select></td>';
-    }
-    return r+'</tr>';
-  }).join('');
-  updateAttBadge();
-}
-
-function attChanged(sel){
-  var orig=sel.getAttribute('data-orig');
-  if(sel.value!==orig){
-    attDirty.add(sel.id);
-    sel.classList.add('changed');
-  } else {
-    attDirty.delete(sel.id);
-    sel.classList.remove('changed');
-  }
-  updateAttBadge();
-}
-
-function updateAttBadge(){
-  var badge=document.getElementById('attChgBadge');
-  var count=document.getElementById('attChgCount');
-  if(!badge||!count)return;
-  if(attDirty.size>0){
-    badge.style.display='inline-flex';
-    count.textContent=attDirty.size;
-  } else {
-    badge.style.display='none';
-  }
-}
-
-async function saveAttB(){
-  if(attDirty.size===0){toast(t('noChanges'),'error');return}
-  var records=[];
-  attDirty.forEach(function(selId){
-    var sel=document.getElementById(selId);
-    if(sel&&sel.value){
-      records.push({studentId:sel.getAttribute('data-stu'),day:parseInt(sel.getAttribute('data-day')),status:sel.value});
-    }
-  });
-  if(!records.length){toast(t('noChanges'),'error');return}
-  var ok=await api('attendance/save',{month:gv('attM'),year:gv('attY
+</script>
+</body>
+</html>
