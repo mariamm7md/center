@@ -13,7 +13,7 @@ app.use(compression());
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Google Auth Setup
+// Google Auth
 let credentials;
 try {
   credentials = process.env.GOOGLE_CREDENTIALS
@@ -26,33 +26,20 @@ try {
 const auth = new google.auth.GoogleAuth({ credentials, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
 
-// ═══════════════════════════════════════════════════════════
-// HELPER FUNCTIONS
-// ═══════════════════════════════════════════════════════════
+// Helper Functions
 const safeStr = (v) => (v == null ? '' : String(v).trim());
 const safeNum = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
 
 async function getRows(sheetName) {
   try {
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${sheetName}!A:ZZ`
-    });
+    const res = await sheets.spreadsheets.values.get({ spreadsheetId: SPREADSHEET_ID, range: `${sheetName}!A:ZZ` });
     return res.data.values || [];
-  } catch (e) {
-    console.error(`Error reading ${sheetName}:`, e.message);
-    return [];
-  }
+  } catch (e) { return []; }
 }
 
 async function appendRow(sheetName, values) {
   try {
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${sheetName}!A:A`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [values] }
-    });
+    await sheets.spreadsheets.values.append({ spreadsheetId: SPREADSHEET_ID, range: `${sheetName}!A:A`, valueInputOption: 'USER_ENTERED', requestBody: { values: [values] } });
     return true;
   } catch (e) { console.error(e); return false; }
 }
@@ -60,12 +47,7 @@ async function appendRow(sheetName, values) {
 async function updateRow(sheetName, rowIndex, values) {
   try {
     const endCol = String.fromCharCode(64 + values.length);
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${sheetName}!A${rowIndex}:${endCol}${rowIndex}`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [values] }
-    });
+    await sheets.spreadsheets.values.update({ spreadsheetId: SPREADSHEET_ID, range: `${sheetName}!A${rowIndex}:${endCol}${rowIndex}`, valueInputOption: 'USER_ENTERED', requestBody: { values: [values] } });
     return true;
   } catch (e) { console.error(e); return false; }
 }
@@ -75,27 +57,19 @@ async function deleteRow(sheetName, rowIndex) {
     const meta = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
     const sheetId = meta.data.sheets.find(s => s.properties.title === sheetName)?.properties.sheetId;
     if (!sheetId) return false;
-    
-    await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SPREADSHEET_ID,
-      requestBody: {
-        requests: [{
-          deleteDimension: {
-            range: { sheetId, dimension: 'ROWS', startIndex: rowIndex - 1, endIndex: rowIndex }
-          }
-        }]
-      }
-    });
+    await sheets.spreadsheets.batchUpdate({ spreadsheetId: SPREADSHEET_ID, requestBody: { requests: [{ deleteDimension: { range: { sheetId, dimension: 'ROWS', startIndex: rowIndex - 1, endIndex: rowIndex } } }] } });
     return true;
   } catch (e) { console.error(e); return false; }
 }
 
 function findRowIndex(rows, colIndex, value) {
   for (let i = 0; i < rows.length; i++) {
-    if (safeStr(rows[i][colIndex]) === safeStr(value)) return i + 1; // 1-based index
+    if (safeStr(rows[i][colIndex]) === safeStr(value)) return i + 1;
   }
   return -1;
 }
+
+function colL(i) { let s = ''; while (i >= 0) { s = String.fromCharCode(65 + (i % 26)) + s; i = Math.floor(i / 26) - 1; } return s; }
 
 // ═══════════════════════════════════════════════════════════
 // API ROUTES
@@ -111,14 +85,12 @@ app.post('/api/verifyLogin', async (req, res) => {
       if (user === 'admin' && pass === 'admin123') return res.json({ success: true, data: { role: 'admin', name: 'المدير' } });
       return res.json({ success: false, message: 'بيانات خاطئة' });
     }
-    
-    // Student Login
     const rows = await getRows('بيانات_الطلاب');
-    const idx = findRowIndex(rows, 0, user); // Search in Col 0 (ID)
+    const idx = findRowIndex(rows, 0, user);
     if (idx === -1) return res.json({ success: false, message: 'رقم الطالب غير موجود' });
     
     const studentRow = rows[idx - 1];
-    const wa = safeStr(studentRow[5]); // WhatsApp Col 5
+    const wa = safeStr(studentRow[5]); //واتساب عمود 5
     if (pass === wa.slice(-4) || pass === '1234') {
       return res.json({ success: true, data: { role: 'student', name: safeStr(studentRow[1]), studentId: safeStr(studentRow[0]) } });
     }
@@ -131,11 +103,9 @@ app.get('/api/dashboard', async (req, res) => {
   try {
     const sRows = await getRows('بيانات_الطلاب');
     const pRows = await getRows('المدفوعات');
-    
     const total = sRows.length - 1;
     const active = sRows.slice(1).filter(r => safeStr(r[11]).includes('نشط')).length;
     const paid = pRows.slice(1).reduce((sum, r) => sum + safeNum(r[4]), 0);
-    
     const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
     res.json({ success: true, data: { totalStudents: total, activeStudents: active, totalPaid: paid, currentMonth: monthNames[new Date().getMonth()] }});
   } catch (e) { res.json({ success: false, message: e.message }); }
@@ -147,7 +117,7 @@ app.get('/api/dashboard', async (req, res) => {
 app.get('/api/students', async (req, res) => {
   try {
     const rows = (await getRows('بيانات_الطلاب')).slice(1);
-    // 0:ID, 1:Name, 2:Grade, 3:Subject, 4:Parent, 5:WA, 6:StuPh, 7:Ph2, 8:Subs, 9:Group, 10:Date, 11:Status, 12:Notes
+    // الاعمدة: 0رقم، 1اسم، 2صف، 3مادة، 4ولي أمر، 5واتساب، 6ت طالب، 7ت2، 8اشتراك، 9مجموعة، 10تاريخ، 11حالة، 12ملاحظات
     const data = rows.map(r => ({
       id: safeStr(r[0]), name: safeStr(r[1]), grade: safeStr(r[2]), subject: safeStr(r[3]),
       parentName: safeStr(r[4]), whatsapp: safeStr(r[5]), studentPhone: safeStr(r[6]),
@@ -202,7 +172,6 @@ app.post('/api/students/delete', async (req, res) => {
 app.get('/api/payments', async (req, res) => {
   try {
     const rows = (await getRows('المدفوعات')).slice(1);
-    // 0:Name, 1:Group, 2:Month, 3:Subs, 4:Paid, 5:Notes
     const data = rows.map((r, i) => ({
       name: safeStr(r[0]), group: safeStr(r[1]), monthYear: safeStr(r[2]),
       subscription: safeStr(r[3]), paid: safeStr(r[4]), notes: safeStr(r[5]),
@@ -211,13 +180,12 @@ app.get('/api/payments', async (req, res) => {
       rowIndex: i
     }));
     res.json({ success: true, data });
-  } catch (e) { res.json({ success: false, message: e.message }); }
+  } catch(e) { res.json({ success: false, message: e.message }); }
 });
 
 app.post('/api/payments/add', async (req, res) => {
   try {
     const d = req.body;
-    // Name, Group, Month, Subs, Paid, Notes
     await appendRow('المدفوعات', [d.studentName, d.group, d.monthYear, d.subscription, d.paid, d.notes]);
     res.json({ success: true });
   } catch (e) { res.json({ success: false, message: e.message }); }
@@ -244,12 +212,9 @@ app.post('/api/grades/update', async (req, res) => {
     const rows = await getRows('الدرجات');
     const idx = findRowIndex(rows, 0, d.id);
     if (idx === -1) return res.json({ success: false });
-    
     const row = rows[idx-1];
     row[2]=d.exam1; row[3]=d.exam2; row[4]=d.exam3; row[5]=d.exam4;
-    row[6]=d.hw1; row[7]=d.hw2; row[8]=d.hw3;
-    row[9]=d.avg; row[10]=d.grade; row[11]=d.notes;
-    
+    row[6]=d.hw1; row[7]=d.hw2; row[8]=d.hw3; row[9]=d.avg; row[10]=d.grade; row[11]=d.notes;
     await updateRow('الدرجات', idx, row);
     res.json({ success: true });
   } catch(e) { res.json({ success: false, message: e.message }); }
@@ -284,7 +249,6 @@ app.post('/api/excuses/update', async (req, res) => {
     const rows = await getRows('الاعتذارات');
     const idx = findRowIndex(rows, 0, id);
     if (idx === -1) return res.json({ success: false });
-    
     const row = rows[idx-1];
     row[5] = status; row[6] = reply;
     await updateRow('الاعتذارات', idx, row);
@@ -293,21 +257,50 @@ app.post('/api/excuses/update', async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// ATTENDANCE
+// ATTENDANCE API
 // ═══════════════════════════════════════════════════════════
 app.get('/api/attendance', async (req, res) => {
   try {
-    const { month } = req.query; // e.g., "يناير"
-    const rows = await getRows(month); // Sheet name is the month
-    
-    // Structure: Row 0 Title, Row 1 Legend, Row 2 Header, Row 3+ Data
-    // Data Cols: 0:ID, 1:Year, 2:Name, 3:Group, 4-34:Days
-    const data = rows.slice(3).filter(r => r.length > 0).map(r => {
+    const { month } = req.query;
+    const rows = await getRows(month); // اسم الورقة هو الشهر
+    // الهيكل: صف 0 عنوان، صف 1 ترقية، صف 2 هيدر، صف 3+ بيانات
+    const data = rows.slice(3).filter(r => r.length > 0).map((r, i) => {
       const days = [];
       for(let d=4; d<35; d++) days.push(safeStr(r[d]));
-      return { id: safeStr(r[0]), name: safeStr(r[2]), group: safeStr(r[3]), days };
+      // نرجع رقم الصف الحقيقي في الشيت (i + 4) عشان نستخدمه في التحديث
+      return { sheetRow: i + 4, id: safeStr(r[0]), name: safeStr(r[2]), group: safeStr(r[3]), days };
     });
     res.json({ success: true, data });
+  } catch(e) { res.json({ success: false, message: e.message }); }
+});
+
+app.post('/api/attendance/save', async (req, res) => {
+  try {
+    const { month, studentId, day, status } = req.body;
+    const rows = await getRows(month);
+    // البحث عن الصف (نبدأ من index 3 لأن البيانات تبدأ من الصف الرابع)
+    let targetRow = -1;
+    for(let i=3; i<rows.length; i++) {
+        if(safeStr(rows[i][0]) === safeStr(studentId)) {
+            targetRow = i + 1; // رقم الصف في الشيت (1-based)
+            break;
+        }
+    }
+    
+    if (targetRow === -1) return res.json({ success: false, message: 'Student not found in sheet' });
+    
+    // العمود = 4 (عمود اليوم الأول) + (رقم اليوم - 1)
+    const colIndex = 4 + (parseInt(day) - 1);
+    const colLetter = colL(colIndex);
+    
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${month}!${colLetter}${targetRow}`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [[status]] }
+    });
+    
+    res.json({ success: true });
   } catch(e) { res.json({ success: false, message: e.message }); }
 });
 
@@ -348,25 +341,6 @@ app.get('/api/student/schedules', async (req, res) => {
   } catch(e) { res.json({ success: false }); }
 });
 
-app.get('/api/student/excuses', async (req, res) => { 
-  try {
-    const rows = (await getRows('الاعتذارات')).slice(1);
-    const data = rows.filter(r => safeStr(r[1]) === safeStr(req.query.id));
-    res.json({ success: true, data });
-  } catch(e) { res.json({ success: false }); }
-});
-
-app.post('/api/student/excuses/add', async (req, res) => {
-  try {
-    const d = req.body;
-    const rows = await getRows('الاعتذارات');
-    const newId = rows.length > 1 ? (parseInt(rows[rows.length-1][0]) || 0) + 1 : 1;
-    const date = new Date().toISOString().split('T')[0];
-    await appendRow('الاعتذارات', [newId, d.studentId, d.studentName, date, d.reason, 'قيد المراجعة', '']);
-    res.json({ success: true });
-  } catch(e) { res.json({ success: false, message: e.message }); }
-});
-
 app.get('/api/student/attendance', async (req, res) => {
   try {
     const { id } = req.query;
@@ -374,7 +348,7 @@ app.get('/api/student/attendance', async (req, res) => {
     const currentMonth = monthNames[new Date().getMonth()];
     const rows = await getRows(currentMonth);
     
-    const idx = findRowIndex(rows, 0, id); // Search ID in col 0
+    const idx = findRowIndex(rows, 0, id); // البحث في العمود 0
     if (idx === -1) return res.json({ success: true, data: { month: currentMonth, days: [] } });
     
     const row = rows[idx-1];
@@ -383,14 +357,6 @@ app.get('/api/student/attendance', async (req, res) => {
     
     res.json({ success: true, data: { month: currentMonth, days } });
   } catch(e) { res.json({ success: false, message: e.message }); }
-});
-
-// Downloads
-app.get('/api/sheets', async (req, res) => { 
-  try {
-    const r = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
-    res.json({ success: true, data: r.data.sheets.map(s => ({ name: s.properties.title, gid: s.properties.sheetId })) });
-  } catch(e) { res.json({ success: false }); }
 });
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
