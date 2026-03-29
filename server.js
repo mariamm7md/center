@@ -3,6 +3,7 @@ const { google } = require('googleapis');
 const path = require('path');
 const helmet = require('helmet');
 const compression = require('compression');
+const morgan = require('morgan');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,7 @@ const SPREADSHEET_ID = process.env.SPREADSHEET_ID || '1emhIjMexXdwWvuMQWHWQx4p0A
 // Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(compression());
+app.use(morgan('combined'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -22,6 +24,7 @@ try {
   credentials = process.env.GOOGLE_CREDENTIALS
     ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
     : require('./service-account.json');
+  console.log('✅ Google credentials loaded');
 } catch (e) {
   console.error('❌ Auth Error:', e.message);
 }
@@ -150,6 +153,8 @@ app.get('/api/dashboard', async (req, res) => {
   try {
     const sRows = await getRows('بيانات_الطلاب');
     const pRows = await getRows('المدفوعات');
+    const aRows = await getRows('الحضور');
+    const eRows = await getRows('الاعتذارات');
     
     const total = sRows.length - 1;
     const active = sRows.slice(1).filter(r => safeStr(r[11]) === 'نشط').length;
@@ -158,19 +163,17 @@ app.get('/api/dashboard', async (req, res) => {
     // Calculate pending payments
     const pending = pRows.slice(1).reduce((sum, r) => {
       const sub = safeNum(r[3]);
-      const paid = safeNum(r[4]);
-      return sum + Math.max(0, sub - paid);
+      const paidAmount = safeNum(r[4]);
+      return sum + Math.max(0, sub - paidAmount);
     }, 0);
     
-    // Get today's attendance from الحضور sheet
-    const aRows = await getRows('الحضور');
+    // Get today's attendance
     const today = new Date().toISOString().split('T')[0];
     const todayAtt = aRows.slice(1).filter(r => safeStr(r[2]) === today);
     const presentToday = todayAtt.filter(r => safeStr(r[3]) === 'حاضر').length;
     const absentToday = todayAtt.filter(r => safeStr(r[3]) === 'غائب').length;
     
     // Pending excuses
-    const eRows = await getRows('الاعتذارات');
     const pendingExcuses = eRows.slice(1).filter(r => safeStr(r[5]) === 'قيد المراجعة').length;
     
     res.json({
@@ -192,27 +195,15 @@ app.get('/api/dashboard', async (req, res) => {
 
 // ═══════════════════════════════════════════════════════════════
 // STUDENTS API
-// ترتيب الأعمدة:
-// 0:رقم | 1:اسم | 2:صف | 3:مادة | 4:ولي أمر | 5:واتساب
-// 6:تليفون | 7:تليفون2 | 8:اشتراك | 9:مجموعة | 10:تاريخ | 11:حالة | 12:ملاحظات
 // ═══════════════════════════════════════════════════════════════
-
 app.get('/api/students', async (req, res) => {
   try {
     const rows = (await getRows('بيانات_الطلاب')).slice(1);
     const data = rows.map(r => ({
-      id: safeStr(r[0]),
-      name: safeStr(r[1]),
-      grade: safeStr(r[2]),
-      subject: safeStr(r[3]),
-      parentName: safeStr(r[4]),
-      whatsapp: safeStr(r[5]),
-      phone: safeStr(r[6]),
-      phone2: safeStr(r[7]),
-      subscription: safeStr(r[8]),
-      group: safeStr(r[9]),
-      status: safeStr(r[11]),
-      notes: safeStr(r[12])
+      id: safeStr(r[0]), name: safeStr(r[1]), grade: safeStr(r[2]), subject: safeStr(r[3]),
+      parentName: safeStr(r[4]), whatsapp: safeStr(r[5]), phone: safeStr(r[6]),
+      phone2: safeStr(r[7]), subscription: safeStr(r[8]), group: safeStr(r[9]),
+      status: safeStr(r[11]), notes: safeStr(r[12])
     }));
     res.json({ success: true, data });
   } catch (e) {
@@ -229,19 +220,9 @@ app.post('/api/students/add', async (req, res) => {
       : 1;
     
     const newRow = [
-      newId,                                           // 0 رقم
-      d.name,                                          // 1 اسم
-      d.grade,                                         // 2 صف
-      d.subject,                                       // 3 مادة
-      d.parentName || '',                              // 4 ولي أمر
-      d.whatsapp || '',                                // 5 واتساب
-      d.studentPhone || '',                            // 6 تليفون
-      d.phone2 || '',                                  // 7 تليفون2
-      d.subscription || '',                            // 8 اشتراك
-      d.group || '',                                   // 9 مجموعة
-      new Date().toLocaleDateString('ar-EG'),          // 10 تاريخ
-      d.status || 'نشط',                               // 11 حالة
-      d.notes || ''                                    // 12 ملاحظات
+      newId, d.name, d.grade, d.subject, d.parentName || '', d.whatsapp || '',
+      d.studentPhone || '', d.phone2 || '', d.subscription || '', d.group || '',
+      new Date().toLocaleDateString('ar-EG'), d.status || 'نشط', d.notes || ''
     ];
     
     await appendRow('بيانات_الطلاب', newRow);
@@ -293,19 +274,13 @@ app.post('/api/students/delete', async (req, res) => {
 
 // ═══════════════════════════════════════════════════════════════
 // PAYMENTS API
-// ترتيب: 0:اسم | 1:مجموعة | 2:شهر/سنة | 3:اشتراك | 4:مدفوع | 5:ملاحظات
 // ═══════════════════════════════════════════════════════════════
-
 app.get('/api/payments', async (req, res) => {
   try {
     const rows = (await getRows('المدفوعات')).slice(1);
     const data = rows.map(r => ({
-      name: safeStr(r[0]),
-      group: safeStr(r[1]),
-      monthYear: safeStr(r[2]),
-      subscription: safeStr(r[3]),
-      paid: safeStr(r[4]),
-      notes: safeStr(r[5]),
+      name: safeStr(r[0]), group: safeStr(r[1]), monthYear: safeStr(r[2]),
+      subscription: safeStr(r[3]), paid: safeStr(r[4]), notes: safeStr(r[5]),
       remaining: safeNum(r[3]) - safeNum(r[4]),
       status: safeNum(r[4]) >= safeNum(r[3]) ? 'مكتمل' : 'غير مكتمل'
     }));
@@ -324,15 +299,7 @@ app.post('/api/payments/add', async (req, res) => {
     const idx = findRow(sRows, 0, studentId);
     const group = idx !== -1 ? safeStr(sRows[idx][9]) : '';
     
-    const newRow = [
-      studentName,
-      group,
-      `${month} ${year}`,
-      subscription,
-      paid,
-      ''
-    ];
-    
+    const newRow = [studentName, group, `${month} ${year}`, subscription, paid, ''];
     await appendRow('المدفوعات', newRow);
     res.json({ success: true });
   } catch (e) {
@@ -342,24 +309,15 @@ app.post('/api/payments/add', async (req, res) => {
 
 // ═══════════════════════════════════════════════════════════════
 // GRADES API
-// ترتيب: 0:رقم | 1:اسم | 2-5:امتحانات | 6-8:واجبات | 9:متوسط | 10:تقدير
 // ═══════════════════════════════════════════════════════════════
-
 app.get('/api/grades', async (req, res) => {
   try {
     const rows = (await getRows('الدرجات')).slice(1);
     const data = rows.map(r => ({
-      id: safeStr(r[0]),
-      name: safeStr(r[1]),
-      exam1: safeStr(r[2]),
-      exam2: safeStr(r[3]),
-      exam3: safeStr(r[4]),
-      exam4: safeStr(r[5]),
-      hw1: safeStr(r[6]),
-      hw2: safeStr(r[7]),
-      hw3: safeStr(r[8]),
-      avg: safeStr(r[9]),
-      grade: safeStr(r[10])
+      id: safeStr(r[0]), name: safeStr(r[1]),
+      exam1: safeStr(r[2]), exam2: safeStr(r[3]), exam3: safeStr(r[4]), exam4: safeStr(r[5]),
+      hw1: safeStr(r[6]), hw2: safeStr(r[7]), hw3: safeStr(r[8]),
+      avg: safeStr(r[9]), grade: safeStr(r[10])
     }));
     res.json({ success: true, data });
   } catch (e) {
@@ -393,19 +351,13 @@ app.post('/api/grades/update', async (req, res) => {
 
 // ═══════════════════════════════════════════════════════════════
 // SCHEDULES API
-// ترتيب: 0:رقم | 1:يوم | 2:وقت | 3:مجموعة | 4:مادة | 5:مدرس | 6:حالة
 // ═══════════════════════════════════════════════════════════════
-
 app.get('/api/schedules', async (req, res) => {
   try {
     const rows = (await getRows('المواعيد')).slice(1);
     const data = rows.map(r => ({
-      id: safeStr(r[0]),
-      day: safeStr(r[1]),
-      time: safeStr(r[2]),
-      group: safeStr(r[3]),
-      subject: safeStr(r[4]),
-      teacher: safeStr(r[5]),
+      id: safeStr(r[0]), day: safeStr(r[1]), time: safeStr(r[2]),
+      group: safeStr(r[3]), subject: safeStr(r[4]), teacher: safeStr(r[5]),
       status: safeStr(r[6]) || 'نشط'
     }));
     res.json({ success: true, data });
@@ -416,4 +368,166 @@ app.get('/api/schedules', async (req, res) => {
 
 app.post('/api/schedules/add', async (req, res) => {
   try {
-    const { day, time,
+    const { day, time, group, subject, teacher } = req.body;
+    const rows = await getRows('المواعيد');
+    const newId = rows.length > 1 ? Math.max(...rows.slice(1).map(r => parseInt(r[0]) || 0)) + 1 : 1;
+    
+    const newRow = [newId, day, time, group, subject, teacher, 'نشط'];
+    await appendRow('المواعيد', newRow);
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false, message: e.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// EXCUSES API
+// ═══════════════════════════════════════════════════════════════
+app.get('/api/excuses', async (req, res) => {
+  try {
+    const rows = (await getRows('الاعتذارات')).slice(1);
+    const data = rows.map(r => ({
+      id: safeStr(r[0]), studentId: safeStr(r[1]), studentName: safeStr(r[2]),
+      date: safeStr(r[3]), reason: safeStr(r[4]), status: safeStr(r[5]) || 'قيد المراجعة',
+      reply: safeStr(r[6])
+    }));
+    res.json({ success: true, data });
+  } catch (e) {
+    res.json({ success: false, message: e.message });
+  }
+});
+
+app.post('/api/excuses/update', async (req, res) => {
+  try {
+    const { id, status, reply } = req.body;
+    const rows = await getRows('الاعتذارات');
+    const idx = findRow(rows, 0, id);
+    if (idx === -1) return res.json({ success: false, message: 'Not found' });
+    
+    const row = idx + 1;
+    await setCell('الاعتذارات', row, 5, status);
+    await setCell('الاعتذارات', row, 6, reply);
+    
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false, message: e.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// ATTENDANCE API
+// ═══════════════════════════════════════════════════════════════
+app.post('/api/attendance/mark', async (req, res) => {
+  try {
+    const { studentId, status, date } = req.body;
+    
+    // Get student name
+    const sRows = await getRows('بيانات_الطلاب');
+    const idx = findRow(sRows, 0, studentId);
+    const studentName = idx !== -1 ? safeStr(sRows[idx][1]) : '';
+    
+    const rows = await getRows('الحضور');
+    const newId = rows.length > 1 ? Math.max(...rows.slice(1).map(r => parseInt(r[0]) || 0)) + 1 : 1;
+    
+    const newRow = [newId, studentId, date, status, studentName];
+    await appendRow('الحضور', newRow);
+    
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false, message: e.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// STUDENT PORTAL API
+// ═══════════════════════════════════════════════════════════════
+app.get('/api/student/dashboard', async (req, res) => {
+  res.json({ success: true, data: { attRate: 85, avgGrade: 'B+', gradeLabel: 'جيد جداً' } });
+});
+
+app.get('/api/student/profile', async (req, res) => {
+  try {
+    const rows = await getRows('بيانات_الطلاب');
+    const idx = findRow(rows, 0, req.query.id);
+    if (idx === -1) return res.json({ success: false });
+    const r = rows[idx];
+    res.json({ success: true, data: { id: r[0], name: r[1], grade: r[2], group: r[9], whatsapp: r[5] } });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
+
+app.get('/api/student/grades', async (req, res) => {
+  try {
+    const rows = (await getRows('الدرجات')).slice(1);
+    const data = rows.filter(r => safeStr(r[0]) === req.query.id);
+    if (data.length === 0) return res.json({ success: true, data: [] });
+    const r = data[0];
+    res.json({
+      success: true,
+      data: [{
+        exam1: r[2], exam2: r[3], exam3: r[4], exam4: r[5],
+        hw1: r[6], hw2: r[7], hw3: r[8], avg: r[9], grade: r[10]
+      }]
+    });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
+
+app.get('/api/student/payments', async (req, res) => {
+  try {
+    const rows = (await getRows('المدفوعات')).slice(1);
+    const data = rows.filter(r => safeStr(r[0]) === req.query.name).map(r => ({
+      monthYear: safeStr(r[2]), subscription: safeStr(r[3]), paid: safeStr(r[4]),
+      status: safeNum(r[4]) >= safeNum(r[3]) ? 'مكتمل' : 'غير مكتمل'
+    }));
+    res.json({ success: true, data });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
+
+app.get('/api/student/schedules', async (req, res) => {
+  try {
+    const rows = (await getRows('المواعيد')).slice(1);
+    res.json({
+      success: true,
+      data: rows.map(r => ({ day: r[1], time: r[2], group: r[3], subject: r[4] }))
+    });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
+
+app.post('/api/student/excuses/add', async (req, res) => {
+  try {
+    const { studentId, studentName, reason } = req.body;
+    const rows = await getRows('الاعتذارات');
+    const newId = rows.length > 1 ? Math.max(...rows.slice(1).map(r => parseInt(r[0]) || 0)) + 1 : 1;
+    
+    const newRow = [newId, studentId, studentName, new Date().toLocaleDateString('ar-EG'), reason, 'قيد المراجعة', ''];
+    await appendRow('الاعتذارات', newRow);
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false, message: e.message });
+  }
+});
+
+app.get('/api/student/excuses', async (req, res) => {
+  try {
+    const rows = (await getRows('الاعتذارات')).slice(1);
+    const data = rows.filter(r => safeStr(r[1]) === req.query.id).map(r => ({
+      date: r[3], reason: r[4], status: r[5], reply: r[6]
+    }));
+    res.json({ success: true, data });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 Spreadsheet ID: ${SPREADSHEET_ID}`);
+});
