@@ -9,27 +9,29 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || '1TMDiMSAtyjk4iPAsLsMoo-uf7nUeJuOwKeOtPZ3o3xw';
 
+// Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(compression());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Google Auth Setup
 let credentials;
 try {
-  credentials = process.env.GOOGLE_CREDENTIALS
-    ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
-    : require('./service-account.json');
+  if (process.env.GOOGLE_CREDENTIALS) {
+    credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+  } else {
+    credentials = require('./service-account.json');
+  }
 } catch (e) {
-  console.error('❌ Auth error');
-  app.get('*', (req, res) => {
-    res.status(500).send('<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#070b12;color:#e4e9f2;font-family:system-ui;text-align:center;padding:20px"><div><div style="font-size:60px;margin-bottom:20px">⚠️</div><h2 style="color:#ff5757;margin-bottom:12px">Authentication Error</h2><p style="color:#6b7a94">Add <code style="background:#1c2d48;padding:2px 8px;border-radius:4px;color:#00d4aa">GOOGLE_CREDENTIALS</code> to Railway env vars</p></div></div>');
-  });
+  console.error('❌ Auth Error:', e.message);
 }
 
 const auth = new google.auth.GoogleAuth({ credentials, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
 const sheets = google.sheets({ version: 'v4', auth });
 
+// Constants & Helpers
 let SH = {};
 const SH_DEF = { students:'الطلاب', attendance:'الحضور', payments:'المدفوعات', grades:'الدرجات', schedules:'المواعيد', excuses:'الاعتذارات' };
 const MO = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
@@ -46,56 +48,17 @@ async function detectSheets() {
 }
 
 function colL(i) { let s=''; while(i>=0){s=String.fromCharCode(65+(i%26))+s;i=Math.floor(i/26)-1;} return s; }
-
-async function getRows(sn) {
-  try { const r = await sheets.spreadsheets.values.get({spreadsheetId:SPREADSHEET_ID,range:`${sn}!A:ZZ`}); return r.data.values||[]; }
-  catch(e) { return []; }
-}
-
-async function setCell(sn, row, col, val) {
-  try { await sheets.spreadsheets.values.update({spreadsheetId:SPREADSHEET_ID,range:`${sn}!${colL(col)}${row}`,valueInputOption:'USER_ENTERED',requestBody:{values:[[val]]}}); return true; }
-  catch(e) { return false; }
-}
-
-async function setRange(sn, row, startCol, vals) {
-  try {
-    const ec = colL(startCol + vals[0].length - 1);
-    await sheets.spreadsheets.values.update({spreadsheetId:SPREADSHEET_ID,range:`${sn}!${colL(startCol)}${row}:${ec}${row}`,valueInputOption:'USER_ENTERED',requestBody:{values:[vals]}});
-    return true;
-  } catch(e) { return false; }
-}
-
-async function appendRow(sn, vals) {
-  try { await sheets.spreadsheets.values.append({spreadsheetId:SPREADSHEET_ID,range:`${sn}!A:A`,valueInputOption:'USER_ENTERED',requestBody:{values:[vals]}}); return true; }
-  catch(e) { return false; }
-}
-
-async function deleteRow(sn, sheetRow) {
-  try {
-    const r = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
-    const sid = r.data.sheets.find(s => s.properties.title === sn).properties.sheetId;
-    await sheets.spreadsheets.batchUpdate({spreadsheetId:SPREADSHEET_ID,requestBody:{requests:[{deleteDimension:{range:{sheetId:sid,dimension:'ROWS',startIndex:sheetRow-1,endIndex:sheetRow}}}]}}});
-    return true;
-  } catch(e) { return false; }
-}
-
-async function nextId(sn) {
-  const rows = await getRows(sn);
-  if (rows.length <= 1) return 1;
-  const ids = rows.slice(1).map(r => parseInt(r[0])).filter(id => !isNaN(id));
-  return ids.length ? Math.max(...ids) + 1 : 1;
-}
-
-function findDR(allRows, colIdx, val) {
-  for (let i = 1; i < allRows.length; i++) {
-    if (String(allRows[i][colIdx] || '').trim() === String(val).trim()) return i + 1;
-  }
-  return -1;
-}
-
+async function getRows(sn) { try { const r = await sheets.spreadsheets.values.get({spreadsheetId:SPREADSHEET_ID,range:`${sn}!A:ZZ`}); return r.data.values||[]; } catch(e) { return []; } }
+async function setCell(sn, row, col, val) { try { await sheets.spreadsheets.values.update({spreadsheetId:SPREADSHEET_ID,range:`${sn}!${colL(col)}${row}`,valueInputOption:'USER_ENTERED',requestBody:{values:[[val]]}}); return true; } catch(e) { return false; } }
+async function setRange(sn, row, startCol, vals) { try { const ec = colL(startCol + vals[0].length - 1); await sheets.spreadsheets.values.update({spreadsheetId:SPREADSHEET_ID,range:`${sn}!${colL(startCol)}${row}:${ec}${row}`,valueInputOption:'USER_ENTERED',requestBody:{values:[vals]}}); return true; } catch(e) { return false; } }
+async function appendRow(sn, vals) { try { await sheets.spreadsheets.values.append({spreadsheetId:SPREADSHEET_ID,range:`${sn}!A:A`,valueInputOption:'USER_ENTERED',requestBody:{values:[vals]}}); return true; } catch(e) { return false; } }
+async function deleteRow(sn, sheetRow) { try { const r = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID }); const sid = r.data.sheets.find(s => s.properties.title === sn).properties.sheetId; await sheets.spreadsheets.batchUpdate({spreadsheetId:SPREADSHEET_ID,requestBody:{requests:[{deleteDimension:{range:{sheetId:sid,dimension:'ROWS',startIndex:sheetRow-1,endIndex:sheetRow}}}]}}); return true; } catch(e) { return false; } }
+async function nextId(sn) { const rows = await getRows(sn); if (rows.length <= 1) return 1; const ids = rows.slice(1).map(r => parseInt(r[0])).filter(id => !isNaN(id)); return ids.length ? Math.max(...ids) + 1 : 1; }
+function findDR(allRows, colIdx, val) { for (let i = 1; i < allRows.length; i++) { if (String(allRows[i][colIdx] || '').trim() === String(val).trim()) return i + 1; } return -1; }
 function safeNum(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
 function safeStr(v) { return v == null ? '' : String(v).trim(); }
 
+// Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 app.get('/api/setup', async (req, res) => {
@@ -113,7 +76,7 @@ app.get('/api/setup', async (req, res) => {
     let c = 0;
     for (const s of toAdd) {
       if (!exN.includes(s.n)) {
-        await sheets.spreadsheets.batchUpdate({spreadsheetId:SPREADSHEET_ID,requestBody:{requests:[{addSheet:{properties:{title:s.n}}}]}]});
+        await sheets.spreadsheets.batchUpdate({spreadsheetId:SPREADSHEET_ID,requestBody:{requests:[{addSheet:{properties:{title:s.n}}}]}});
         await appendRow(s.n, s.h);
         c++;
       }
@@ -225,7 +188,7 @@ app.post('/api/attendance/save', async (req, res) => {
     const aR = await getRows(SH.attendance);
     const sR = await getRows(SH.students);
     for (const rec of records) {
-      const dn = parseInt(rec.day), dc = colL(4 + dn);
+      const dn = parseInt(rec.day);
       const ar = findDR(aR, 0, rec.studentId);
       if (ar !== -1 && safeStr(aR[ar-1][3]) === month && safeStr(aR[ar-1][4]) === String(year)) {
         await setCell(SH.attendance, ar, 4 + dn, rec.status);
@@ -353,7 +316,7 @@ app.get('/api/alerts', async (req, res) => {
         const sr2 = findDR(sR, 0, sid);
         const name = sr2 !== -1 ? safeStr(sR[sr2-1][1]) : sid;
         const wa = sr2 !== -1 ? safeStr(sR[sr2-1][5]) : '';
-        alerts.push({ name, whatsapp: wa, message: `عذراً، تم تسجيل غياب ${name} اليوم في المركز.` });
+        alerts.push({ name, whatsapp: wa, message: `عذراً، تم تسجيل غياب ${name} اليوم.` });
       }
     });
     res.json({ success: true, data: alerts });
@@ -367,6 +330,7 @@ app.get('/api/sheets', async (req, res) => {
   } catch(e) { res.json({ success:false, message:e.message }); }
 });
 
+// Student APIs
 app.get('/api/student/dashboard', async (req, res) => {
   try {
     const { id } = req.query, now = new Date(), cm = MO[now.getMonth()], cy = String(now.getFullYear());
@@ -386,7 +350,7 @@ app.get('/api/student/dashboard', async (req, res) => {
     const gRow = gR.find(r => safeStr(r[0]) === safeStr(id));
     const pR = (await getRows(SH.payments)).slice(1);
     const uc = pR.filter(p => safeStr(p[0]) === safeStr(stu[1]) && safeStr(p[7]).includes('غير')).length;
-    res.json({ success: true, data: {attRate: rate, present: p, absent: a, late: l, avgGrade: gRow ? safeStr(gRow[9]) : '-', gradeLabel: gRow ? safeStr(gRow[10]) : '-', unpaidCount: uc, month: cm, grade: sv(stu[2]), group: sv(stu[8]), subject: sv(stu[3])} });
+    res.json({ success: true, data: {attRate: rate, present: p, absent: a, late: l, avgGrade: gRow ? safeStr(gRow[9]) : '-', gradeLabel: gRow ? safeStr(gRow[10]) : '-', unpaidCount: uc, month: cm, grade: safeStr(stu[2]), group: safeStr(stu[8]), subject: safeStr(stu[3])} });
   } catch (e) { res.json({ success:false, message:e.message }); }
 });
 
@@ -482,14 +446,8 @@ app.get('/api/student/schedules', async (req, res) => {
   } catch(e) { res.json({ success: false, message: e.message }); }
 });
 
-app.use((err, req, res, next) => {
-  console.error('❌ Error:', err.message);
-  res.status(500).json({ success: false, message: err.message });
-});
-
+// Start Server
 app.listen(PORT, async () => {
   await detectSheets();
-  console.log(`🚀 Server: http://localhost:${PORT}`);
-  console.log(`📄 Sheet: ${SPREADSHEET_ID}`);
-  console.log(`⚙️  Setup: /api/setup\n`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
