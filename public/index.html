@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0f1a">
   <title>Smart Educational Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0f1a;
@@ -62,561 +62,111 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     /* Login Page */
-    #loginPage {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .login-bg {
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-    }
-    .login-pattern {
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
-      background-size: 40px 40px;
-    }
-    .login-orbs {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      animation: float 20s ease-in-out infinite;
-    }
-    .orb-1 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.2), transparent 70%);
-      top: -150px;
-      right: -100px;
-    }
-    .orb-2 {
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%);
-      bottom: -100px;
-      left: -80px;
-      animation-delay: -10s;
-    }
-    .orb-3 {
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%);
-      top: 50%;
-      left: 50%;
-      animation-delay: -5s;
-    }
+    #loginPage { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .login-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+    .login-pattern { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0); background-size: 40px 40px; }
+    .login-orbs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: float 20s ease-in-out infinite; }
+    .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.2), transparent 70%); top: -150px; right: -100px; }
+    .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%); bottom: -100px; left: -80px; animation-delay: -10s; }
+    .orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%); top: 50%; left: 50%; animation-delay: -5s; }
 
-    .login-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 48px 40px;
-      width: 440px;
-      max-width: 94vw;
-      position: relative;
-      z-index: 10;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .login-header {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-    .login-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
-    }
-    .login-logo svg {
-      width: 40px;
-      height: 40px;
-      fill: white;
-    }
-    .login-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .login-subtitle {
-      font-size: 13px;
-      color: var(--text2);
-    }
-    .role-tabs {
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      background: var(--bg2);
-      border-radius: 14px;
-      margin-bottom: 28px;
-      border: 1px solid var(--border);
-    }
-    .role-tab {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text2);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .role-tab.active {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
-    }
-    .role-tab:hover:not(.active) {
-      color: var(--text);
-      background: var(--accent-g);
-    }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text2);
-      margin-bottom: 8px;
-    }
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: var(--r2);
-      background: var(--bg2);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-      transition: all 0.25s;
-      outline: none;
-    }
-    .form-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-g);
-    }
+    .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; width: 440px; max-width: 94vw; position: relative; z-index: 10; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .login-header { text-align: center; margin-bottom: 36px; }
+    .login-logo { width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3); }
+    .login-logo svg { width: 40px; height: 40px; fill: white; }
+    .login-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    .login-subtitle { font-size: 13px; color: var(--text2); }
+    .role-tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border-radius: 14px; margin-bottom: 28px; border: 1px solid var(--border); }
+    .role-tab { flex: 1; padding: 14px; border: none; border-radius: 10px; background: transparent; color: var(--text2); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+    .role-tab.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35); }
+    .role-tab:hover:not(.active) { color: var(--text); background: var(--accent-g); }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+    .form-input { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--r2); background: var(--bg2); color: var(--text); font-family: inherit; font-size: 14px; transition: all 0.25s; outline: none; }
+    .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-g); }
     .form-input::placeholder { color: var(--text3); }
-    .form-input:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    textarea.form-input {
-      min-height: 100px;
-      resize: vertical;
-    }
-    select.form-input {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: left 14px center;
-      padding-left: 36px;
-    }
-    [dir="ltr"] select.form-input {
-      background-position: right 14px center;
-      padding-left: 16px;
-      padding-right: 36px;
-    }
+    textarea.form-input { min-height: 100px; resize: vertical; }
+    select.form-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 14px center; padding-left: 36px; }
+    [dir="ltr"] select.form-input { background-position: right 14px center; padding-left: 16px; padding-right: 36px; }
 
     /* Buttons */
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: var(--r2);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .btn-primary {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-      font-size: 15px;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
-    }
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-    .btn-secondary {
-      background: var(--bg2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover {
-      border-color: var(--accent);
-      background: var(--accent-g);
-    }
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-    }
-    .btn-danger:hover {
-      opacity: 0.9;
-    }
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold), #d97706);
-      color: white;
-    }
+    .btn { padding: 12px 20px; border: none; border-radius: var(--r2); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+    .btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-size: 15px; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); background: var(--accent-g); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { opacity: 0.9; }
+    .btn-gold { background: linear-gradient(135deg, var(--gold), #d97706); color: white; }
     .btn-sm { padding: 8px 14px; font-size: 12px; }
-    .btn-icon {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border-radius: var(--r2);
-    }
-    .btn-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .login-error {
-      color: var(--danger);
-      font-size: 12px;
-      text-align: center;
-      margin-top: 14px;
-      display: none;
-      font-weight: 600;
-    }
-    .login-hint {
-      font-size: 11px;
-      color: var(--text3);
-      text-align: center;
-      margin-top: 18px;
-      line-height: 1.8;
-    }
+    .btn-icon { width: 36px; height: 36px; padding: 0; border-radius: var(--r2); }
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .login-error { color: var(--danger); font-size: 12px; text-align: center; margin-top: 14px; display: none; font-weight: 600; }
+    .login-hint { font-size: 11px; color: var(--text3); text-align: center; margin-top: 18px; line-height: 1.8; }
 
     /* Main App */
     #mainApp { display: none; min-height: 100vh; }
 
     /* Sidebar */
-    #sidebar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: var(--sb);
-      height: 100vh;
-      background: var(--card);
-      border-left: 1px solid var(--border);
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    [dir="ltr"] #sidebar {
-      right: auto;
-      left: 0;
-      border-left: none;
-      border-right: 1px solid var(--border);
-    }
-    .sb-header {
-      padding: 22px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .sb-logo {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+    #sidebar { position: fixed; top: 0; right: 0; width: var(--sb); height: 100vh; background: var(--card); border-left: 1px solid var(--border); z-index: 200; display: flex; flex-direction: column; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    [dir="ltr"] #sidebar { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
+    .sb-header { padding: 22px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .sb-logo { width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .sb-logo svg { width: 24px; height: 24px; fill: white; }
     .sb-title { flex: 1; overflow: hidden; }
-    .sb-title span {
-      font-size: 16px;
-      font-weight: 700;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .sb-title small {
-      font-size: 10px;
-      color: var(--text2);
-    }
-    .sb-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 14px 10px;
-    }
-    .nav-section {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 18px 14px 8px;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: var(--r2);
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text2);
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 3px;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: inherit;
-      font-family: inherit;
-      position: relative;
-    }
-    .nav-item:hover {
-      background: var(--accent-g);
-      color: var(--text);
-    }
-    .nav-item.active {
-      background: var(--accent-g);
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .nav-item.active::before {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 22px;
-      background: var(--accent);
-      border-radius: 0 4px 4px 0;
-    }
-    [dir="ltr"] .nav-item.active::before {
-      right: auto;
-      left: 0;
-      border-radius: 4px 0 0 4px;
-    }
-    .nav-item svg {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      fill: currentColor;
-    }
-    .nav-badge {
-      background: var(--danger);
-      color: white;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-right: auto;
-    }
-    [dir="ltr"] .nav-badge {
-      margin-right: 0;
-      margin-left: auto;
-    }
-    .sb-footer {
-      padding: 14px 10px;
-      border-top: 1px solid var(--border);
-    }
+    .sb-title span { font-size: 16px; font-weight: 700; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-title small { font-size: 10px; color: var(--text2); }
+    .sb-nav { flex: 1; overflow-y: auto; padding: 14px 10px; }
+    .nav-section { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; padding: 18px 14px 8px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--r2); cursor: pointer; transition: all 0.2s; color: var(--text2); font-size: 13px; font-weight: 500; margin-bottom: 3px; border: none; background: none; width: 100%; text-align: inherit; font-family: inherit; position: relative; }
+    .nav-item:hover { background: var(--accent-g); color: var(--text); }
+    .nav-item.active { background: var(--accent-g); color: var(--accent); font-weight: 700; }
+    .nav-item.active::before { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 22px; background: var(--accent); border-radius: 0 4px 4px 0; }
+    [dir="ltr"] .nav-item.active::before { right: auto; left: 0; border-radius: 4px 0 0 4px; }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; fill: currentColor; }
+    .nav-badge { background: var(--danger); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-right: auto; }
+    [dir="ltr"] .nav-badge { margin-right: 0; margin-left: auto; }
+    .sb-footer { padding: 14px 10px; border-top: 1px solid var(--border); }
     .sb-footer .nav-item { color: var(--danger); }
     .sb-footer .nav-item:hover { background: var(--danger-g); }
     .sb-footer .nav-item svg { fill: var(--danger); }
 
     /* Header */
-    #topHeader {
-      position: fixed;
-      top: 0;
-      right: var(--sb);
-      left: 0;
-      height: var(--hd);
-      background: rgba(21, 29, 46, 0.9);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 28px;
-      z-index: 100;
-      transition: right 0.35s, left 0.35s;
-    }
-    [data-theme="light"] #topHeader {
-      background: rgba(255, 255, 255, 0.92);
-    }
-    [dir="ltr"] #topHeader {
-      right: 0;
-      left: var(--sb);
-    }
+    #topHeader { position: fixed; top: 0; right: var(--sb); left: 0; height: var(--hd); background: rgba(21, 29, 46, 0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; z-index: 100; transition: right 0.35s, left 0.35s; }
+    [data-theme="light"] #topHeader { background: rgba(255, 255, 255, 0.92); }
+    [dir="ltr"] #topHeader { right: 0; left: var(--sb); }
     .hdr-left { display: flex; align-items: center; gap: 18px; }
-    .hamburger {
-      display: none;
-      width: 44px;
-      height: 44px;
-      border: 1px solid var(--border);
-      border-radius: var(--r2);
-      background: var(--card);
-      color: var(--text);
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.25s;
-    }
-    .hamburger:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .page-title {
-      font-size: 17px;
-      font-weight: 700;
-    }
+    .hamburger { display: none; width: 44px; height: 44px; border: 1px solid var(--border); border-radius: var(--r2); background: var(--card); color: var(--text); cursor: pointer; align-items: center; justify-content: center; transition: all 0.25s; }
+    .hamburger:hover { border-color: var(--accent); color: var(--accent); }
+    .page-title { font-size: 17px; font-weight: 700; }
     .hdr-right { display: flex; align-items: center; gap: 12px; }
-    .hdr-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--r2);
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.25s;
-    }
-    .hdr-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-g);
-    }
+    .hdr-btn { width: 44px; height: 44px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--card); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+    .hdr-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-g); }
     .hdr-btn svg { width: 20px; height: 20px; fill: currentColor; }
-    .user-badge {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      background: var(--accent-g);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: var(--r2);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent);
-    }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s infinite;
-    }
+    .user-badge { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--accent-g); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--r2); font-size: 13px; font-weight: 600; color: var(--accent); }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
     .status-dot.offline { background: var(--danger); animation: none; }
 
     /* Main Content */
-    #mainContent {
-      margin-top: var(--hd);
-      margin-inline-start: var(--sb);
-      padding: 28px;
-      min-height: calc(100vh - var(--hd));
-      transition: margin 0.35s;
-      position: relative;
-      z-index: 1;
-    }
-    .section {
-      display: none;
-      animation: fadeIn 0.4s ease-out;
-    }
+    #mainContent { margin-top: var(--hd); margin-inline-start: var(--sb); padding: 28px; min-height: calc(100vh - var(--hd)); transition: margin 0.35s; position: relative; z-index: 1; }
+    .section { display: none; animation: fadeIn 0.4s ease-out; }
     .section.active { display: block; }
 
     /* Cards */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 28px;
-      margin-bottom: 24px;
-      transition: all 0.3s;
-    }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 24px; transition: all 0.3s; }
     .card:hover { border-color: var(--border2); }
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--r2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
+    .card-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+    .card-icon { width: 40px; height: 40px; border-radius: var(--r2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .card-icon svg { width: 20px; height: 20px; fill: currentColor; }
     .card-icon.accent { background: var(--accent-g); color: var(--accent); }
     .card-icon.gold { background: var(--gold-g); color: var(--gold); }
@@ -626,51 +176,16 @@
     .card-icon.cyan { background: var(--cyan-g); color: var(--cyan); }
 
     /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-      border-color: var(--border2);
-    }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      height: 4px;
-      background: var(--accent);
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-bottom: 28px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; position: relative; overflow: hidden; transition: all 0.3s; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25); border-color: var(--border2); }
+    .stat-card::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: var(--accent); }
     .stat-card.gold::before { background: var(--gold); }
     .stat-card.danger::before { background: var(--danger); }
     .stat-card.info::before { background: var(--info); }
     .stat-card.purple::before { background: var(--purple); }
     .stat-card.cyan::before { background: var(--cyan); }
-    .stat-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: var(--r2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
+    .stat-icon { width: 50px; height: 50px; border-radius: var(--r2); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; position: relative; z-index: 1; }
     .stat-icon svg { width: 26px; height: 26px; fill: currentColor; }
     .stat-icon.accent { background: var(--accent-g); color: var(--accent); }
     .stat-icon.gold { background: var(--gold-g); color: var(--gold); }
@@ -678,110 +193,28 @@
     .stat-icon.info { background: var(--info-g); color: var(--info); }
     .stat-icon.purple { background: var(--purple-g); color: var(--purple); }
     .stat-icon.cyan { background: var(--cyan-g); color: var(--cyan); }
-    .stat-label {
-      font-size: 12px;
-      color: var(--text2);
-      font-weight: 600;
-      margin-bottom: 6px;
-      position: relative;
-      z-index: 1;
-    }
-    .stat-value {
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      position: relative;
-      z-index: 1;
-    }
-    .stat-change {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-top: 10px;
-      padding: 5px 10px;
-      border-radius: 20px;
-    }
-    .stat-change.up { background: var(--accent-g); color: var(--accent); }
-    .stat-change.down { background: var(--danger-g); color: var(--danger); }
+    .stat-label { font-size: 12px; color: var(--text2); font-weight: 600; margin-bottom: 6px; position: relative; z-index: 1; }
+    .stat-value { font-size: 32px; font-weight: 900; letter-spacing: -1px; position: relative; z-index: 1; }
 
     /* Quick Actions */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 14px;
-    }
-    .quick-btn {
-      padding: 24px 18px;
-      border-radius: var(--r);
-      border: 1px solid var(--border);
-      background: var(--card);
-      cursor: pointer;
-      transition: all 0.3s;
-      text-align: center;
-      font-family: inherit;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .quick-btn:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-      background: var(--accent-g);
-    }
-    .quick-btn svg {
-      width: 32px;
-      height: 32px;
-      fill: var(--accent);
-      margin-bottom: 12px;
-    }
-    .quick-btn span {
-      font-size: 13px;
-      font-weight: 600;
-    }
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+    .quick-btn { padding: 24px 18px; border-radius: var(--r); border: 1px solid var(--border); background: var(--card); cursor: pointer; transition: all 0.3s; text-align: center; font-family: inherit; color: var(--text); text-decoration: none; }
+    .quick-btn:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); background: var(--accent-g); }
+    .quick-btn svg { width: 32px; height: 32px; fill: var(--accent); margin-bottom: 12px; }
+    .quick-btn span { font-size: 13px; font-weight: 600; }
 
     /* Tables */
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: var(--r);
-      border: 1px solid var(--border);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
+    .table-wrapper { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead { background: var(--bg2); }
-    th {
-      padding: 14px 16px;
-      text-align: center;
-      font-weight: 700;
-      color: var(--text2);
-      font-size: 11px;
-      white-space: nowrap;
-      border-bottom: 1px solid var(--border);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-    td {
-      padding: 13px 16px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
+    th { padding: 14px 16px; text-align: center; font-weight: 700; color: var(--text2); font-size: 11px; white-space: nowrap; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.3px; }
+    td { padding: 13px 16px; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap; }
     tbody tr { transition: all 0.2s; }
     tbody tr:hover { background: var(--accent-g); }
     tbody tr:last-child td { border-bottom: none; }
 
     /* Badge */
-    .badge {
-      display: inline-block;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
+    .badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
     .badge-success { background: var(--accent-g); color: var(--accent); }
     .badge-danger { background: var(--danger-g); color: var(--danger); }
     .badge-warn { background: var(--gold-g); color: var(--gold); }
@@ -789,282 +222,51 @@
     .badge-purple { background: var(--purple-g); color: var(--purple); }
 
     /* Form Row */
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
+    .form-row { display: flex; flex-wrap: wrap; gap: 16px; }
     .form-row .form-group { flex: 1; min-width: 200px; }
 
     /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 24px;
-    }
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
     .modal.show { display: flex; }
-    .modal-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      max-width: 560px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-title {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
+    .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
     .modal-title svg { width: 22px; height: 22px; fill: var(--accent); }
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 28px;
-      justify-content: flex-end;
-    }
-    .modal-desc {
-      color: var(--text2);
-      font-size: 14px;
-      line-height: 1.8;
-      margin: 18px 0;
-    }
+    .modal-actions { display: flex; gap: 12px; margin-top: 28px; justify-content: flex-end; }
+    .modal-desc { color: var(--text2); font-size: 14px; line-height: 1.8; margin: 18px 0; }
 
     /* Toast */
-    #toast {
-      position: fixed;
-      top: 85px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: none;
-    }
-    .toast-item {
-      padding: 16px 28px;
-      border-radius: var(--r2);
-      font-size: 14px;
-      font-weight: 600;
-      min-width: 300px;
-      text-align: center;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: auto;
-      font-family: 'Tajawal', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
+    #toast { position: fixed; top: 85px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast-item { padding: 16px 28px; border-radius: var(--r2); font-size: 14px; font-weight: 600; min-width: 300px; text-align: center; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4); animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: auto; font-family: 'Tajawal', sans-serif; display: flex; align-items: center; justify-content: center; gap: 12px; }
     .toast-item svg { width: 20px; height: 20px; fill: currentColor; }
-    .toast-item.success {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-    }
-    .toast-item.error {
-      background: linear-gradient(135deg, var(--danger), #dc2626);
-      color: white;
-    }
+    .toast-item.success { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
+    .toast-item.error { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
 
     /* Loader */
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 15, 26, 0.95);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
-      flex-direction: column;
-      gap: 18px;
-    }
-    [data-theme="light"] #loader {
-      background: rgba(241, 245, 249, 0.95);
-    }
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
-    .loader-text {
-      color: var(--text2);
-      font-size: 14px;
-      font-weight: 500;
-    }
+    #loader { position: fixed; inset: 0; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9998; flex-direction: column; gap: 18px; }
+    [data-theme="light"] #loader { background: rgba(241, 245, 249, 0.95); }
+    .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+    .loader-text { color: var(--text2); font-size: 14px; font-weight: 500; }
 
     /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 70px 24px;
-      color: var(--text2);
-    }
-    .empty-state svg {
-      width: 70px;
-      height: 70px;
-      fill: var(--border);
-      margin-bottom: 18px;
-      opacity: 0.4;
-    }
-    .empty-state p {
-      font-size: 14px;
-      font-weight: 500;
-    }
+    .empty-state { text-align: center; padding: 70px 24px; color: var(--text2); }
+    .empty-state svg { width: 70px; height: 70px; fill: var(--border); margin-bottom: 18px; opacity: 0.4; }
+    .empty-state p { font-size: 14px; font-weight: 500; }
 
     /* Sidebar Overlay */
-    #sidebarOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 190;
-    }
-
-    /* QR Code Section */
-    .qr-section {
-      text-align: center;
-      padding: 30px;
-    }
-    .qr-code {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 20px;
-      background: white;
-      border-radius: var(--r);
-      padding: 10px;
-    }
-    .qr-instructions {
-      font-size: 13px;
-      color: var(--text2);
-      margin-top: 15px;
-    }
-
-    /* Chart Container */
-    .chart-container {
-      height: 250px;
-      background: linear-gradient(135deg, var(--bg2), var(--card));
-      border-radius: var(--r2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text3);
-      font-size: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-    .chart-bar {
-      position: absolute;
-      bottom: 0;
-      width: 30px;
-      background: linear-gradient(180deg, var(--accent), var(--accent2));
-      border-radius: 4px 4px 0 0;
-      transition: height 0.5s ease-out;
-    }
+    #sidebarOverlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 190; }
 
     /* Search Box */
-    .search-box {
-      position: relative;
-      max-width: 300px;
-    }
-    .search-box input {
-      padding-right: 40px;
-    }
-    [dir="ltr"] .search-box input {
-      padding-right: 16px;
-      padding-left: 40px;
-    }
-    .search-box svg {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      fill: var(--text3);
-    }
-    [dir="ltr"] .search-box svg {
-      right: auto;
-      left: 14px;
-    }
+    .search-box { position: relative; max-width: 300px; }
+    .search-box input { padding-right: 40px; }
+    [dir="ltr"] .search-box input { padding-right: 16px; padding-left: 40px; }
+    .search-box svg { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--text3); }
+    [dir="ltr"] .search-box svg { right: auto; left: 14px; }
 
     /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      background: var(--bg2);
-      border-radius: var(--r2);
-      margin-bottom: 20px;
-    }
-    .tab {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text2);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .tab.active {
-      background: var(--accent);
-      color: white;
-    }
-    .tab:hover:not(.active) {
-      background: var(--accent-g);
-      color: var(--text);
-    }
-
-    /* Progress Bar */
-    .progress-bar {
-      height: 8px;
-      background: var(--bg2);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 8px;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 4px;
-      transition: width 0.5s ease-out;
-    }
-
-    /* Avatar */
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 14px;
-    }
+    .tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border-radius: var(--r2); margin-bottom: 20px; }
+    .tab { padding: 10px 20px; border: none; border-radius: 6px; background: transparent; color: var(--text2); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .tab.active { background: var(--accent); color: white; }
+    .tab:hover:not(.active) { background: var(--accent-g); color: var(--text); }
 
     /* Responsive */
     @media (max-width: 900px) {
@@ -1086,10 +288,7 @@
       .card { padding: 20px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
@@ -1119,7 +318,6 @@
     </div>
     <div class="role-tabs">
       <button class="role-tab active" id="tabAdmin" onclick="setLoginRole('admin')">Admin</button>
-      <button class="role-tab" id="tabEmployee" onclick="setLoginRole('employee')">Employee</button>
       <button class="role-tab" id="tabStudent" onclick="setLoginRole('student')">Student</button>
     </div>
     <div id="adminLogin">
@@ -1132,16 +330,6 @@
         <input class="form-input" id="inputPass" type="password" placeholder="********">
       </div>
     </div>
-    <div id="employeeLogin" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Employee ID</label>
-        <input class="form-input" id="inputEmpId" placeholder="1">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" id="inputEmpPass" type="password" placeholder="********">
-      </div>
-    </div>
     <div id="studentLogin" style="display:none">
       <div class="form-group">
         <label class="form-label" id="labelSid">Student ID</label>
@@ -1151,7 +339,7 @@
         <label class="form-label" id="labelCode">Verification Code</label>
         <input class="form-input" id="inputCode" type="password" placeholder="1234">
       </div>
-      <p class="login-hint" id="loginHint">Last 4 digits of WhatsApp or 1234</p>
+      <p class="login-hint" id="loginHint">Last 4 digits of parent WhatsApp or 1234</p>
     </div>
     <button class="btn btn-primary" id="btnLogin" onclick="doLogin()">Login</button>
     <div class="login-error" id="loginError"></div>
@@ -1203,31 +391,14 @@
   </header>
   
   <main id="mainContent">
-    <!-- Dashboard Section -->
-    <section id="sec_dashboard" class="section" data-role="admin,employee"></section>
-    
-    <!-- Students Section -->
-    <section id="sec_students" class="section" data-role="admin,employee"></section>
-    
-    <!-- Courses Section -->
-    <section id="sec_courses" class="section" data-role="admin,employee"></section>
-    
-    <!-- Teachers Section -->
-    <section id="sec_teachers" class="section" data-role="admin"></section>
-    
-    <!-- Attendance Section -->
-    <section id="sec_attendance" class="section" data-role="admin,employee"></section>
-    
-    <!-- Payments Section -->
-    <section id="sec_payments" class="section" data-role="admin,employee"></section>
-    
-    <!-- Reports Section -->
-    <section id="sec_reports" class="section" data-role="admin"></section>
-    
-    <!-- Downloads Section -->
-    <section id="sec_downloads" class="section" data-role="admin,employee"></section>
-    
-    <!-- Student Portal Sections -->
+    <section id="sec_dashboard" class="section" data-role="admin"></section>
+    <section id="sec_students" class="section" data-role="admin"></section>
+    <section id="sec_payments" class="section" data-role="admin"></section>
+    <section id="sec_grades" class="section" data-role="admin"></section>
+    <section id="sec_schedules" class="section" data-role="admin"></section>
+    <section id="sec_excuses" class="section" data-role="admin"></section>
+    <section id="sec_attendance" class="section" data-role="admin"></section>
+    <section id="sec_downloads" class="section" data-role="admin"></section>
     <section id="sec_studentDashboard" class="section" data-role="student"></section>
     <section id="sec_studentProfile" class="section" data-role="student"></section>
     <section id="sec_studentGrades" class="section" data-role="student"></section>
@@ -1244,7 +415,7 @@
 <script>
 // Configuration
 const CONFIG = {
-  spreadsheetId: '1w64sK9ucTyEhsu1_FUEtX56GKcvdZaGe1aRDpyBOrRs',
+  spreadsheetId: '1emhIjMexXdwWvuMQWHWQx4p0AtfjqcCie5IV0Pl4Rzk',
   months: {
     ar: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
     en: ['January','February','March','April','May','June','July','August','September','October','November','December']
@@ -1255,76 +426,55 @@ const CONFIG = {
   },
   grades: ['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي','First Year','Second Year','Third Year'],
   groups: ['مجموعة 1','مجموعة 2','مجموعة 3','مجموعة 4','مجموعة 5','مجموعة 6'],
-  subjects: ['كيمياء','فيزياء','أحياء','رياضيات','عربي','إنجليزي','Chemistry','Physics','Biology','Math','Arabic','English']
+  subjects: ['كيمياء','فيزياء','أحياء','رياضيات','عربي','إنجليزي']
 };
 
 // State
-const STATE = {
-  role: 'admin',
-  lang: 'ar',
-  theme: 'dark',
-  user: null,
-  userId: null,
-  cache: {}
-};
+const STATE = { role: 'admin', lang: 'ar', theme: 'dark', user: null, userId: null, cache: {} };
 
 // Translations
 const T = {
   ar: {
-    appName: 'مركز التعليم الذكي', appSub: 'نظام الإدارة', admin: 'مدير', employee: 'موظف', student: 'طالب',
+    appName: 'مركز التعليم الذكي', appSub: 'نظام الإدارة', admin: 'مدير', student: 'طالب',
     username: 'اسم المستخدم', password: 'كلمة السر', studentId: 'رقم الطالب', code: 'رمز التحقق',
-    login: 'تسجيل الدخول', hint: 'آخر 4 أرقام واتساب أو 1234', logout: 'تسجيل خروج',
-    dashboard: 'لوحة التحكم', students: 'الطلاب', courses: 'الكورسات', teachers: 'المدرسين',
-    attendance: 'الحضور', payments: 'المدفوعات', reports: 'التقارير', downloads: 'التنزيلات',
+    login: 'تسجيل الدخول', hint: 'آخر 4 أرقام واتساب ولي الأمر أو 1234', logout: 'تسجيل خروج',
+    dashboard: 'لوحة التحكم', students: 'الطلاب', payments: 'المدفوعات', grades: 'الدرجات',
+    schedules: 'المواعيد', excuses: 'الاعتذارات', attendance: 'الحضور', downloads: 'التنزيلات',
     add: 'إضافة', save: 'حفظ', cancel: 'إلغاء', delete: 'حذف', edit: 'تعديل', search: 'بحث...',
     name: 'الاسم', grade: 'الصف', subject: 'المادة', group: 'المجموعة', price: 'السعر',
     subscription: 'الاشتراك', parent: 'ولي الأمر', phone: 'الهاتف', whatsapp: 'واتساب',
     status: 'الحالة', notes: 'ملاحظات', active: 'نشط', inactive: 'غير نشط', noData: 'لا توجد بيانات',
     confirmDelete: 'هل أنت متأكد من الحذف؟', total: 'الإجمالي', activeStudents: 'النشطين',
-    totalRevenue: 'إجمالي الإيرادات', pendingPayments: 'متأخرات', currentMonth: 'الشهر الحالي',
-    presentToday: 'حاضرون اليوم', absentToday: 'غائبون اليوم', attendanceRate: 'نسبة الحضور',
-    totalStudents: 'عدد الطلاب', totalCourses: 'عدد الكورسات', totalTeachers: 'عدد المدرسين',
-    addStudent: 'إضافة طالب', studentList: 'قائمة الطلاب', addCourse: 'إضافة كورس',
-    courseList: 'قائمة الكورسات', addTeacher: 'إضافة مدرس', teacherList: 'قائمة المدرسين',
-    markPresent: 'حضور', markAbsent: 'غياب', addPayment: 'تسجيل دفعة', amount: 'المبلغ',
+    totalRevenue: 'إجمالي الإيرادات', pendingPayments: 'متأخرات', presentToday: 'حاضرون اليوم',
+    absentToday: 'غائبون اليوم', attendanceRate: 'نسبة الحضور', totalStudents: 'عدد الطلاب',
+    addStudent: 'إضافة طالب', studentList: 'قائمة الطلاب', addPayment: 'تسجيل دفعة', amount: 'المبلغ',
     month: 'الشهر', year: 'السنة', paid: 'مدفوع', complete: 'مكتمل', incomplete: 'غير مكتمل',
-    average: 'المتوسط', rating: 'التقدير', addSchedule: 'إضافة موعد', day: 'اليوم', time: 'الوقت',
-    teacher: 'المدرس', salary: 'الراتب', percentage: 'النسبة', exportExcel: 'تصدير Excel',
-    myDashboard: 'لوحتي', myProfile: 'بروفايلي', myGrades: 'درجاتي', myPayments: 'مدفوعاتي',
-    myAttendance: 'حضوري', quickActions: 'إجراءات سريعة', loading: 'جاري التحميل...',
-    present: 'حاضر', absent: 'غائب', qrCode: 'QR Code', scanQR: 'امسح الكود',
-    sessions: 'الحصص', enrollments: 'المسجلين', bestCourse: 'أفضل كورس',
-    recentActivity: 'النشاط الأخير', todaySchedule: 'مواعيد اليوم', mainMenu: 'القائمة الرئيسي',
-    management: 'الإدارة', reportsSection: 'التقارير', salaryType: 'نوع الراتب',
-    fixed: 'ثابت', percentageBased: 'نسبة', monthly: 'شهري'
+    average: 'المتوسط', rating: 'التقدير', markPresent: 'حضور', markAbsent: 'غياب',
+    exportExcel: 'تصدير Excel', myDashboard: 'لوحتي', myProfile: 'بروفايلي', myGrades: 'درجاتي',
+    myPayments: 'مدفوعاتي', myAttendance: 'حضوري', quickActions: 'إجراءات سريعة', loading: 'جاري التحميل...',
+    present: 'حاضر', absent: 'غائب', late: 'متأخر', mainMenu: 'القائمة الرئيسي', management: 'الإدارة',
+    reports: 'التقارير', todaySchedule: 'مواعيد اليوم', sessions: 'الحصص'
   },
   en: {
-    appName: 'Smart Educational Center', appSub: 'Management System', admin: 'Admin', employee: 'Employee', student: 'Student',
+    appName: 'Smart Educational Center', appSub: 'Management System', admin: 'Admin', student: 'Student',
     username: 'Username', password: 'Password', studentId: 'Student ID', code: 'Code',
-    login: 'Login', hint: 'Last 4 digits of WhatsApp or 1234', logout: 'Logout',
-    dashboard: 'Dashboard', students: 'Students', courses: 'Courses', teachers: 'Teachers',
-    attendance: 'Attendance', payments: 'Payments', reports: 'Reports', downloads: 'Downloads',
+    login: 'Login', hint: 'Last 4 digits of parent WhatsApp or 1234', logout: 'Logout',
+    dashboard: 'Dashboard', students: 'Students', payments: 'Payments', grades: 'Grades',
+    schedules: 'Schedules', excuses: 'Excuses', attendance: 'Attendance', downloads: 'Downloads',
     add: 'Add', save: 'Save', cancel: 'Cancel', delete: 'Delete', edit: 'Edit', search: 'Search...',
     name: 'Name', grade: 'Grade', subject: 'Subject', group: 'Group', price: 'Price',
     subscription: 'Subscription', parent: 'Parent', phone: 'Phone', whatsapp: 'WhatsApp',
     status: 'Status', notes: 'Notes', active: 'Active', inactive: 'Inactive', noData: 'No data',
     confirmDelete: 'Are you sure?', total: 'Total', activeStudents: 'Active',
-    totalRevenue: 'Total Revenue', pendingPayments: 'Pending', currentMonth: 'Current Month',
-    presentToday: 'Present', absentToday: 'Absent', attendanceRate: 'Attendance Rate',
-    totalStudents: 'Total Students', totalCourses: 'Total Courses', totalTeachers: 'Total Teachers',
-    addStudent: 'Add Student', studentList: 'Students List', addCourse: 'Add Course',
-    courseList: 'Courses List', addTeacher: 'Add Teacher', teacherList: 'Teachers List',
-    markPresent: 'Present', markAbsent: 'Absent', addPayment: 'Record Payment', amount: 'Amount',
+    totalRevenue: 'Total Revenue', pendingPayments: 'Pending', presentToday: 'Present Today',
+    absentToday: 'Absent Today', attendanceRate: 'Attendance Rate', totalStudents: 'Total Students',
+    addStudent: 'Add Student', studentList: 'Students List', addPayment: 'Record Payment', amount: 'Amount',
     month: 'Month', year: 'Year', paid: 'Paid', complete: 'Complete', incomplete: 'Incomplete',
-    average: 'Average', rating: 'Rating', addSchedule: 'Add Schedule', day: 'Day', time: 'Time',
-    teacher: 'Teacher', salary: 'Salary', percentage: 'Percentage', exportExcel: 'Export Excel',
-    myDashboard: 'My Dashboard', myProfile: 'My Profile', myGrades: 'My Grades', myPayments: 'My Payments',
-    myAttendance: 'My Attendance', quickActions: 'Quick Actions', loading: 'Loading...',
-    present: 'Present', absent: 'Absent', qrCode: 'QR Code', scanQR: 'Scan Code',
-    sessions: 'Sessions', enrollments: 'Enrollments', bestCourse: 'Best Course',
-    recentActivity: 'Recent Activity', todaySchedule: "Today's Schedule", mainMenu: 'Main Menu',
-    management: 'Management', reportsSection: 'Reports', salaryType: 'Salary Type',
-    fixed: 'Fixed', percentageBased: 'Percentage', monthly: 'Monthly'
+    average: 'Average', rating: 'Rating', markPresent: 'Present', markAbsent: 'Absent',
+    exportExcel: 'Export Excel', myDashboard: 'My Dashboard', myProfile: 'My Profile', myGrades: 'My Grades',
+    myPayments: 'My Payments', myAttendance: 'My Attendance', quickActions: 'Quick Actions', loading: 'Loading...',
+    present: 'Present', absent: 'Absent', late: 'Late', mainMenu: 'Main Menu', management: 'Management',
+    reports: 'Reports', todaySchedule: "Today's Schedule", sessions: 'Sessions'
   }
 };
 
@@ -1335,35 +485,27 @@ function getDays() { return CONFIG.days[STATE.lang]; }
 function getCurrentMonth() { return getMonths()[new Date().getMonth()]; }
 function getCurrentYear() { return new Date().getFullYear(); }
 function getCurrentDay() { return getDays()[new Date().getDay()]; }
-function safeVal(v) { return (v == null || v === '') ? '-' : String(v); }
-function formatNum(n) {
-  const x = parseFloat(n);
-  return isNaN(x) ? safeVal(n) : x.toLocaleString(STATE.lang === 'ar' ? 'ar-EG' : 'en-US');
-}
+function safeVal(v) { return (v == null || v === '') ? '-' : String(v).trim(); }
+function formatNum(n) { const x = parseFloat(n); return isNaN(x) ? safeVal(n) : x.toLocaleString(STATE.lang === 'ar' ? 'ar-EG' : 'en-US'); }
 function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v || ''; }
-function buildOptions(arr, selected) {
-  return arr.map(v => `<option${v === selected ? ' selected' : ''}>${v}</option>`).join('');
-}
+function buildOptions(arr, selected) { return arr.map(v => `<option${v === selected ? ' selected' : ''}>${v}</option>`).join(''); }
 
 // SVG Icons
 const ICONS = {
   dashboard: '<svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>',
   users: '<svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>',
-  book: '<svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>',
-  teacher: '<svg viewBox="0 0 24 24"><path d="M20 17a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9.46c.35.61.54 1.3.54 2h10v11h-9v2h9zM15 7v2H9v2h6v2l4-3-4-3zM1 22h4v-3H1v3zm1.5-4l1-1c.75 0 1.5.25 1.5 1v1h-3v-1zm4-3.5c0 .83-.67 1.5-1.5 1.5S3.5 15.33 3.5 14.5 4.17 13 5 13s1.5.67 1.5 1.5zM8 22h4v-6H8v6zm2-9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>',
-  check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
   money: '<svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>',
   chart: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',
-  download: '<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>',
-  qr: '<svg viewBox="0 0 24 24"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13-2h-2v2h2v-2zm2 0h2v4h-4v-2h2v-2zm-2 6h2v2h-2v-2zm-4-4h2v2h-2v-2z"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
   x: '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
   star: '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
   calendar: '<svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>',
   userPlus: '<svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
   clock: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
   mail: '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
-  warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>'
+  warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+  download: '<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>'
 };
 
 // UI Helpers
@@ -1371,113 +513,56 @@ function showToast(message, type = 'success') {
   const container = document.getElementById('toast');
   const div = document.createElement('div');
   div.className = `toast-item ${type}`;
-  const icon = type === 'error'
-    ? ICONS.warning
-    : ICONS.check;
+  const icon = type === 'error' ? ICONS.warning : ICONS.check;
   div.innerHTML = icon + message;
   container.appendChild(div);
-  setTimeout(() => {
-    div.style.opacity = '0';
-    div.style.transform = 'translateY(-15px)';
-    div.style.transition = 'all 0.3s';
-    setTimeout(() => div.remove(), 300);
-  }, 4000);
+  setTimeout(() => { div.style.opacity = '0'; div.style.transform = 'translateY(-15px)'; div.style.transition = 'all 0.3s'; setTimeout(() => div.remove(), 300); }, 4000);
 }
 
-function showLoader(msg) {
-  document.getElementById('loaderText').textContent = msg || t('loading');
-  document.getElementById('loader').style.display = 'flex';
-}
+function showLoader(msg) { document.getElementById('loaderText').textContent = msg || t('loading'); document.getElementById('loader').style.display = 'flex'; }
 function hideLoader() { document.getElementById('loader').style.display = 'none'; }
 
-function showModal(html) {
-  document.getElementById('modalBox').innerHTML = html;
-  document.getElementById('modal').classList.add('show');
-}
+function showModal(html) { document.getElementById('modalBox').innerHTML = html; document.getElementById('modal').classList.add('show'); }
 function closeModal() { document.getElementById('modal').classList.remove('show'); }
 
 function confirmDialog(msg) {
   return new Promise(resolve => {
-    showModal(`
-      <div class="modal-title">${ICONS.warning}${t('confirmDelete')}</div>
-      <div class="modal-desc">${msg}</div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closeModal();_resolve(false)">${t('cancel')}</button>
-        <button class="btn btn-danger" onclick="closeModal();_resolve(true)">${t('delete')}</button>
-      </div>
-    `);
+    showModal(`<div class="modal-title">${ICONS.warning}${t('confirmDelete')}</div><div class="modal-desc">${msg}</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal();_resolve(false)">${t('cancel')}</button><button class="btn btn-danger" onclick="closeModal();_resolve(true)">${t('delete')}</button></div>`);
     window._resolve = resolve;
   });
 }
 
 function statCard(icon, value, label, cls = '') {
-  return `
-    <div class="stat-card ${cls}">
-      <div class="stat-icon ${cls}">${ICONS[icon]}</div>
-      <div class="stat-label">${label}</div>
-      <div class="stat-value">${formatNum(value)}</div>
-    </div>
-  `;
+  return `<div class="stat-card ${cls}"><div class="stat-icon ${cls}">${ICONS[icon]}</div><div class="stat-label">${label}</div><div class="stat-value">${formatNum(value)}</div></div>`;
 }
 
-function emptyState(icon, msg) {
-  return `
-    <div class="empty-state">
-      ${ICONS[icon]}
-      <p>${msg}</p>
-    </div>
-  `;
-}
-
-function badge(text, cls) {
-  return `<span class="badge ${cls}">${text}</span>`;
-}
+function emptyState(icon, msg) { return `<div class="empty-state">${ICONS[icon]}<p>${msg}</p></div>`; }
+function badge(text, cls) { return `<span class="badge ${cls}">${text}</span>`; }
 
 // API
 async function api(action, data, method) {
   showLoader();
   let url = '/api/' + action;
   const opts = { headers: { 'Content-Type': 'application/json' } };
-  
-  const writeActions = ['verifyLogin', 'students/add', 'students/update', 'students/delete',
-    'courses/add', 'courses/update', 'courses/delete', 'teachers/add', 'teachers/update',
-    'teachers/delete', 'payments/add', 'attendance/mark', 'enrollments/add'];
-  
+  const writeActions = ['verifyLogin', 'students/add', 'students/update', 'students/delete', 'payments/add', 'attendance/mark', 'excuses/add', 'excuses/update'];
   if (method === 'GET' || (!method && !writeActions.includes(action))) {
     if (data) url += '?' + new URLSearchParams(data).toString();
     opts.method = 'GET';
-  } else {
-    opts.method = method || 'POST';
-    opts.body = JSON.stringify(data || {});
-  }
-  
+  } else { opts.method = method || 'POST'; opts.body = JSON.stringify(data || {}); }
   try {
     const res = await fetch(url, opts);
-    const dot = document.getElementById('statusDot');
-    if (dot) dot.classList.remove('offline');
-    const json = await res.json();
-    hideLoader();
-    if (json.success === false) {
-      showToast(json.message || 'Error', 'error');
-      return null;
-    }
+    const dot = document.getElementById('statusDot'); if (dot) dot.classList.remove('offline');
+    const json = await res.json(); hideLoader();
+    if (json.success === false) { showToast(json.message || 'Error', 'error'); return null; }
     return json.data !== undefined ? json.data : json;
-  } catch (err) {
-    hideLoader();
-    const dot = document.getElementById('statusDot');
-    if (dot) dot.classList.add('offline');
-    showToast('Connection error', 'error');
-    console.error(err);
-    return null;
-  }
+  } catch (err) { hideLoader(); const dot = document.getElementById('statusDot'); if (dot) dot.classList.add('offline'); showToast('Connection error', 'error'); console.error(err); return null; }
 }
 
 // Theme & Language
 function toggleTheme() {
   STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', STATE.theme);
-  const btn = document.getElementById('themeBtn');
-  btn.innerHTML = STATE.theme === 'dark'
+  document.getElementById('themeBtn').innerHTML = STATE.theme === 'dark'
     ? '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>'
     : '<svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>';
 }
@@ -1486,94 +571,47 @@ function toggleLang() {
   STATE.lang = STATE.lang === 'ar' ? 'en' : 'ar';
   document.documentElement.lang = STATE.lang;
   document.documentElement.dir = STATE.lang === 'ar' ? 'rtl' : 'ltr';
-  updateLabels();
-  buildNav();
+  updateLabels(); buildNav();
   const activeSec = document.querySelector('.section.active');
   if (activeSec) navigateTo(activeSec.id.replace('sec_', ''));
 }
 
 function updateLabels() {
-  const map = {
-    loginTitle: 'appName', sbTitle: 'appName', loginSubtitle: 'appSub',
-    tabAdmin: 'admin', tabStudent: 'student', labelUser: 'username',
-    labelPass: 'password', labelSid: 'studentId', labelCode: 'code',
-    btnLogin: 'login', loginHint: 'hint', btnLogout: 'logout'
-  };
-  for (const [id, key] of Object.entries(map)) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = t(key);
-  }
+  const map = { loginTitle: 'appName', sbTitle: 'appName', loginSubtitle: 'appSub', tabAdmin: 'admin', tabStudent: 'student', labelUser: 'username', labelPass: 'password', labelSid: 'studentId', labelCode: 'code', btnLogin: 'login', loginHint: 'hint', btnLogout: 'logout' };
+  for (const [id, key] of Object.entries(map)) { const el = document.getElementById(id); if (el) el.textContent = t(key); }
 }
 
 // Login
 let loginRole = 'admin';
-
 function setLoginRole(role) {
   loginRole = role;
   document.querySelectorAll('.role-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('active');
   document.getElementById('adminLogin').style.display = role === 'admin' ? 'block' : 'none';
-  document.getElementById('employeeLogin').style.display = role === 'employee' ? 'block' : 'none';
   document.getElementById('studentLogin').style.display = role === 'student' ? 'block' : 'none';
   document.getElementById('loginError').style.display = 'none';
 }
 
 async function doLogin() {
-  const btn = document.getElementById('btnLogin');
-  btn.disabled = true;
+  const btn = document.getElementById('btnLogin'); btn.disabled = true;
   let payload = { role: loginRole };
-  
   if (loginRole === 'admin') {
-    payload.user = getVal('inputUser');
-    payload.pass = getVal('inputPass');
-    if (!payload.user || !payload.pass) {
-      showError(t('username') + ' / ' + t('password'));
-      btn.disabled = false;
-      return;
-    }
-  } else if (loginRole === 'employee') {
-    payload.user = getVal('inputEmpId');
-    payload.pass = getVal('inputEmpPass');
-    if (!payload.user || !payload.pass) {
-      showError('Employee ID / Password required');
-      btn.disabled = false;
-      return;
-    }
+    payload.user = getVal('inputUser'); payload.pass = getVal('inputPass');
+    if (!payload.user || !payload.pass) { showError(t('username') + ' / ' + t('password')); btn.disabled = false; return; }
   } else {
-    payload.user = getVal('inputSid');
-    payload.pass = getVal('inputCode');
-    if (!payload.user || !payload.pass) {
-      showError(t('studentId') + ' / ' + t('code'));
-      btn.disabled = false;
-      return;
-    }
+    payload.user = getVal('inputSid'); payload.pass = getVal('inputCode');
+    if (!payload.user || !payload.pass) { showError(t('studentId') + ' / ' + t('code')); btn.disabled = false; return; }
   }
-  
-  const result = await api('verifyLogin', payload);
-  btn.disabled = false;
-  
+  const result = await api('verifyLogin', payload); btn.disabled = false;
   if (result) {
-    STATE.role = result.role;
-    STATE.user = result.name || '';
-    STATE.userId = result.id || null;
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    document.getElementById('userName').textContent = STATE.user;
-    buildNav();
-    if (STATE.role === 'student') {
-      navigateTo('studentDashboard');
-    } else {
-      navigateTo('dashboard');
-    }
+    STATE.role = result.role; STATE.user = result.name || ''; STATE.userId = result.id || null;
+    document.getElementById('loginPage').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('userName').textContent = STATE.user; buildNav();
+    navigateTo(STATE.role === 'student' ? 'studentDashboard' : 'dashboard');
   }
 }
 
-function showError(msg) {
-  const el = document.getElementById('loginError');
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
+function showError(msg) { const el = document.getElementById('loginError'); el.textContent = msg; el.style.display = 'block'; }
 function logout() { location.reload(); }
 
 // Navigation
@@ -1581,18 +619,12 @@ const NAV_ITEMS = {
   admin: [
     { id: 'dashboard', icon: 'dashboard', key: 'dashboard', cat: 'mainMenu' },
     { id: 'students', icon: 'users', key: 'students', cat: 'management' },
-    { id: 'courses', icon: 'book', key: 'courses', cat: 'management' },
-    { id: 'teachers', icon: 'teacher', key: 'teachers', cat: 'management' },
-    { id: 'attendance', icon: 'check', key: 'attendance', cat: 'management' },
     { id: 'payments', icon: 'money', key: 'payments', cat: 'management' },
-    { id: 'reports', icon: 'chart', key: 'reports', cat: 'reportsSection' },
-    { id: 'downloads', icon: 'download', key: 'downloads', cat: 'reportsSection' }
-  ],
-  employee: [
-    { id: 'dashboard', icon: 'dashboard', key: 'dashboard', cat: 'mainMenu' },
-    { id: 'students', icon: 'users', key: 'students', cat: 'management' },
+    { id: 'grades', icon: 'star', key: 'grades', cat: 'management' },
+    { id: 'schedules', icon: 'clock', key: 'schedules', cat: 'management' },
+    { id: 'excuses', icon: 'mail', key: 'excuses', cat: 'management' },
     { id: 'attendance', icon: 'check', key: 'attendance', cat: 'management' },
-    { id: 'payments', icon: 'money', key: 'payments', cat: 'management' }
+    { id: 'downloads', icon: 'download', key: 'downloads', cat: 'reports' }
   ],
   student: [
     { id: 'studentDashboard', icon: 'dashboard', key: 'myDashboard', cat: 'mainMenu' },
@@ -1605,835 +637,285 @@ const NAV_ITEMS = {
 
 function buildNav() {
   const nav = NAV_ITEMS[STATE.role] || NAV_ITEMS.admin;
-  let html = '';
-  let lastCat = '';
-  
+  let html = '', lastCat = '';
   nav.forEach(n => {
-    if (n.cat !== lastCat) {
-      html += `<div class="nav-section">${t(n.cat)}</div>`;
-      lastCat = n.cat;
-    }
-    html += `
-      <button class="nav-item" data-nav="${n.id}" onclick="navigateTo('${n.id}')">
-        ${ICONS[n.icon]}
-        <span>${t(n.key)}</span>
-      </button>
-    `;
+    if (n.cat !== lastCat) { html += `<div class="nav-section">${t(n.cat)}</div>`; lastCat = n.cat; }
+    html += `<button class="nav-item" data-nav="${n.id}" onclick="navigateTo('${n.id}')">${ICONS[n.icon]}<span>${t(n.key)}</span></button>`;
   });
-  
   document.getElementById('sbNav').innerHTML = html;
 }
 
 function navigateTo(id) {
-  const sec = document.getElementById('sec_' + id);
-  if (!sec) return;
-  
-  const allowedRoles = (sec.getAttribute('data-role') || '').split(',');
-  if (!allowedRoles.includes(STATE.role)) return;
-  
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  sec.classList.add('active');
-  
+  const sec = document.getElementById('sec_' + id); if (!sec) return;
+  const allowedRoles = (sec.getAttribute('data-role') || '').split(','); if (!allowedRoles.includes(STATE.role)) return;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); sec.classList.add('active');
   document.querySelectorAll('.nav-item[data-nav]').forEach(n => n.classList.remove('active'));
-  const navBtn = document.querySelector(`.nav-item[data-nav="${id}"]`);
-  if (navBtn) navBtn.classList.add('active');
-  
-  const nav = NAV_ITEMS[STATE.role] || NAV_ITEMS.admin;
-  const item = nav.find(n => n.id === id);
+  const navBtn = document.querySelector(`.nav-item[data-nav="${id}"]`); if (navBtn) navBtn.classList.add('active');
+  const nav = NAV_ITEMS[STATE.role] || NAV_ITEMS.admin; const item = nav.find(n => n.id === id);
   document.getElementById('pageTitle').textContent = item ? t(item.key) : '';
-  
-  const loaders = {
-    dashboard: loadDashboard, students: loadStudents, courses: loadCourses,
-    teachers: loadTeachers, attendance: loadAttendance, payments: loadPayments,
-    reports: loadReports, downloads: loadDownloads,
-    studentDashboard: loadStudentDashboard, studentProfile: loadStudentProfile,
-    studentGrades: loadStudentGrades, studentPayments: loadStudentPayments,
-    studentAttendance: loadStudentAttendance
-  };
-  
+  const loaders = { dashboard: loadDashboard, students: loadStudents, payments: loadPayments, grades: loadGrades, schedules: loadSchedules, excuses: loadExcuses, attendance: loadAttendance, downloads: loadDownloads, studentDashboard: loadStudentDashboard, studentProfile: loadStudentProfile, studentGrades: loadStudentGrades, studentPayments: loadStudentPayments, studentAttendance: loadStudentAttendance };
   if (loaders[id]) loaders[id]();
-  
-  if (window.innerWidth <= 900) {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').style.display = 'none';
-  }
+  if (window.innerWidth <= 900) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').style.display = 'none'; }
 }
 
-function toggleSidebar() {
-  const sb = document.getElementById('sidebar');
-  sb.classList.toggle('open');
-  document.getElementById('sidebarOverlay').style.display = sb.classList.contains('open') ? 'block' : 'none';
-}
+function toggleSidebar() { const sb = document.getElementById('sidebar'); sb.classList.toggle('open'); document.getElementById('sidebarOverlay').style.display = sb.classList.contains('open') ? 'block' : 'none'; }
 
-// =============================================
-// ADMIN/EMPLOYEE PAGES
-// =============================================
+// ============================================= ADMIN PAGES =============================================
 
 async function loadDashboard() {
-  const d = await api('dashboard');
-  if (!d) return;
-  
+  const d = await api('dashboard'); if (!d) return;
   let html = '<div class="stats-grid">';
   html += statCard('users', d.totalStudents || 0, t('totalStudents'));
   html += statCard('users', d.activeStudents || 0, t('activeStudents'), 'gold');
-  html += statCard('book', d.totalCourses || 0, t('totalCourses'), 'info');
-  html += statCard('teacher', d.totalTeachers || 0, t('totalTeachers'), 'purple');
-  html += '</div>';
-  
-  html += '<div class="stats-grid">';
   html += statCard('money', d.totalRevenue || 0, t('totalRevenue'), 'cyan');
   html += statCard('warning', d.pendingPayments || 0, t('pendingPayments'), 'danger');
+  html += '</div>';
+  html += '<div class="stats-grid">';
   html += statCard('check', d.presentToday || 0, t('presentToday'));
   html += statCard('x', d.absentToday || 0, t('absentToday'), 'danger');
   html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['dashboard']}</div>
-        ${t('quickActions')}
-      </div>
-    </div>
-    <div class="quick-grid">
-      <button class="quick-btn" onclick="navigateTo('students')">
-        ${ICONS['userPlus']}
-        <span>${t('addStudent')}</span>
-      </button>
-      <button class="quick-btn" onclick="navigateTo('courses')">
-        ${ICONS['book']}
-        <span>${t('addCourse')}</span>
-      </button>
-      <button class="quick-btn" onclick="navigateTo('attendance')">
-        ${ICONS['qr']}
-        <span>${t('qrCode')}</span>
-      </button>
-      <button class="quick-btn" onclick="navigateTo('payments')">
-        ${ICONS['money']}
-        <span>${t('addPayment')}</span>
-      </button>
-    </div>
-  </div>`;
-  
+  html += `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['dashboard']}</div>${t('quickActions')}</div></div><div class="quick-grid">`;
+  html += `<button class="quick-btn" onclick="navigateTo('students')">${ICONS['userPlus']}<span>${t('addStudent')}</span></button>`;
+  html += `<button class="quick-btn" onclick="navigateTo('payments')">${ICONS['money']}<span>${t('payments')}</span></button>`;
+  html += `<button class="quick-btn" onclick="navigateTo('attendance')">${ICONS['check']}<span>${t('attendance')}</span></button>`;
+  html += `<button class="quick-btn" onclick="navigateTo('grades')">${ICONS['star']}<span>${t('grades')}</span></button>`;
+  html += '</div></div>';
   document.getElementById('sec_dashboard').innerHTML = html;
 }
 
-// Students
 async function loadStudents() {
-  const list = await api('students');
-  STATE.cache.students = list || [];
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['userPlus']}</div>
-        ${t('addStudent')}
-      </div>
-    </div>`;
-  
+  const list = await api('students'); STATE.cache.students = list || [];
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['userPlus']}</div>${t('addStudent')}</div></div>`;
   html += '<div class="form-row">';
   html += `<div class="form-group"><label class="form-label">${t('name')} *</label><input class="form-input" id="stuName"></div>`;
   html += `<div class="form-group"><label class="form-label">${t('grade')}</label><select class="form-input" id="stuGrade">${buildOptions(CONFIG.grades.filter(g => STATE.lang === 'ar' ? g.includes('صف') : !g.includes('صف')))}</select></div>`;
   html += `<div class="form-group"><label class="form-label">${t('phone')}</label><input class="form-input" id="stuPhone"></div>`;
-  html += '</div>';
-  
-  html += '<div class="form-row">';
+  html += '</div><div class="form-row">';
   html += `<div class="form-group"><label class="form-label">${t('parent')}</label><input class="form-input" id="stuParent"></div>`;
   html += `<div class="form-group"><label class="form-label">${t('whatsapp')}</label><input class="form-input" id="stuWhatsapp" maxlength="11"></div>`;
   html += `<div class="form-group"><label class="form-label">${t('group')}</label><select class="form-input" id="stuGroup">${buildOptions(CONFIG.groups)}</select></div>`;
-  html += '</div>';
-  
-  html += '<div class="form-row">';
+  html += '</div><div class="form-row">';
   html += `<div class="form-group"><label class="form-label">${t('subscription')}</label><select class="form-input" id="stuSub">${buildOptions(['300','350','400','450','500'])}</select></div>`;
   html += `<div class="form-group"><label class="form-label">${t('status')}</label><select class="form-input" id="stuStatus"><option value="نشط">${t('active')}</option><option value="غير نشط">${t('inactive')}</option></select></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('notes')}</label><input class="form-input" id="stuNotes"></div>`;
   html += '</div>';
-  
-  html += `<button class="btn btn-primary" onclick="addStudent()">${ICONS['userPlus']}<span>${t('add')}</span></button>`;
-  html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon gold">${ICONS['users']}</div>
-        ${t('studentList')} (${STATE.cache.students.length})
-      </div>
-      <div class="search-box">
-        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input class="form-input" placeholder="${t('search')}" oninput="filterStudents(this.value)">
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>ID</th><th>${t('name')}</th><th>${t('grade')}</th><th>${t('group')}</th>
-          <th>${t('phone')}</th><th>${t('status')}</th><th></th>
-        </tr></thead>
-        <tbody id="studentsTableBody"></tbody>
-      </table>
-    </div>
-  </div>`;
-  
+  html += `<button class="btn btn-primary" onclick="addStudent()">${ICONS['userPlus']}<span>${t('add')}</span></button></div>`;
+  html += `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon gold">${ICONS['users']}</div>${t('studentList')} (${STATE.cache.students.length})</div>`;
+  html += `<div class="search-box"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input class="form-input" placeholder="${t('search')}" oninput="filterStudents(this.value)"></div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>ID</th><th>${t('name')}</th><th>${t('grade')}</th><th>${t('group')}</th><th>${t('phone')}</th><th>${t('status')}</th><th></th></tr></thead><tbody id="studentsTableBody"></tbody></table></div></div>`;
   document.getElementById('sec_students').innerHTML = html;
   renderStudentsTable(STATE.cache.students);
 }
 
 function renderStudentsTable(list) {
-  const tb = document.getElementById('studentsTableBody');
-  if (!tb) return;
-  
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="7">${emptyState('users', t('noData'))}</td></tr>`;
-    return;
-  }
-  
+  const tb = document.getElementById('studentsTableBody'); if (!tb) return;
+  if (!list.length) { tb.innerHTML = `<tr><td colspan="7">${emptyState('users', t('noData'))}</td></tr>`; return; }
   tb.innerHTML = list.map(s => {
     const statusBadge = s.status === 'نشط' ? badge(t('active'), 'badge-success') : badge(t('inactive'), 'badge-danger');
-    return `<tr>
-      <td>${safeVal(s.id)}</td>
-      <td style="font-weight:600">${safeVal(s.name)}</td>
-      <td>${safeVal(s.grade)}</td>
-      <td>${safeVal(s.group)}</td>
-      <td>${safeVal(s.phone)}</td>
-      <td>${statusBadge}</td>
-      <td>
-        <div class="btn-group">
-          <button class="btn btn-sm btn-secondary" onclick="editStudent(${s.id})">${ICONS['chart']}</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteStudent(${s.id})">${ICONS['x']}</button>
-        </div>
-      </td>
-    </tr>`;
+    return `<tr><td>${safeVal(s.id)}</td><td style="font-weight:600">${safeVal(s.name)}</td><td>${safeVal(s.grade)}</td><td>${safeVal(s.group)}</td><td>${safeVal(s.phone)}</td><td>${statusBadge}</td><td><div class="btn-group"><button class="btn btn-sm btn-secondary" onclick="editStudent(${s.id})">${ICONS['chart']}</button><button class="btn btn-sm btn-danger" onclick="deleteStudent(${s.id})">${ICONS['x']}</button></div></td></tr>`;
   }).join('');
 }
 
-function filterStudents(query) {
-  const q = query.toLowerCase();
-  renderStudentsTable(STATE.cache.students.filter(s => 
-    (safeVal(s.name) + ' ' + safeVal(s.id) + ' ' + safeVal(s.phone)).toLowerCase().includes(q)
-  ));
-}
+function filterStudents(query) { const q = query.toLowerCase(); renderStudentsTable(STATE.cache.students.filter(s => (safeVal(s.name) + ' ' + safeVal(s.id) + ' ' + safeVal(s.phone)).toLowerCase().includes(q))); }
 
 async function addStudent() {
-  const name = getVal('stuName');
-  if (!name) { showToast(t('name') + '!', 'error'); return; }
-  
-  await api('students/add', {
-    name, grade: getVal('stuGrade'), phone: getVal('stuPhone'),
-    parentName: getVal('stuParent'), whatsapp: getVal('stuWhatsapp'),
-    group: getVal('stuGroup'), subscription: +getVal('stuSub'),
-    status: getVal('stuStatus'), notes: getVal('stuNotes')
-  });
-  
-  showToast(t('add'), 'success');
-  loadStudents();
+  const name = getVal('stuName'); if (!name) { showToast(t('name') + '!', 'error'); return; }
+  await api('students/add', { name, grade: getVal('stuGrade'), phone: getVal('stuPhone'), parentName: getVal('stuParent'), whatsapp: getVal('stuWhatsapp'), group: getVal('stuGroup'), subscription: +getVal('stuSub'), status: getVal('stuStatus') });
+  showToast(t('add'), 'success'); loadStudents();
 }
 
 async function editStudent(id) {
-  const s = STATE.cache.students.find(x => x.id == id);
-  if (!s) return;
-  
-  let html = `<div class="modal-title">${ICONS['users']}${t('edit')}</div>`;
-  html += '<div class="form-row">';
+  const s = STATE.cache.students.find(x => x.id == id); if (!s) return;
+  let html = `<div class="modal-title">${ICONS['users']}${t('edit')}</div><div class="form-row">`;
   html += `<div class="form-group"><label class="form-label">${t('name')}</label><input class="form-input" id="editName" value="${safeVal(s.name)}"></div>`;
   html += `<div class="form-group"><label class="form-label">${t('phone')}</label><input class="form-input" id="editPhone" value="${safeVal(s.phone)}"></div>`;
-  html += '</div>';
-  html += '<div class="form-row">';
+  html += '</div><div class="form-row">';
   html += `<div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="editSub" type="number" value="${safeVal(s.subscription)}"></div>`;
   html += `<div class="form-group"><label class="form-label">${t('status')}</label><select class="form-input" id="editStatus"><option value="نشط"${s.status === 'نشط' ? ' selected' : ''}>${t('active')}</option><option value="غير نشط"${s.status === 'غير نشط' ? ' selected' : ''}>${t('inactive')}</option></select></div>`;
   html += '</div>';
-  html += `<div class="modal-actions">
-    <button class="btn btn-primary" onclick="saveStudent(${id})">${t('save')}</button>
-    <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
-  </div>`;
-  
+  html += `<div class="modal-actions"><button class="btn btn-primary" onclick="saveStudent(${id})">${t('save')}</button><button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button></div>`;
   showModal(html);
 }
 
 async function saveStudent(id) {
-  await api('students/update', {
-    id, name: getVal('editName'), phone: getVal('editPhone'),
-    subscription: +getVal('editSub'), status: getVal('editStatus')
-  });
-  closeModal();
-  showToast(t('save'), 'success');
-  loadStudents();
+  await api('students/update', { id, name: getVal('editName'), phone: getVal('editPhone'), subscription: +getVal('editSub'), status: getVal('editStatus') });
+  closeModal(); showToast(t('save'), 'success'); loadStudents();
 }
 
-async function deleteStudent(id) {
-  if (await confirmDialog(t('confirmDelete'))) {
-    await api('students/delete', { id });
-    showToast(t('delete'), 'success');
-    loadStudents();
-  }
-}
+async function deleteStudent(id) { if (await confirmDialog(t('confirmDelete'))) { await api('students/delete', { id }); showToast(t('delete'), 'success'); loadStudents(); } }
 
-// Courses
-async function loadCourses() {
-  const list = await api('courses');
-  const teachers = await api('teachers');
-  STATE.cache.courses = list || [];
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['book']}</div>
-        ${t('addCourse')}
-      </div>
-    </div>`;
-  
+async function loadPayments() {
+  const students = await api('students'); const payments = await api('payments');
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['money']}</div>${t('addPayment')}</div></div>`;
   html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('name')} *</label><input class="form-input" id="courseName"></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('subject')}</label><select class="form-input" id="courseSubject">${buildOptions(CONFIG.subjects.filter(s => STATE.lang === 'ar' ? !s.match(/[A-Z]/) : s.match(/[A-Z]/)))}</select></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('teacher')}</label><select class="form-input" id="courseTeacher"><option value="">--</option>${(teachers || []).map(t => `<option value="${t.id}">${t.name}</option>`).join('')}</select></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('name')}</label><select class="form-input" id="payStudent"><option value="">--</option>${(students || []).map(s => `<option value="${s.id}" data-sub="${s.subscription}">${s.name}</option>`).join('')}</select></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('month')}</label><select class="form-input" id="payMonth">${buildOptions(getMonths(), getCurrentMonth())}</select></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('year')}</label><select class="form-input" id="payYear">${[2024,2025,2026].map(y => `<option${y === getCurrentYear() ? ' selected' : ''}>${y}</option>`).join('')}</select></div>`;
+  html += '</div><div class="form-row">';
+  html += `<div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="paySub" type="number" readonly></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('amount')}</label><input class="form-input" id="payAmount" type="number"></div>`;
   html += '</div>';
-  
-  html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('price')}</label><input class="form-input" id="coursePrice" type="number"></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('sessions')}</label><input class="form-input" id="courseSessions" type="number"></div>`;
-  html += '</div>';
-  
-  html += `<button class="btn btn-primary" onclick="addCourse()">${ICONS['book']}<span>${t('add')}</span></button>`;
-  html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon gold">${ICONS['book']}</div>
-        ${t('courseList')} (${STATE.cache.courses.length})
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>ID</th><th>${t('name')}</th><th>${t('subject')}</th><th>${t('teacher')}</th>
-          <th>${t('price')}</th><th>${t('sessions')}</th><th></th>
-        </tr></thead>
-        <tbody id="coursesTableBody"></tbody>
-      </table>
-    </div>
-  </div>`;
-  
-  document.getElementById('sec_courses').innerHTML = html;
-  renderCoursesTable(STATE.cache.courses);
+  html += `<button class="btn btn-primary" onclick="addPayment()">${ICONS['money']}<span>${t('add')}</span></button></div>`;
+  html += `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon gold">${ICONS['money']}</div>${t('payments')}</div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>${t('name')}</th><th>${t('month')}/${t('year')}</th><th>${t('subscription')}</th><th>${t('paid')}</th><th>${t('status')}</th></tr></thead><tbody id="paymentsTableBody"></tbody></table></div></div>`;
+  document.getElementById('sec_payments').innerHTML = html;
+  document.getElementById('payStudent').addEventListener('change', function() { const opt = this.options[this.selectedIndex]; document.getElementById('paySub').value = opt.dataset.sub || ''; });
+  renderPaymentsTable(payments || []);
 }
 
-function renderCoursesTable(list) {
-  const tb = document.getElementById('coursesTableBody');
-  if (!tb) return;
-  
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="7">${emptyState('book', t('noData'))}</td></tr>`;
-    return;
-  }
-  
-  tb.innerHTML = list.map(c => `<tr>
-    <td>${safeVal(c.id)}</td>
-    <td style="font-weight:600">${safeVal(c.name)}</td>
-    <td>${safeVal(c.subject)}</td>
-    <td>${safeVal(c.teacherName)}</td>
-    <td>${safeVal(c.price)}</td>
-    <td>${safeVal(c.sessions)}</td>
-    <td>
-      <div class="btn-group">
-        <button class="btn btn-sm btn-danger" onclick="deleteCourse(${c.id})">${ICONS['x']}</button>
-      </div>
-    </td>
-  </tr>`).join('');
+function renderPaymentsTable(list) {
+  const tb = document.getElementById('paymentsTableBody'); if (!tb) return;
+  if (!list.length) { tb.innerHTML = `<tr><td colspan="5">${emptyState('money', t('noData'))}</td></tr>`; return; }
+  tb.innerHTML = list.map(p => {
+    const statusBadge = p.status === 'مكتمل' ? badge(t('complete'), 'badge-success') : badge(t('incomplete'), 'badge-warn');
+    return `<tr><td>${safeVal(p.name)}</td><td>${safeVal(p.monthYear)}</td><td>${safeVal(p.subscription)}</td><td>${safeVal(p.paid)}</td><td>${statusBadge}</td></tr>`;
+  }).join('');
 }
 
-async function addCourse() {
-  const name = getVal('courseName');
-  if (!name) { showToast(t('name') + '!', 'error'); return; }
-  
-  await api('courses/add', {
-    name, subject: getVal('courseSubject'), teacherId: getVal('courseTeacher'),
-    price: +getVal('coursePrice'), sessions: +getVal('courseSessions')
-  });
-  
-  showToast(t('add'), 'success');
-  loadCourses();
+async function addPayment() {
+  const studentSelect = document.getElementById('payStudent'); const studentId = studentSelect.value; const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+  if (!studentId) { showToast(t('name') + '!', 'error'); return; }
+  await api('payments/add', { studentId, studentName, month: getVal('payMonth'), year: getVal('payYear'), subscription: +getVal('paySub'), paid: +getVal('payAmount') });
+  showToast(t('add'), 'success'); loadPayments();
 }
 
-async function deleteCourse(id) {
-  if (await confirmDialog(t('confirmDelete'))) {
-    await api('courses/delete', { id });
-    showToast(t('delete'), 'success');
-    loadCourses();
-  }
+async function loadGrades() {
+  const list = await api('grades');
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['star']}</div>${t('grades')}</div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>ID</th><th>${t('name')}</th><th>E1</th><th>E2</th><th>E3</th><th>E4</th><th>HW1</th><th>HW2</th><th>HW3</th><th>${t('average')}</th><th>${t('rating')}</th><th></th></tr></thead><tbody id="gradesTableBody"></tbody></table></div></div>`;
+  document.getElementById('sec_grades').innerHTML = html;
+  const tb = document.getElementById('gradesTableBody'); if (!tb) return;
+  if (!list || !list.length) { tb.innerHTML = `<tr><td colspan="12">${emptyState('star', t('noData'))}</td></tr>`; return; }
+  tb.innerHTML = list.map((g, i) => {
+    let row = `<tr><td>${safeVal(g.id)}</td><td style="font-weight:600">${safeVal(g.name)}</td>`;
+    ['exam1', 'exam2', 'exam3', 'exam4', 'hw1', 'hw2', 'hw3'].forEach((k, j) => { row += `<td><input class="form-input" style="width:50px;padding:4px;text-align:center" value="${safeVal(g[k])}" id="grade_${i}_${j}" onchange="calcAvg(${i})"></td>`; });
+    row += `<td id="gradeAvg_${i}" style="font-weight:800;color:var(--accent)">${safeVal(g.avg)}</td>`;
+    row += `<td><input class="form-input" style="width:60px;padding:4px;text-align:center" value="${safeVal(g.grade)}" id="gradeRating_${i}"></td>`;
+    row += `<td><button class="btn btn-sm btn-primary" onclick="saveGrade(${i}, '${g.id}')">${ICONS['check']}</button></td></tr>`;
+    return row;
+  }).join('');
 }
 
-// Teachers
-async function loadTeachers() {
-  const list = await api('teachers');
-  STATE.cache.teachers = list || [];
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['teacher']}</div>
-        ${t('addTeacher')}
-      </div>
-    </div>`;
-  
-  html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('name')} *</label><input class="form-input" id="teacherName"></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('phone')}</label><input class="form-input" id="teacherPhone"></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('subject')}</label><input class="form-input" id="teacherSubject"></div>`;
-  html += '</div>';
-  
-  html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('salaryType')}</label><select class="form-input" id="teacherSalaryType"><option value="ثابت">${t('fixed')}</option><option value="نسبة">${t('percentageBased')}</option></select></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('salary')}</label><input class="form-input" id="teacherSalary" type="number"></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('percentage')}</label><input class="form-input" id="teacherPercentage" type="number" placeholder="%"></div>`;
-  html += '</div>';
-  
-  html += `<button class="btn btn-primary" onclick="addTeacher()">${ICONS['teacher']}<span>${t('add')}</span></button>`;
-  html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon gold">${ICONS['teacher']}</div>
-        ${t('teacherList')} (${STATE.cache.teachers.length})
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>ID</th><th>${t('name')}</th><th>${t('subject')}</th><th>${t('phone')}</th>
-          <th>${t('salaryType')}</th><th></th>
-        </tr></thead>
-        <tbody id="teachersTableBody"></tbody>
-      </table>
-    </div>
-  </div>`;
-  
-  document.getElementById('sec_teachers').innerHTML = html;
-  renderTeachersTable(STATE.cache.teachers);
+function calcAvg(i) {
+  const vals = []; for (let j = 0; j < 7; j++) { const v = parseFloat(document.getElementById(`grade_${i}_${j}`).value); if (!isNaN(v)) vals.push(v); }
+  const el = document.getElementById(`gradeAvg_${i}`); const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : '';
+  el.textContent = avg; el.style.color = vals.length && avg >= 50 ? 'var(--accent)' : 'var(--danger)';
 }
 
-function renderTeachersTable(list) {
-  const tb = document.getElementById('teachersTableBody');
-  if (!tb) return;
-  
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="6">${emptyState('teacher', t('noData'))}</td></tr>`;
-    return;
-  }
-  
-  tb.innerHTML = list.map(t => `<tr>
-    <td>${safeVal(t.id)}</td>
-    <td style="font-weight:600">${safeVal(t.name)}</td>
-    <td>${safeVal(t.subject)}</td>
-    <td>${safeVal(t.phone)}</td>
-    <td>${safeVal(t.salaryType)}</td>
-    <td>
-      <div class="btn-group">
-        <button class="btn btn-sm btn-danger" onclick="deleteTeacher(${t.id})">${ICONS['x']}</button>
-      </div>
-    </td>
-  </tr>`).join('');
+async function saveGrade(i, id) {
+  const data = { id }; ['exam1', 'exam2', 'exam3', 'exam4', 'hw1', 'hw2', 'hw3'].forEach((k, j) => { data[k] = document.getElementById(`grade_${i}_${j}`).value; });
+  data.avg = document.getElementById(`gradeAvg_${i}`).textContent; data.grade = document.getElementById(`gradeRating_${i}`).value;
+  await api('grades/update', data); showToast(t('save'), 'success');
 }
 
-async function addTeacher() {
-  const name = getVal('teacherName');
-  if (!name) { showToast(t('name') + '!', 'error'); return; }
-  
-  await api('teachers/add', {
-    name, phone: getVal('teacherPhone'), subject: getVal('teacherSubject'),
-    salaryType: getVal('teacherSalaryType'), salary: +getVal('teacherSalary'),
-    percentage: +getVal('teacherPercentage')
-  });
-  
-  showToast(t('add'), 'success');
-  loadTeachers();
+async function loadSchedules() {
+  const list = await api('schedules');
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['clock']}</div>${t('schedules')}</div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>${t('day')}</th><th>${t('time')}</th><th>${t('group')}</th><th>${t('subject')}</th><th>${t('status')}</th></tr></thead><tbody id="schedulesTableBody"></tbody></table></div></div>`;
+  document.getElementById('sec_schedules').innerHTML = html;
+  const tb = document.getElementById('schedulesTableBody'); if (!tb) return;
+  if (!list || !list.length) { tb.innerHTML = `<tr><td colspan="5">${emptyState('clock', t('noData'))}</td></tr>`; return; }
+  tb.innerHTML = list.map(s => `<tr><td>${safeVal(s.day)}</td><td>${safeVal(s.time)}</td><td>${safeVal(s.group)}</td><td>${safeVal(s.subject)}</td><td>${badge(s.status || t('active'), s.status === 'نشط' ? 'badge-success' : 'badge-danger')}</td></tr>`).join('');
 }
 
-async function deleteTeacher(id) {
-  if (await confirmDialog(t('confirmDelete'))) {
-    await api('teachers/delete', { id });
-    showToast(t('delete'), 'success');
-    loadTeachers();
-  }
+async function loadExcuses() {
+  const list = await api('excuses');
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['mail']}</div>${t('excuses')}</div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>ID</th><th>${t('name')}</th><th>${t('status')}</th><th></th></tr></thead><tbody id="excusesTableBody"></tbody></table></div></div>`;
+  document.getElementById('sec_excuses').innerHTML = html;
+  const tb = document.getElementById('excusesTableBody'); if (!tb) return;
+  if (!list || !list.length) { tb.innerHTML = `<tr><td colspan="4">${emptyState('mail', t('noData'))}</td></tr>`; return; }
+  tb.innerHTML = list.map(e => {
+    let statusBadge; if (e.status.includes('قيد')) statusBadge = badge('Pending', 'badge-warn'); else if (e.status.includes('مقبول')) statusBadge = badge('Approved', 'badge-success'); else statusBadge = badge('Rejected', 'badge-danger');
+    return `<tr><td>${safeVal(e.id)}</td><td>${safeVal(e.studentName)}</td><td>${statusBadge}</td><td><div class="btn-group"><button class="btn btn-sm btn-secondary" onclick="replyExcuse('${e.id}', 'مقبول')">${ICONS['check']}</button><button class="btn btn-sm btn-danger" onclick="replyExcuse('${e.id}', 'مرفوض')">${ICONS['x']}</button></div></td></tr>`;
+  }).join('');
 }
 
-// Attendance
+async function replyExcuse(id, status) {
+  await api('excuses/update', { id, status });
+  showToast(t('save'), 'success'); loadExcuses();
+}
+
 async function loadAttendance() {
   const students = await api('students');
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['qr']}</div>
-        ${t('qrCode')} - ${t('attendance')}
-      </div>
-    </div>
-    <div class="qr-section">
-      <div class="qr-code" id="qrCodeDisplay">
-        <svg viewBox="0 0 24 24" width="180" height="180" fill="var(--accent)">
-          <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13-2h-2v2h2v-2zm2 0h2v4h-4v-2h2v-2zm-2 6h2v2h-2v-2zm-4-4h2v2h-2v-2z"/>
-        </svg>
-      </div>
-      <p class="qr-instructions">${t('scanQR')}</p>
-    </div>
-  </div>`;
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon gold">${ICONS['check']}</div>
-        ${t('attendance')} - ${getCurrentDay()} - ${new Date().toLocaleDateString(STATE.lang === 'ar' ? 'ar-EG' : 'en-US')}
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>ID</th><th>${t('name')}</th><th>${t('group')}</th><th>${t('status')}</th><th></th>
-        </tr></thead>
-        <tbody id="attendanceTableBody"></tbody>
-      </table>
-    </div>
-  </div>`;
-  
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['check']}</div>${t('attendance')} - ${getCurrentDay()} - ${new Date().toLocaleDateString(STATE.lang === 'ar' ? 'ar-EG' : 'en-US')}</div></div>`;
+  html += `<div class="table-wrapper"><table><thead><tr><th>ID</th><th>${t('name')}</th><th>${t('group')}</th><th>${t('status')}</th><th></th></tr></thead><tbody id="attendanceTableBody"></tbody></table></div></div>`;
   document.getElementById('sec_attendance').innerHTML = html;
-  
-  const tb = document.getElementById('attendanceTableBody');
-  if (!tb) return;
-  
-  if (!students || !students.length) {
-    tb.innerHTML = `<tr><td colspan="5">${emptyState('users', t('noData'))}</td></tr>`;
-    return;
-  }
-  
-  tb.innerHTML = students.map(s => `
-    <tr>
-      <td>${safeVal(s.id)}</td>
-      <td style="font-weight:600">${safeVal(s.name)}</td>
-      <td>${safeVal(s.group)}</td>
-      <td id="attStatus_${s.id}">${badge('-', 'badge-info')}</td>
-      <td>
-        <div class="btn-group">
-          <button class="btn btn-sm btn-secondary" onclick="markAttendance(${s.id}, 'حاضر')">${ICONS['check']}</button>
-          <button class="btn btn-sm btn-danger" onclick="markAttendance(${s.id}, 'غائب')">${ICONS['x']}</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  const tb = document.getElementById('attendanceTableBody'); if (!tb) return;
+  if (!students || !students.length) { tb.innerHTML = `<tr><td colspan="5">${emptyState('users', t('noData'))}</td></tr>`; return; }
+  tb.innerHTML = students.map(s => `<tr><td>${safeVal(s.id)}</td><td style="font-weight:600">${safeVal(s.name)}</td><td>${safeVal(s.group)}</td><td id="attStatus_${s.id}">${badge('-', 'badge-info')}</td><td><div class="btn-group"><button class="btn btn-sm btn-secondary" onclick="markAttendance(${s.id}, 'حاضر')">${ICONS['check']}</button><button class="btn btn-sm btn-danger" onclick="markAttendance(${s.id}, 'غائب')">${ICONS['x']}</button></div></td></tr>`).join('');
 }
 
 async function markAttendance(studentId, status) {
   const statusEl = document.getElementById(`attStatus_${studentId}`);
   statusEl.innerHTML = status === 'حاضر' ? badge(t('present'), 'badge-success') : badge(t('absent'), 'badge-danger');
-  
   await api('attendance/mark', { studentId, status, date: new Date().toISOString().split('T')[0] });
   showToast(t('save'), 'success');
 }
 
-// Payments
-async function loadPayments() {
-  const students = await api('students');
-  const payments = await api('payments');
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['money']}</div>
-        ${t('addPayment')}
-      </div>
-    </div>`;
-  
-  html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('name')}</label><select class="form-input" id="payStudent"><option value="">--</option>${(students || []).map(s => `<option value="${s.id}" data-sub="${s.subscription}">${s.name}</option>`).join('')}</select></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('month')}</label><select class="form-input" id="payMonth">${buildOptions(getMonths(), getCurrentMonth())}</select></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('year')}</label><select class="form-input" id="payYear">${[2024,2025,2026].map(y => `<option${y === getCurrentYear() ? ' selected' : ''}>${y}</option>`).join('')}</select></div>`;
-  html += '</div>';
-  
-  html += '<div class="form-row">';
-  html += `<div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="paySub" type="number" readonly></div>`;
-  html += `<div class="form-group"><label class="form-label">${t('amount')}</label><input class="form-input" id="payAmount" type="number"></div>`;
-  html += '</div>';
-  
-  html += `<button class="btn btn-primary" onclick="addPayment()">${ICONS['money']}<span>${t('add')}</span></button>`;
-  html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon gold">${ICONS['money']}</div>
-        ${t('payments')}
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>${t('name')}</th><th>${t('month')}/${t('year')}</th><th>${t('subscription')}</th>
-          <th>${t('paid')}</th><th>${t('status')}</th>
-        </tr></thead>
-        <tbody id="paymentsTableBody"></tbody>
-      </table>
-    </div>
-  </div>`;
-  
-  document.getElementById('sec_payments').innerHTML = html;
-  
-  document.getElementById('payStudent').addEventListener('change', function() {
-    const opt = this.options[this.selectedIndex];
-    document.getElementById('paySub').value = opt.dataset.sub || '';
-  });
-  
-  renderPaymentsTable(payments || []);
-}
-
-function renderPaymentsTable(list) {
-  const tb = document.getElementById('paymentsTableBody');
-  if (!tb) return;
-  
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="5">${emptyState('money', t('noData'))}</td></tr>`;
-    return;
-  }
-  
-  tb.innerHTML = list.map(p => {
-    const statusBadge = p.status === 'مكتمل' ? badge(t('complete'), 'badge-success') : badge(t('incomplete'), 'badge-warn');
-    return `<tr>
-      <td>${safeVal(p.name)}</td>
-      <td>${safeVal(p.monthYear)}</td>
-      <td>${safeVal(p.subscription)}</td>
-      <td>${safeVal(p.paid)}</td>
-      <td>${statusBadge}</td>
-    </tr>`;
-  }).join('');
-}
-
-async function addPayment() {
-  const studentSelect = document.getElementById('payStudent');
-  const studentId = studentSelect.value;
-  const studentName = studentSelect.options[studentSelect.selectedIndex].text;
-  
-  if (!studentId) { showToast(t('name') + '!', 'error'); return; }
-  
-  await api('payments/add', {
-    studentId, studentName, month: getVal('payMonth'), year: getVal('payYear'),
-    subscription: +getVal('paySub'), paid: +getVal('payAmount')
-  });
-  
-  showToast(t('add'), 'success');
-  loadPayments();
-}
-
-// Reports
-async function loadReports() {
-  const d = await api('dashboard');
-  
-  let html = '<div class="stats-grid">';
-  html += statCard('money', d.totalRevenue || 0, t('totalRevenue'), 'cyan');
-  html += statCard('warning', d.pendingPayments || 0, t('pendingPayments'), 'danger');
-  html += statCard('check', d.attendanceRate || 0, t('attendanceRate'), 'gold');
-  html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['chart']}</div>
-        ${t('reports')}
-      </div>
-    </div>
-    <div class="quick-grid">
-      <a href="/api/reports/excel" class="quick-btn" style="text-decoration:none">
-        ${ICONS['download']}
-        <span>${t('exportExcel')}</span>
-      </a>
-    </div>
-  </div>`;
-  
-  document.getElementById('sec_reports').innerHTML = html;
-}
-
-// Downloads
 async function loadDownloads() {
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['download']}</div>
-        ${t('downloads')}
-      </div>
-    </div>
-    <div class="quick-grid">
-      <a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/export?format=xlsx" target="_blank" class="quick-btn" style="text-decoration:none">
-        ${ICONS['download']}
-        <span>${t('exportExcel')}</span>
-      </a>
-      <a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/edit" target="_blank" class="quick-btn" style="text-decoration:none">
-        ${ICONS['book']}
-        <span>Google Sheets</span>
-      </a>
-    </div>
-  </div>`;
-  
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['download']}</div>${t('downloads')}</div></div><div class="quick-grid">`;
+  html += `<a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/export?format=xlsx" target="_blank" class="quick-btn" style="text-decoration:none">${ICONS['download']}<span>${t('exportExcel')}</span></a>`;
+  html += `<a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/edit" target="_blank" class="quick-btn" style="text-decoration:none">${ICONS['calendar']}<span>Google Sheets</span></a>`;
+  html += '</div></div>';
   document.getElementById('sec_downloads').innerHTML = html;
 }
 
-// =============================================
-// STUDENT PORTAL PAGES
-// =============================================
+// ============================================= STUDENT PAGES =============================================
 
 async function loadStudentDashboard() {
   const d = await api('student/dashboard', { id: STATE.userId });
-  
   let html = '<div class="stats-grid">';
   html += statCard('chart', (d.attRate || 85) + '%', t('attendanceRate'));
   html += statCard('star', d.avgGrade || '-', t('average'), 'gold');
   html += '</div>';
-  
-  html += `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['calendar']}</div>
-        ${t('todaySchedule')}
-      </div>
-    </div>
-    <div id="todayScheduleList"></div>
-  </div>`;
-  
+  html += `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['calendar']}</div>${t('todaySchedule')}</div></div><div id="todayScheduleList"></div></div>`;
   document.getElementById('sec_studentDashboard').innerHTML = html;
-  
-  const schedules = await api('student/schedules', { id: STATE.userId });
-  const today = getCurrentDay();
-  const todaySch = (schedules || []).filter(s => s.day === today);
-  
+  const schedules = await api('student/schedules', { id: STATE.userId }); const today = getCurrentDay(); const todaySch = (schedules || []).filter(s => s.day === today);
   const listEl = document.getElementById('todayScheduleList');
-  if (!todaySch.length) {
-    listEl.innerHTML = emptyState('clock', t('noData'));
-  } else {
-    listEl.innerHTML = `<div class="table-wrapper"><table>
-      <thead><tr><th>${t('time')}</th><th>${t('subject')}</th></tr></thead>
-      <tbody>${todaySch.map(s => `<tr><td>${safeVal(s.time)}</td><td>${safeVal(s.subject)}</td></tr>`).join('')}</tbody>
-    </table></div>`;
-  }
+  if (!todaySch.length) { listEl.innerHTML = emptyState('clock', t('noData')); }
+  else { listEl.innerHTML = `<div class="table-wrapper"><table><thead><tr><th>${t('time')}</th><th>${t('subject')}</th></tr></thead><tbody>${todaySch.map(s => `<tr><td>${safeVal(s.time)}</td><td>${safeVal(s.subject)}</td></tr>`).join('')}</tbody></table></div>`; }
 }
 
 async function loadStudentProfile() {
   const p = await api('student/profile', { id: STATE.userId });
-  if (!p) {
-    document.getElementById('sec_studentProfile').innerHTML = emptyState('users', t('noData'));
-    return;
-  }
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['users']}</div>
-        ${t('myProfile')}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">${t('name')}</label><input class="form-input" value="${safeVal(p.name)}" readonly></div>
-      <div class="form-group"><label class="form-label">${t('grade')}</label><input class="form-input" value="${safeVal(p.grade)}" readonly></div>
-      <div class="form-group"><label class="form-label">${t('group')}</label><input class="form-input" value="${safeVal(p.group)}" readonly></div>
-    </div>
-  </div>`;
-  
+  if (!p) { document.getElementById('sec_studentProfile').innerHTML = emptyState('users', t('noData')); return; }
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['users']}</div>${t('myProfile')}</div></div><div class="form-row">`;
+  html += `<div class="form-group"><label class="form-label">${t('name')}</label><input class="form-input" value="${safeVal(p.name)}" readonly></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('grade')}</label><input class="form-input" value="${safeVal(p.grade)}" readonly></div>`;
+  html += `<div class="form-group"><label class="form-label">${t('group')}</label><input class="form-input" value="${safeVal(p.group)}" readonly></div>`;
+  html += '</div></div>';
   document.getElementById('sec_studentProfile').innerHTML = html;
 }
 
 async function loadStudentGrades() {
-  const list = await api('student/grades', { id: STATE.userId });
-  const el = document.getElementById('sec_studentGrades');
-  
+  const list = await api('student/grades', { id: STATE.userId }); const el = document.getElementById('sec_studentGrades');
   if (!list || !list.length) { el.innerHTML = emptyState('star', t('noData')); return; }
-  
   const g = list[0];
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['star']}</div>
-        ${t('myGrades')}
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>Exam 1</th><th>Exam 2</th><th>Exam 3</th><th>Exam 4</th>
-          <th>HW 1</th><th>HW 2</th><th>HW 3</th>
-          <th>${t('average')}</th><th>${t('rating')}</th>
-        </tr></thead>
-        <tbody><tr>
-          ${['exam1','exam2','exam3','exam4','hw1','hw2','hw3'].map(k => `<td>${safeVal(g[k])}</td>`).join('')}
-          <td style="font-weight:800;color:var(--accent)">${safeVal(g.avg)}</td>
-          <td>${safeVal(g.grade)}</td>
-        </tr></tbody>
-      </table>
-    </div>
-  </div>`;
-  
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['star']}</div>${t('myGrades')}</div></div><div class="table-wrapper"><table><thead><tr><th>E1</th><th>E2</th><th>E3</th><th>E4</th><th>HW1</th><th>HW2</th><th>HW3</th><th>${t('average')}</th><th>${t('rating')}</th></tr></thead><tbody><tr>`;
+  ['exam1', 'exam2', 'exam3', 'exam4', 'hw1', 'hw2', 'hw3'].forEach(k => { html += `<td>${safeVal(g[k])}</td>`; });
+  html += `<td style="font-weight:800;color:var(--accent)">${safeVal(g.avg)}</td><td>${safeVal(g.grade)}</td></tr></tbody></table></div></div>`;
   el.innerHTML = html;
 }
 
 async function loadStudentPayments() {
-  const list = await api('student/payments', { id: STATE.userId });
-  const el = document.getElementById('sec_studentPayments');
-  
+  const list = await api('student/payments', { id: STATE.userId }); const el = document.getElementById('sec_studentPayments');
   if (!list || !list.length) { el.innerHTML = emptyState('money', t('noData')); return; }
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['money']}</div>
-        ${t('myPayments')}
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr>
-          <th>${t('month')}/${t('year')}</th><th>${t('subscription')}</th><th>${t('paid')}</th><th>${t('status')}</th>
-        </tr></thead>
-        <tbody>${list.map(p => {
-          const statusBadge = p.status === 'مكتمل' ? badge(t('complete'), 'badge-success') : badge(t('incomplete'), 'badge-warn');
-          return `<tr><td>${safeVal(p.monthYear)}</td><td>${safeVal(p.subscription)}</td><td>${safeVal(p.paid)}</td><td>${statusBadge}</td></tr>`;
-        }).join('')}</tbody>
-      </table>
-    </div>
-  </div>`;
-  
-  el.innerHTML = html;
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['money']}</div>${t('myPayments')}</div></div><div class="table-wrapper"><table><thead><tr><th>${t('month')}/${t('year')}</th><th>${t('subscription')}</th><th>${t('paid')}</th><th>${t('status')}</th></tr></thead><tbody>`;
+  list.forEach(p => { const statusBadge = p.status === 'مكتمل' ? badge(t('complete'), 'badge-success') : badge(t('incomplete'), 'badge-warn'); html += `<tr><td>${safeVal(p.monthYear)}</td><td>${safeVal(p.subscription)}</td><td>${safeVal(p.paid)}</td><td>${statusBadge}</td></tr>`; });
+  el.innerHTML = html + '</tbody></table></div></div>';
 }
 
 async function loadStudentAttendance() {
-  const list = await api('student/attendance', { id: STATE.userId });
-  const el = document.getElementById('sec_studentAttendance');
-  
+  const list = await api('student/attendance', { id: STATE.userId }); const el = document.getElementById('sec_studentAttendance');
   if (!list || !list.length) { el.innerHTML = emptyState('check', t('noData')); return; }
-  
-  let html = `<div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <div class="card-icon accent">${ICONS['check']}</div>
-        ${t('myAttendance')}
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr><th>Date</th><th>${t('status')}</th></tr></thead>
-        <tbody>${list.map(a => {
-          const statusBadge = a.status === 'حاضر' ? badge(t('present'), 'badge-success') : badge(t('absent'), 'badge-danger');
-          return `<tr><td>${safeVal(a.date)}</td><td>${statusBadge}</td></tr>`;
-        }).join('')}</tbody>
-      </table>
-    </div>
-  </div>`;
-  
-  el.innerHTML = html;
+  let html = `<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${ICONS['check']}</div>${t('myAttendance')}</div></div><div class="table-wrapper"><table><thead><tr><th>Date</th><th>${t('status')}</th></tr></thead><tbody>`;
+  list.forEach(a => { const statusBadge = a.status === 'حاضر' ? badge(t('present'), 'badge-success') : badge(t('absent'), 'badge-danger'); html += `<tr><td>${safeVal(a.date)}</td><td>${statusBadge}</td></tr>`; });
+  el.innerHTML = html + '</tbody></table></div></div>';
 }
 
 // Event Listeners
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
-    doLogin();
-  }
-});
-
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin(); });
+document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 </script>
 </body>
 </html>
