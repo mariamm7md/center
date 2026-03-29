@@ -1,23 +1,2 @@
-# Environment
-.env
-.env.local
-
-# Credentials
-service-account.json
-*.pem
-*.key
-
-# Dependencies
 node_modules/
-
-# Logs
-*.log
-npm-debug.log*
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
+.env
