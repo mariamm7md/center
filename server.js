@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 // ═══════════════════════════════════════════════════════════════
 // GOOGLE APPS SCRIPT API URL
 // ═══════════════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFdUByhOAIoM_5JRpqN9r9GoH--JSssaDNwqek2qr4Fd2KNNrT3MRooCOlRZ8gt5aN/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLP1sK4m6-8JUv6CXYheJA1M4gaagR-X4XkOrI1EYhy10Kos2jMPSxix_k3DpoxZ4/exec';
 
 // ═══════════════════════════════════════════════════════════════
 // MIDDLEWARE
