@@ -22,64 +22,42 @@
     body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
     ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     
-    /* Animations */
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     /* Login */
     #loginPage { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .login-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
-    .login-pattern { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0); background-size: 40px 40px; }
-    .login-orbs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-    .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: float 20s ease-in-out infinite; }
-    .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.2), transparent 70%); top: -150px; right: -100px; }
-    .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%); bottom: -100px; left: -80px; animation-delay: -10s; }
-    .orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%); top: 50%; left: 50%; animation-delay: -5s; }
-    .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; width: 440px; max-width: 94vw; position: relative; z-index: 10; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .login-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+    .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; width: 440px; max-width: 94vw; position: relative; z-index: 10; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); animation: fadeIn 0.6s; }
     .login-header { text-align: center; margin-bottom: 36px; }
     .login-logo { width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3); }
     .login-logo svg { width: 40px; height: 40px; fill: white; }
     .login-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-    .login-subtitle { font-size: 13px; color: var(--text2); }
     .role-tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border-radius: 14px; margin-bottom: 28px; border: 1px solid var(--border); }
     .role-tab { flex: 1; padding: 14px; border: none; border-radius: 10px; background: transparent; color: var(--text2); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
     .role-tab.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35); }
-    .role-tab:hover:not(.active) { color: var(--text); background: var(--accent-g); }
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
     .form-input { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--r2); background: var(--bg2); color: var(--text); font-family: inherit; font-size: 14px; transition: all 0.25s; outline: none; }
     .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-g); }
-    .form-input::placeholder { color: var(--text3); }
-    
-    /* Buttons */
     .btn { padding: 12px 20px; border: none; border-radius: var(--r2); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
     .btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-size: 15px; }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
     .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { border-color: var(--accent); background: var(--accent-g); }
     .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover { opacity: 0.9; }
     .btn-sm { padding: 8px 14px; font-size: 12px; }
-    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
     .login-error { color: var(--danger); font-size: 12px; text-align: center; margin-top: 14px; display: none; font-weight: 600; }
-    .login-hint { font-size: 11px; color: var(--text3); text-align: center; margin-top: 18px; line-height: 1.8; }
 
     /* Main App */
     #mainApp { display: none; min-height: 100vh; }
-    #sidebar { position: fixed; top: 0; right: 0; width: var(--sb); height: 100vh; background: var(--card); border-left: 1px solid var(--border); z-index: 200; display: flex; flex-direction: column; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    #sidebar { position: fixed; top: 0; right: 0; width: var(--sb); height: 100vh; background: var(--card); border-left: 1px solid var(--border); z-index: 200; display: flex; flex-direction: column; transition: transform 0.35s; }
     [dir="ltr"] #sidebar { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
     .sb-header { padding: 22px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
     .sb-logo { width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .sb-logo svg { width: 24px; height: 24px; fill: white; }
-    .sb-title { flex: 1; overflow: hidden; }
-    .sb-title span { font-size: 16px; font-weight: 700; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sb-title small { font-size: 10px; color: var(--text2); }
+    .sb-title span { font-size: 16px; font-weight: 700; display: block; }
     .sb-nav { flex: 1; overflow-y: auto; padding: 14px 10px; }
-    .nav-section { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; padding: 18px 14px 8px; }
     .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--r2); cursor: pointer; transition: all 0.2s; color: var(--text2); font-size: 13px; font-weight: 500; margin-bottom: 3px; border: none; background: none; width: 100%; text-align: inherit; font-family: inherit; position: relative; }
     .nav-item:hover { background: var(--accent-g); color: var(--text); }
     .nav-item.active { background: var(--accent-g); color: var(--accent); font-weight: 700; }
@@ -88,64 +66,41 @@
     .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; fill: currentColor; }
     .sb-footer { padding: 14px 10px; border-top: 1px solid var(--border); }
     .sb-footer .nav-item { color: var(--danger); }
-    .sb-footer .nav-item:hover { background: var(--danger-g); }
 
     /* Header */
     #topHeader { position: fixed; top: 0; right: var(--sb); left: 0; height: var(--hd); background: rgba(21, 29, 46, 0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; z-index: 100; transition: right 0.35s, left 0.35s; }
     [data-theme="light"] #topHeader { background: rgba(255, 255, 255, 0.92); }
     [dir="ltr"] #topHeader { right: 0; left: var(--sb); }
-    .hdr-left { display: flex; align-items: center; gap: 18px; }
-    .hamburger { display: none; width: 44px; height: 44px; border: 1px solid var(--border); border-radius: var(--r2); background: var(--card); color: var(--text); cursor: pointer; align-items: center; justify-content: center; transition: all 0.25s; }
-    .hamburger:hover { border-color: var(--accent); color: var(--accent); }
     .page-title { font-size: 17px; font-weight: 700; }
     .hdr-right { display: flex; align-items: center; gap: 12px; }
-    .hdr-btn { width: 44px; height: 44px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--card); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; position: relative; }
-    .hdr-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-g); }
+    .hdr-btn { width: 44px; height: 44px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--card); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
     .hdr-btn svg { width: 20px; height: 20px; fill: currentColor; }
-    .notification-badge { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: none; }
-    .notification-badge.show { display: block; }
-    .notification-dropdown { position: absolute; top: 100%; left: 0; width: 320px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); box-shadow: 0 20px 50px rgba(0,0,0,0.3); display: none; flex-direction: column; max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: 10px; }
-    [dir="ltr"] .notification-dropdown { left: auto; right: 0; }
-    .notification-dropdown.show { display: flex; }
-    .notif-header { padding: 14px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-    .notif-item { padding: 12px 14px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; transition: background 0.2s; }
-    .notif-item:hover { background: var(--bg2); }
-    .notif-item.unread { background: var(--accent-g); }
-    .notif-time { font-size: 10px; color: var(--text3); margin-top: 4px; }
     .user-badge { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--accent-g); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--r2); font-size: 13px; font-weight: 600; color: var(--accent); }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     /* Content */
-    #mainContent { margin-top: var(--hd); margin-inline-start: var(--sb); padding: 28px; min-height: calc(100vh - var(--hd)); transition: margin 0.35s; position: relative; z-index: 1; }
+    #mainContent { margin-top: var(--hd); margin-inline-start: var(--sb); padding: 28px; min-height: calc(100vh - var(--hd)); transition: margin 0.35s; }
     .section { display: none; animation: fadeIn 0.4s ease-out; }
     .section.active { display: block; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 24px; transition: all 0.3s; }
-    .card:hover { border-color: var(--border2); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 24px; }
     .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
     .card-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-    .card-icon { width: 40px; height: 40px; border-radius: var(--r2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .card-icon svg { width: 20px; height: 20px; fill: currentColor; }
-    .card-icon.accent { background: var(--accent-g); color: var(--accent); }
-    .card-icon.gold { background: var(--gold-g); color: var(--gold); }
-    .card-icon.danger { background: var(--danger-g); color: var(--danger); }
-
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-bottom: 28px; }
     .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; position: relative; overflow: hidden; transition: all 0.3s; }
-    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25); border-color: var(--border2); }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25); }
     .stat-card::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: var(--accent); }
     .stat-card.gold::before { background: var(--gold); }
     .stat-card.danger::before { background: var(--danger); }
-    .stat-card.info::before { background: var(--info); }
-    .stat-label { font-size: 12px; color: var(--text2); font-weight: 600; margin-bottom: 6px; position: relative; z-index: 1; }
-    .stat-value { font-size: 32px; font-weight: 900; letter-spacing: -1px; position: relative; z-index: 1; }
+    .stat-label { font-size: 12px; color: var(--text2); font-weight: 600; margin-bottom: 6px; }
+    .stat-value { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
 
-    /* Table & Misc */
+    /* Table */
     .table-wrapper { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--border); }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead { background: var(--bg2); }
-    th { padding: 14px 16px; text-align: center; font-weight: 700; color: var(--text2); font-size: 11px; white-space: nowrap; border-bottom: 1px solid var(--border); }
-    td { padding: 13px 16px; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { padding: 14px 16px; text-align: center; font-weight: 700; color: var(--text2); font-size: 11px; border-bottom: 1px solid var(--border); }
+    td { padding: 13px 16px; text-align: center; border-bottom: 1px solid var(--border); }
     tbody tr:hover { background: var(--accent-g); }
     .badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
     .badge-success { background: var(--accent-g); color: var(--accent); }
@@ -154,25 +109,22 @@
     
     .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
     .modal.show { display: flex; }
-    .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; animation: fadeIn 0.35s; }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
     .modal-actions { display: flex; gap: 12px; margin-top: 28px; justify-content: flex-end; }
     
     #toast { position: fixed; top: 85px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-    .toast-item { padding: 16px 28px; border-radius: var(--r2); font-size: 14px; font-weight: 600; min-width: 300px; text-align: center; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4); animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: auto; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .toast-item { padding: 16px 28px; border-radius: var(--r2); font-size: 14px; font-weight: 600; min-width: 300px; text-align: center; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4); animation: fadeIn 0.4s; }
     .toast-item.success { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
     .toast-item.error { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
     #loader { position: fixed; inset: 0; background: rgba(10, 15, 26, 0.95); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9998; flex-direction: column; gap: 18px; }
     .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
-    .loader-text { color: var(--text2); font-size: 14px; font-weight: 500; }
-    .search-box { position: relative; max-width: 300px; }
-    .search-box input { padding-right: 40px; }
-    [dir="ltr"] .search-box input { padding-right: 16px; padding-left: 40px; }
-    .search-box svg { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--text3); }
-    [dir="ltr"] .search-box svg { right: auto; left: 14px; }
+
+    /* Utils */
+    .quick-btn { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; color: var(--text2); transition: all 0.2s; }
+    .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-g); }
     .chart-container { position: relative; height: 300px; width: 100%; margin-top: 20px; }
 
-    /* Responsive */
     @media (max-width: 900px) {
       #sidebar { transform: translateX(100%); } #sidebar.open { transform: translateX(0); }
       [dir="ltr"] #sidebar { transform: translateX(-100%); } [dir="ltr"] #sidebar.open { transform: translateX(0); }
@@ -180,7 +132,6 @@
       #mainContent { margin-inline-start: 0 !important; padding: 18px; }
       .hamburger { display: flex; }
     }
-    @media (max-width: 500px) { .stats-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -190,13 +141,10 @@
 <!-- Login Page -->
 <div id="loginPage">
   <div class="login-bg"></div>
-  <div class="login-pattern"></div>
-  <div class="login-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
   <div class="login-card">
     <div class="login-header">
       <div class="login-logo"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg></div>
-      <h1 class="login-title" id="loginTitle">Smart Educational Center</h1>
-      <p class="login-subtitle" id="loginSubtitle">Management System</p>
+      <h1 class="login-title">Smart Educational Center</h1>
     </div>
     <div class="role-tabs">
       <button class="role-tab active" id="tabAdmin" onclick="setLoginRole('admin')">Admin</button>
@@ -208,10 +156,9 @@
     </div>
     <div id="studentLogin" style="display:none">
       <div class="form-group"><label class="form-label">Student ID</label><input class="form-input" id="inputSid" type="number" placeholder="1"></div>
-      <div class="form-group"><label class="form-label">Verification Code</label><input class="form-input" id="inputCode" type="password" placeholder="1234"></div>
-      <p class="login-hint">Enter last 4 digits of your National ID</p>
+      <div class="form-group"><label class="form-label">Verification Code</label><input class="form-input" id="inputCode" type="password" placeholder="Last 4 digits of ID"></div>
     </div>
-    <button class="btn btn-primary" id="btnLogin" onclick="doLogin()">Login</button>
+    <button class="btn btn-primary" onclick="doLogin()">Login</button>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
@@ -221,33 +168,21 @@
   <aside id="sidebar">
     <div class="sb-header">
       <div class="sb-logo"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3z"/></svg></div>
-      <div class="sb-title"><span id="sbTitle">Smart Center</span><small>Management System</small></div>
+      <div class="sb-title"><span id="sbTitle">Smart Center</span></div>
     </div>
     <nav class="sb-nav" id="sbNav"></nav>
     <div class="sb-footer">
-      <button class="nav-item" onclick="logout()"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg><span>Logout</span></button>
+      <button class="nav-item" onclick="logout()"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg><span>Logout</span></button>
     </div>
   </aside>
-  <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
  
   <header id="topHeader">
-    <div class="hdr-left">
-      <button class="hamburger" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+    <div style="display:flex;align-items:center;gap:18px">
+      <button class="hdr-btn" style="display:none" id="hamburger" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
       <h2 class="page-title" id="pageTitle">Dashboard</h2>
     </div>
     <div class="hdr-right">
-      <button class="hdr-btn" onclick="toggleLang()" title="Language"><svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg></button>
-      <button class="hdr-btn" onclick="toggleTheme()" id="themeBtn" title="Theme"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg></button>
-      
-      <div class="hdr-btn" onclick="toggleNotifications()" id="notifBtn">
-        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        <div class="notification-badge" id="notifBadge"></div>
-        <div class="notification-dropdown" id="notifDropdown">
-            <div class="notif-header">Notifications <span style="cursor:pointer;font-size:11px" onclick="markAllRead()">Mark all read</span></div>
-            <div id="notifList"></div>
-        </div>
-      </div>
-
+      <button class="hdr-btn" onclick="toggleTheme()" title="Theme"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg></button>
       <div class="user-badge">
         <div class="user-avatar" id="userAvatar">U</div>
         <span id="userName">User</span>
@@ -256,6 +191,7 @@
   </header>
  
   <main id="mainContent">
+    <!-- Admin Sections -->
     <section id="sec_dashboard" class="section" data-role="admin"></section>
     <section id="sec_students" class="section" data-role="admin"></section>
     <section id="sec_payments" class="section" data-role="admin"></section>
@@ -263,8 +199,8 @@
     <section id="sec_schedules" class="section" data-role="admin"></section>
     <section id="sec_excuses" class="section" data-role="admin"></section>
     <section id="sec_attendance" class="section" data-role="admin"></section>
-    <section id="sec_downloads" class="section" data-role="admin"></section>
     
+    <!-- Student Sections -->
     <section id="sec_studentDashboard" class="section" data-role="student"></section>
     <section id="sec_studentProfile" class="section" data-role="student"></section>
     <section id="sec_studentGrades" class="section" data-role="student"></section>
@@ -280,55 +216,36 @@
 // Configuration
 const CONFIG = {
   spreadsheetId: '1emhIjMexXdwWvuMQWHWQx4p0AtfjqcCie5IV0Pl4Rzk',
-  months: { ar: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'], en: ['January','February','March','April','May','June','July','August','September','October','November','December'] },
-  days: { ar: ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'], en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] },
-  grades: ['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي','First Year','Second Year','Third Year'],
-  groups: ['مجموعة 1','مجموعة 2','مجموعة 3','مجموعة 4','مجموعة 5','مجموعة 6']
+  months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+  groups: ['مجموعة 1','مجموعة 2','مجموعة 3','مجموعة 4']
 };
-const STATE = { role: 'admin', lang: 'ar', theme: 'dark', user: null, userId: null, cache: {}, notifications: [] };
-
-// Translations (Fixed Syntax)
-const T = {
-  ar: { appName: 'مركز التعليم الذكي', dashboard: 'لوحة التحكم', students: 'الطلاب', payments: 'المدفوعات', grades: 'الدرجات', schedules: 'المواعيد', excuses: 'الاعتذارات', attendance: 'الحضور', add: 'إضافة', save: 'حفظ', cancel: 'إلغاء', delete: 'حذف', edit: 'تعديل', search: 'بحث...', name: 'الاسم', amount: 'المبلغ', month: 'الشهر', status: 'الحالة', noData: 'لا توجد بيانات', confirmDelete: 'هل أنت متأكد؟', presentToday: 'حاضرون اليوم', absentToday: 'غائبون اليوم', myExcuses: 'اعتذاراتي', sendExcuse: 'إرسال اعتذار', reason: 'السبب', notifications: 'الإشعارات', ranking: 'الترتيب', chart: 'الرسم البياني', activeStudents: 'النشطين', totalRevenue: 'إجمالي الإيرادات', pendingPayments: 'متأخرات', totalStudents: 'عدد الطلاب', quickActions: 'إجراءات سريعة', addStudent: 'إضافة طالب', studentList: 'قائمة الطلاب', myDashboard: 'لوحتي', myProfile: 'بروفايلي', myGrades: 'درجاتي', myPayments: 'مدفوعاتي', myAttendance: 'حضوري', active: 'نشط', inactive: 'غير نشط', complete: 'مكتمل', incomplete: 'غير مكتمل', present: 'حاضر', absent: 'غائب', total: 'الإجمالي', average: 'المتوسط', rating: 'التقدير' },
-  en: { appName: 'Smart Educational Center', dashboard: 'Dashboard', students: 'Students', payments: 'Payments', grades: 'Grades', schedules: 'Schedules', excuses: 'Excuses', attendance: 'Attendance', add: 'Add', save: 'Save', cancel: 'Cancel', delete: 'Delete', edit: 'Edit', search: 'Search...', name: 'Name', amount: 'Amount', month: 'Month', status: 'Status', noData: 'No data', confirmDelete: 'Are you sure?', presentToday: 'Present Today', absentToday: 'Absent Today', myExcuses: 'My Excuses', sendExcuse: 'Send Excuse', reason: 'Reason', notifications: 'Notifications', ranking: 'Ranking', chart: 'Chart', activeStudents: 'Active', totalRevenue: 'Total Revenue', pendingPayments: 'Pending', totalStudents: 'Total Students', quickActions: 'Quick Actions', addStudent: 'Add Student', studentList: 'Students List', myDashboard: 'My Dashboard', myProfile: 'My Profile', myGrades: 'My Grades', myPayments: 'My Payments', myAttendance: 'My Attendance', active: 'Active', inactive: 'Inactive', complete: 'Complete', incomplete: 'Incomplete', present: 'Present', absent: 'Absent', total: 'Total', average: 'Average', rating: 'Rating' }
-};
-
-// Utilities
-function t(k) { return (T[STATE.lang] && T[STATE.lang][k]) || k; }
-function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
-function safeVal(v) { return (v == null || v === '') ? '-' : String(v).trim(); }
-function formatNum(n) { const x = parseFloat(n); return isNaN(x) ? safeVal(n) : x.toLocaleString(STATE.lang === 'ar' ? 'ar-EG' : 'en-US'); }
-function buildOptions(arr, selected) { return arr.map(v => `<option${v === selected ? ' selected' : ''}>${v}</option>`).join(''); }
+const STATE = { role: 'admin', user: null, userId: null, cache: {} };
 const ICONS = {
   dashboard: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>',
   users: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>',
   money: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>',
   chart: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',
   check: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
-  x: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-  star: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
   mail: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
-  download: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>',
-  userPlus: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'
+  clock: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+  star: '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'
 };
 
 // UI Helpers
-function showToast(msg, type = 'success') { const c = document.getElementById('toast'); const d = document.createElement('div'); d.className = `toast-item ${type}`; d.innerHTML = (type === 'error' ? ICONS.x : ICONS.check) + msg; c.appendChild(d); setTimeout(() => { d.style.opacity = '0'; setTimeout(() => d.remove(), 300); }, 4000); }
+function showToast(msg, type = 'success') { const c = document.getElementById('toast'); const d = document.createElement('div'); d.className = `toast-item ${type}`; d.textContent = msg; c.appendChild(d); setTimeout(() => d.remove(), 4000); }
 function showLoader(msg) { document.getElementById('loaderText').textContent = msg || 'Loading...'; document.getElementById('loader').style.display = 'flex'; }
 function hideLoader() { document.getElementById('loader').style.display = 'none'; }
 function showModal(html) { document.getElementById('modalBox').innerHTML = html; document.getElementById('modal').classList.add('show'); }
 function closeModal() { document.getElementById('modal').classList.remove('show'); }
 function badge(text, cls) { return `<span class="badge ${cls}">${text}</span>`; }
-function statCard(icon, value, label, cls = '') { return `<div class="stat-card ${cls}"><div class="stat-icon ${cls}">${ICONS[icon]}</div><div class="stat-label">${label}</div><div class="stat-value">${formatNum(value)}</div></div>`; }
-function emptyState(icon, msg) { return `<div style="text-align:center;padding:40px;color:var(--text3)">${ICONS[icon]}<p>${msg}</p></div>`; }
+function statCard(icon, value, label, cls = '') { return `<div class="stat-card ${cls}"><div class="stat-label">${label}</div><div class="stat-value">${value}</div></div>`; }
 
-// API Wrapper
+// API
 async function api(action, data, method) {
   showLoader();
   let url = '/api/' + action;
   const opts = { headers: { 'Content-Type': 'application/json' } };
-  const writeActions = ['verifyLogin', 'students/add', 'students/update', 'payments/add', 'attendance/mark', 'excuses/add', 'student/updateProfile'];
+  const writeActions = ['verifyLogin', 'students/add', 'students/update', 'payments/add', 'payments/edit', 'attendance/mark', 'excuses/add', 'student/updateProfile'];
   if (method === 'GET' || (!method && !writeActions.includes(action))) {
     if (data) url += '?' + new URLSearchParams(data).toString();
     opts.method = 'GET';
@@ -338,87 +255,159 @@ async function api(action, data, method) {
     const json = await res.json(); hideLoader();
     if (json.success === false) { showToast(json.message || 'Error', 'error'); return null; }
     return json.data !== undefined ? json.data : json;
-  } catch (err) { hideLoader(); showToast('Connection error', 'error'); console.error(err); return null; }
+  } catch (err) { hideLoader(); showToast('Connection error', 'error'); return null; }
 }
 
-// Theme & Language
-function toggleTheme() { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', STATE.theme); }
-function toggleLang() { STATE.lang = STATE.lang === 'ar' ? 'en' : 'ar'; document.documentElement.lang = STATE.lang; document.documentElement.dir = STATE.lang === 'ar' ? 'rtl' : 'ltr'; updateUI(); }
-function updateUI() { document.getElementById('sbTitle').textContent = t('appName'); buildNav(); const activeSec = document.querySelector('.section.active'); if (activeSec) navigateTo(activeSec.id.replace('sec_', '')); }
-
-// Notifications
-function toggleNotifications() { document.getElementById('notifDropdown').classList.toggle('show'); }
-async function loadNotifications() { if (STATE.role !== 'student') return; const notifs = await api('student/notifications', { id: STATE.userId }); STATE.notifications = notifs || []; const b = document.getElementById('notifBadge'); if (STATE.notifications.filter(n => !n.read).length > 0) b.classList.add('show'); else b.classList.remove('show'); document.getElementById('notifList').innerHTML = STATE.notifications.length ? STATE.notifications.map(n => `<div class="notif-item ${n.read ? '' : 'unread'}"><div>${n.message}</div><div class="notif-time">${n.date}</div></div>`).join('') : '<div class="notif-item">No notifications</div>'; }
-function markAllRead() { api('notifications/readAll', { studentId: STATE.userId }); loadNotifications(); }
+// Theme
+function toggleTheme() { document.documentElement.toggleAttribute('data-theme'); }
 
 // Login
 let loginRole = 'admin';
-function setLoginRole(role) { loginRole = role; document.querySelectorAll('.role-tab').forEach(b => b.classList.remove('active')); document.getElementById('tab' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('active'); document.getElementById('adminLogin').style.display = role === 'admin' ? 'block' : 'none'; document.getElementById('studentLogin').style.display = role === 'student' ? 'block' : 'none'; document.getElementById('loginError').style.display = 'none'; }
+function setLoginRole(role) { 
+  loginRole = role; 
+  document.querySelectorAll('.role-tab').forEach(b => b.classList.remove('active')); 
+  document.getElementById('tab' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('active'); 
+  document.getElementById('adminLogin').style.display = role === 'admin' ? 'block' : 'none'; 
+  document.getElementById('studentLogin').style.display = role === 'student' ? 'block' : 'none'; 
+}
 async function doLogin() {
-  const btn = document.getElementById('btnLogin'); btn.disabled = true;
   let payload = { role: loginRole };
-  if (loginRole === 'admin') { payload.user = getVal('inputUser'); payload.pass = getVal('inputPass'); if (!payload.user || !payload.pass) { showToast('Missing fields', 'error'); btn.disabled = false; return; } }
-  else { payload.user = getVal('inputSid'); payload.pass = getVal('inputCode'); if (!payload.user || !payload.pass) { showToast('Missing fields', 'error'); btn.disabled = false; return; } }
-  const result = await api('verifyLogin', payload); btn.disabled = false;
+  if (loginRole === 'admin') { payload.user = document.getElementById('inputUser').value; payload.pass = document.getElementById('inputPass').value; }
+  else { payload.user = document.getElementById('inputSid').value; payload.pass = document.getElementById('inputCode').value; }
+  
+  const result = await api('verifyLogin', payload);
   if (result) {
-    STATE.role = result.role; STATE.user = result.name || ''; STATE.userId = result.id || null;
+    STATE.role = result.role; STATE.user = result.name; STATE.userId = result.id;
     document.getElementById('loginPage').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
     document.getElementById('userName').textContent = STATE.user;
-    if(result.photo) document.getElementById('userAvatar').innerHTML = `<img src="${result.photo}" alt="avatar">`;
-    else document.getElementById('userAvatar').textContent = STATE.user.charAt(0);
+    document.getElementById('userAvatar').innerHTML = result.photo ? `<img src="${result.photo}" alt="avatar">` : STATE.user.charAt(0);
     buildNav(); navigateTo(STATE.role === 'student' ? 'studentDashboard' : 'dashboard');
-    if (STATE.role === 'student') loadNotifications();
   }
 }
 function logout() { location.reload(); }
 
 // Navigation
 const NAV_ITEMS = {
-  admin: [ { id: 'dashboard', icon: 'dashboard', key: 'dashboard' }, { id: 'students', icon: 'users', key: 'students' }, { id: 'payments', icon: 'money', key: 'payments' }, { id: 'grades', icon: 'star', key: 'grades' }, { id: 'attendance', icon: 'check', key: 'attendance' }, { id: 'excuses', icon: 'mail', key: 'excuses' }, { id: 'schedules', icon: 'clock', key: 'schedules' }, { id: 'downloads', icon: 'download', key: 'downloads' } ],
-  student: [ { id: 'studentDashboard', icon: 'dashboard', key: 'myDashboard' }, { id: 'studentGrades', icon: 'star', key: 'myGrades' }, { id: 'studentPayments', icon: 'money', key: 'myPayments' }, { id: 'studentAttendance', icon: 'check', key: 'myAttendance' }, { id: 'studentExcuse', icon: 'mail', key: 'myExcuses' }, { id: 'studentProfile', icon: 'users', key: 'myProfile' } ]
+  admin: [ { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' }, { id: 'students', icon: 'users', label: 'Students' }, { id: 'payments', icon: 'money', label: 'Payments' }, { id: 'grades', icon: 'star', label: 'Grades' }, { id: 'attendance', icon: 'check', label: 'Attendance' }, { id: 'excuses', icon: 'mail', label: 'Excuses' }, { id: 'schedules', icon: 'clock', label: 'Schedules' } ],
+  student: [ { id: 'studentDashboard', icon: 'dashboard', label: 'Dashboard' }, { id: 'studentGrades', icon: 'star', label: 'Grades' }, { id: 'studentPayments', icon: 'money', label: 'Payments' }, { id: 'studentAttendance', icon: 'check', label: 'Attendance' }, { id: 'studentExcuse', icon: 'mail', label: 'Excuses' }, { id: 'studentProfile', icon: 'users', label: 'Profile' } ]
 };
-function buildNav() { const nav = NAV_ITEMS[STATE.role] || NAV_ITEMS.admin; document.getElementById('sbNav').innerHTML = nav.map(n => `<button class="nav-item" data-nav="${n.id}" onclick="navigateTo('${n.id}')">${ICONS[n.icon]}<span>${t(n.key)}</span></button>`).join(''); }
-function navigateTo(id) { document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); const sec = document.getElementById('sec_' + id); if (sec) sec.classList.add('active'); document.querySelectorAll('.nav-item[data-nav]').forEach(n => n.classList.remove('active')); const navBtn = document.querySelector(`.nav-item[data-nav="${id}"]`); if (navBtn) navBtn.classList.add('active'); document.getElementById('pageTitle').textContent = t(id.replace('student', '')); const loaders = { dashboard: loadDashboard, students: loadStudents, payments: loadPayments, grades: loadGrades, attendance: loadAttendance, excuses: loadExcuses, schedules: loadSchedules, downloads: loadDownloads, studentDashboard: loadStudentDashboard, studentGrades: loadStudentGrades, studentPayments: loadStudentPayments, studentAttendance: loadStudentAttendance, studentExcuse: loadStudentExcuse, studentProfile: loadStudentProfile }; if (loaders[id]) loaders[id](); if (window.innerWidth <= 900) toggleSidebar(false); }
-function toggleSidebar(force) { const sb = document.getElementById('sidebar'); if (force === false) sb.classList.remove('open'); else sb.classList.toggle('open'); document.getElementById('sidebarOverlay').style.display = sb.classList.contains('open') ? 'block' : 'none'; }
+function buildNav() { document.getElementById('sbNav').innerHTML = NAV_ITEMS[STATE.role].map(n => `<button class="nav-item" data-nav="${n.id}" onclick="navigateTo('${n.id}')">${ICONS[n.icon]}<span>${n.label}</span></button>`).join(''); }
+function navigateTo(id) { 
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); 
+  document.getElementById('sec_' + id).classList.add('active'); 
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
+  document.querySelector(`.nav-item[data-nav="${id}"]`)?.classList.add('active'); 
+  document.getElementById('pageTitle').textContent = NAV_ITEMS[STATE.role].find(n => n.id === id)?.label || id;
+  const loaders = { dashboard: loadDashboard, students: loadStudents, payments: loadPayments, grades: loadGrades, attendance: loadAttendance, excuses: loadExcuses, schedules: loadSchedules, studentDashboard: loadStudentDashboard, studentGrades: loadStudentGrades, studentPayments: loadStudentPayments, studentAttendance: loadStudentAttendance, studentExcuse: loadStudentExcuse, studentProfile: loadStudentProfile };
+  if (loaders[id]) loaders[id](); 
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 // ============================================= ADMIN PAGES =============================================
-async function loadDashboard() { const d = await api('dashboard'); if (!d) return; document.getElementById('sec_dashboard').innerHTML = `<div class="stats-grid">${statCard('users', d.totalStudents || 0, t('totalStudents'))}${statCard('users', d.activeStudents || 0, t('activeStudents'), 'gold')}${statCard('money', d.totalRevenue || 0, t('totalRevenue'), 'cyan')}${statCard('chart', d.pendingPayments || 0, t('pendingPayments'), 'danger')}</div><div class="stats-grid">${statCard('check', d.presentToday || 0, t('presentToday'))}${statCard('x', d.absentToday || 0, t('absentToday'), 'danger')}</div><div class="card"><div class="card-header"><div class="card-title">${ICONS.dashboard} ${t('quickActions')}</div></div><div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(150px,1fr))"><button class="quick-btn" onclick="navigateTo('students')">${ICONS.userPlus}<span>${t('addStudent')}</span></button><button class="quick-btn" onclick="navigateTo('payments')">${ICONS.money}<span>${t('payments')}</span></button><button class="quick-btn" onclick="navigateTo('attendance')">${ICONS.check}<span>${t('attendance')}</span></button><button class="quick-btn" onclick="navigateTo('grades')">${ICONS.star}<span>${t('grades')}</span></button></div></div>`; }
+async function loadDashboard() { 
+  const d = await api('dashboard'); 
+  if (!d) return; 
+  document.getElementById('sec_dashboard').innerHTML = `
+    <div class="stats-grid">${statCard('users', d.totalStudents || 0, 'Total Students')}${statCard('users', d.activeStudents || 0, 'Active Students', 'gold')}${statCard('money', d.totalRevenue || 0, 'Total Revenue', 'chart')}${statCard('chart', d.pendingPayments || 0, 'Pending Payments', 'danger')}</div>
+    <div class="stats-grid">${statCard('check', d.presentToday || 0, 'Present Today')}${statCard('users', d.absentToday || 0, 'Absent Today', 'danger')}</div>
+    <div class="card"><div class="card-title">${ICONS.chart} Quick Actions</div><div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(150px,1fr))"><button class="quick-btn" onclick="navigateTo('students')">Add Student</button><button class="quick-btn" onclick="navigateTo('payments')">Add Payment</button><button class="quick-btn" onclick="navigateTo('attendance')">Take Attendance</button></div></div>
+  `; 
+}
 
-async function loadStudents() { const list = await api('students'); STATE.cache.students = list || []; document.getElementById('sec_students').innerHTML = `<div class="card"><div class="card-header"><div class="card-title">${ICONS.userPlus} ${t('addStudent')}</div></div><div class="form-row"><div class="form-group"><input class="form-input" id="stuName" placeholder="${t('name')}"></div><div class="form-group"><input class="form-input" id="stuPhone" placeholder="Phone"></div><div class="form-group"><select class="form-input" id="stuGroup">${CONFIG.groups.map(g=>`<option>${g}</option>`).join('')}</select></div><button class="btn btn-primary" onclick="addStudent()">${t('add')}</button></div></div><div class="card"><div class="card-header"><div class="card-title">${ICONS.users} ${t('studentList')} (${STATE.cache.students.length})</div></div><div class="table-wrapper"><table><thead><tr><th>ID</th><th>${t('name')}</th><th>Group</th><th>Phone</th><th>Status</th><th></th></tr></thead><tbody>${STATE.cache.students.map(s => `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.group}</td><td>${s.phone}</td><td>${badge(t('active'), 'badge-success')}</td><td><button class="btn btn-sm btn-secondary" onclick="editStudent(${s.id})">${t('edit')}</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent(${s.id})">${t('delete')}</button></td></tr>`).join('')}</tbody></table></div></div>`; }
-async function addStudent() { await api('students/add', { name: getVal('stuName'), phone: getVal('stuPhone'), group: getVal('stuGroup') }); showToast(t('save')); loadStudents(); }
-async function editStudent(id) { const s = STATE.cache.students.find(x => x.id == id); if(!s) return; showModal(`<div class="modal-title">${t('edit')} ${s.name}</div><div class="form-group"><label>Name</label><input class="form-input" id="editName" value="${s.name}"></div><div class="form-group"><label>Phone</label><input class="form-input" id="editPhone" value="${s.phone}"></div><div class="modal-actions"><button class="btn btn-primary" onclick="saveStudent(${id})">${t('save')}</button></div>`); }
-async function saveStudent(id) { await api('students/update', { id, name: getVal('editName'), phone: getVal('editPhone') }); closeModal(); showToast(t('save')); loadStudents(); }
-async function deleteStudent(id) { if(confirm(t('confirmDelete'))) { await api('students/delete', { id }); showToast(t('delete')); loadStudents(); } }
+async function loadStudents() { 
+  const list = await api('students'); STATE.cache.students = list || []; 
+  document.getElementById('sec_students').innerHTML = `
+    <div class="card"><div class="card-title">${ICONS.users} Add Student</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px">
+        <input class="form-input" id="stuName" placeholder="Name">
+        <input class="form-input" id="stuPhone" placeholder="Phone">
+        <select class="form-input" id="stuGroup">${CONFIG.groups.map(g=>`<option>${g}</option>`).join('')}</select>
+        <button class="btn btn-primary" onclick="addStudent()">Add</button>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">${ICONS.users} Students List (${STATE.cache.students.length})</div>
+      <div class="table-wrapper"><table><thead><tr><th>ID</th><th>Name</th><th>Group</th><th>Phone</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>${STATE.cache.students.map(s => `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.group}</td><td>${s.phone}</td><td>${badge(s.status.includes('نشط') ? 'Active' : 'Inactive', s.status.includes('نشط') ? 'badge-success' : 'badge-danger')}</td><td><button class="btn btn-sm btn-secondary" onclick="editStudent(${s.id})">Edit</button></td></tr>`).join('')}</tbody></table></div>
+    </div>`; 
+}
+async function addStudent() { await api('students/add', { name: document.getElementById('stuName').value, phone: document.getElementById('stuPhone').value, group: document.getElementById('stuGroup').value }); showToast('Added'); loadStudents(); }
+async function editStudent(id) { const s = STATE.cache.students.find(x => x.id == id); if(!s) return; showModal(`<div class="modal-title">Edit ${s.name}</div><div class="form-group"><label>Name</label><input class="form-input" id="editName" value="${s.name}"></div><div class="form-group"><label>Phone</label><input class="form-input" id="editPhone" value="${s.phone}"></div><div class="modal-actions"><button class="btn btn-primary" onclick="saveStudent(${id})">Save</button></div>`); }
+async function saveStudent(id) { await api('students/update', { id, name: document.getElementById('editName').value, phone: document.getElementById('editPhone').value }); closeModal(); showToast('Saved'); loadStudents(); }
 
-async function loadPayments() { const students = await api('students'); const payments = await api('payments'); const grouped = {}; (payments || []).forEach(p => { if(!grouped[p.studentId]) grouped[p.studentId] = { name: p.name, subscription: p.subscription, totalPaid: 0 }; grouped[p.studentId].totalPaid += parseFloat(p.paid) || 0; }); document.getElementById('sec_payments').innerHTML = `<div class="card"><div class="card-header"><div class="card-title">${ICONS.money} ${t('payments')}</div></div><div class="form-row"><div class="form-group"><select class="form-input" id="payStudent">${(students || []).map(s => `<option value="${s.id}" data-sub="${s.subscription}">${s.name}</option>`).join('')}</select></div><div class="form-group"><select class="form-input" id="payMonth">${CONFIG.months[STATE.lang].map(m => `<option>${m}</option>`).join('')}</select></div><div class="form-group"><input class="form-input" id="payAmount" type="number" placeholder="${t('amount')}"></div><button class="btn btn-primary" onclick="addPayment()">Pay</button></div></div><div class="card"><div class="card-header"><div class="card-title">${ICONS.chart} Status</div></div><div class="table-wrapper"><table><thead><tr><th>Student</th><th>Required</th><th>Paid</th><th>Status</th></tr></thead><tbody>${Object.keys(grouped).map(id => { const g = grouped[id]; return `<tr><td>${g.name}</td><td>${g.subscription}</td><td>${g.totalPaid}</td><td>${g.totalPaid >= g.subscription ? badge(t('complete'), 'badge-success') : badge(t('incomplete'), 'badge-warn')}</td></tr>`; }).join('')}</tbody></table></div></div>`; document.getElementById('payStudent').addEventListener('change', function() { /* logic for sub */ }); }
-async function addPayment() { const sel = document.getElementById('payStudent'); const id = sel.value; const name = sel.options[sel.selectedIndex].text; await api('payments/add', { studentId: id, studentName: name, month: getVal('payMonth'), amount: getVal('payAmount') }); showToast(t('save')); loadPayments(); }
+async function loadPayments() { 
+  const students = await api('students'); 
+  const payments = await api('payments'); 
+  document.getElementById('sec_payments').innerHTML = `
+    <div class="card"><div class="card-title">${ICONS.money} Record Payment</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px">
+        <select class="form-input" id="payStudent">${(students || []).map(s => `<option value="${s.id}">${s.name}</option>`).join('')}</select>
+        <select class="form-input" id="payMonth">${CONFIG.months.map(m => `<option>${m}</option>`).join('')}</select>
+        <input class="form-input" id="payAmount" type="number" placeholder="Amount">
+        <button class="btn btn-primary" onclick="addPayment()">Pay</button>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">${ICONS.chart} Payment History</div>
+      <div class="table-wrapper"><table><thead><tr><th>Student</th><th>Month</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody>${(payments || []).map(p => `<tr><td>${p.name}</td><td>${p.monthYear}</td><td>${p.paid}</td><td>${badge(p.status, p.status === 'مكتمل' ? 'badge-success' : 'badge-warn')}</td></tr>`).join('')}</tbody></table>
+    </div></div>`; 
+}
+async function addPayment() { 
+  const sel = document.getElementById('payStudent'); 
+  await api('payments/add', { studentId: sel.value, studentName: sel.options[sel.selectedIndex].text, month: document.getElementById('payMonth').value, amount: document.getElementById('payAmount').value }); 
+  showToast('Saved'); loadPayments(); 
+}
 
-async function loadGrades() { const list = await api('grades'); STATE.cache.grades = list || []; document.getElementById('sec_grades').innerHTML = `<div class="card"><div class="card-header"><div class="card-title">${ICONS.star} ${t('grades')}</div></div><div class="table-wrapper"><table><thead><tr><th>Name</th><th>S1</th><th>S2</th><th>S3</th><th>Final</th><th></th></tr></thead><tbody id="gradesBody"></tbody></table></div></div>`; renderGradesRows(list); }
-function renderGradesRows(list) { const tb = document.getElementById('gradesBody'); if(!tb) return; tb.innerHTML = (list || []).map((g, i) => { const avg = ((parseFloat(g.exam1)||0) + (parseFloat(g.exam2)||0) + (parseFloat(g.exam3)||0)) / 3; return `<tr><td>${g.name}</td><td><input class="form-input" style="width:60px" value="${g.exam1}" onchange="updateGradeField('${g.id}', 'exam1', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam2}" onchange="updateGradeField('${g.id}', 'exam2', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam3}" onchange="updateGradeField('${g.id}', 'exam3', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam4}" onchange="updateGradeField('${g.id}', 'exam4', this.value)"></td><td>${avg.toFixed(1)}</td></tr>`; }).join(''); }
-async function updateGradeField(id, field, val) { await api('grades/update', { id, field, val }); showToast('Updated'); }
+async function loadGrades() { 
+  const list = await api('grades'); 
+  document.getElementById('sec_grades').innerHTML = `
+    <div class="card"><div class="card-title">${ICONS.star} Grades Entry</div>
+      <div class="table-wrapper"><table><thead><tr><th>Name</th><th>S1</th><th>S2</th><th>S3</th><th>Final</th></tr></thead>
+      <tbody>${(list || []).map(g => `<tr><td>${g.name}</td><td><input class="form-input" style="width:60px" value="${g.exam1}" onchange="updateGrade('${g.id}', 'exam1', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam2}" onchange="updateGrade('${g.id}', 'exam2', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam3}" onchange="updateGrade('${g.id}', 'exam3', this.value)"></td><td><input class="form-input" style="width:60px" value="${g.exam4}" onchange="updateGrade('${g.id}', 'exam4', this.value)"></td></tr>`).join('')}</tbody></table>
+    </div></div>`; 
+}
+async function updateGrade(id, field, val) { await api('grades/update', { id, field, val }); showToast('Updated'); }
 
-async function loadAttendance() { const students = await api('students'); document.getElementById('sec_attendance').innerHTML = `<div class="card"><div class="card-header"><div class="card-title">${ICONS.check} ${t('attendance')}</div></div><div class="table-wrapper"><table><thead><tr><th>Name</th><th>Group</th><th>Action</th></tr></thead><tbody>${students.map(s => `<tr><td>${s.name}</td><td>${s.group}</td><td><button class="btn btn-sm btn-secondary" onclick="markAttendance(${s.id}, 'present')">${t('present')}</button> <button class="btn btn-sm btn-danger" onclick="markAttendance(${s.id}, 'absent')">${t('absent')}</button></td></tr>`).join('')}</tbody></table></div></div>`; }
-async function markAttendance(id, status) { await api('attendance/mark', { studentId: id, status, date: new Date().toISOString().split('T')[0] }); showToast(t('save')); }
+async function loadAttendance() { 
+  const students = await api('students'); 
+  document.getElementById('sec_attendance').innerHTML = `
+    <div class="card"><div class="card-title">${ICONS.check} Mark Attendance (${new Date().toLocaleDateString()})</div>
+      <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Group</th><th>Action</th></tr></thead>
+      <tbody>${(students || []).map(s => `<tr><td>${s.name}</td><td>${s.group}</td><td><button class="btn btn-sm btn-secondary" onclick="markAttendance(${s.id}, 'present')">Present</button> <button class="btn btn-sm btn-danger" onclick="markAttendance(${s.id}, 'absent')">Absent</button></td></tr>`).join('')}</tbody></table>
+    </div></div>`; 
+}
+async function markAttendance(id, status) { await api('attendance/mark', { studentId: id, status, date: new Date().toISOString().split('T')[0] }); showToast('Saved'); }
 
-async function loadExcuses() { const list = await api('excuses'); document.getElementById('sec_excuses').innerHTML = `<div class="card"><div class="card-header"><div class="card-title">${ICONS.mail} ${t('excuses')}</div></div><div class="table-wrapper"><table><thead><tr><th>Student</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${(list || []).map(e => `<tr><td>${e.studentName}</td><td>${e.reason}</td><td>${badge(e.status, 'badge-warn')}</td><td><button class="btn btn-sm btn-secondary" onclick="replyExcuse('${e.id}', 'Approved')">Accept</button></td></tr>`).join('')}</tbody></table></div></div>`; }
-async function replyExcuse(id, status) { await api('excuses/update', { id, status }); showToast(t('save')); loadExcuses(); }
-async function loadSchedules() { const list = await api('schedules'); document.getElementById('sec_schedules').innerHTML = `<div class="card"><div class="card-title">${ICONS.clock} Schedules</div><div class="table-wrapper"><table><thead><tr><th>Day</th><th>Time</th><th>Group</th></tr></thead><tbody>${(list || []).map(s => `<tr><td>${s.day}</td><td>${s.time}</td><td>${s.group}</td></tr>`).join('')}</tbody></table></div></div>`; }
-async function loadDownloads() { document.getElementById('sec_downloads').innerHTML = `<div class="card"><div class="card-title">${ICONS.download} ${t('downloads')}</div><a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/export?format=xlsx" target="_blank" class="btn btn-secondary" style="width:fit-content">${ICONS.download} Excel</a></div>`; }
+async function loadExcuses() { 
+  const list = await api('excuses'); 
+  document.getElementById('sec_excuses').innerHTML = `
+    <div class="card"><div class="card-title">${ICONS.mail} Excuses</div>
+      <div class="table-wrapper"><table><thead><tr><th>Student</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>${(list || []).map(e => `<tr><td>${e.studentName}</td><td>${e.reason}</td><td>${badge(e.status, 'badge-warn')}</td><td><button class="btn btn-sm btn-secondary" onclick="replyExcuse('${e.id}', 'مقبول')">Accept</button></td></tr>`).join('')}</tbody></table>
+    </div></div>`; 
+}
+async function replyExcuse(id, status) { await api('excuses/update', { id, status }); showToast('Saved'); loadExcuses(); }
+
+async function loadSchedules() { 
+  const list = await api('schedules'); 
+  document.getElementById('sec_schedules').innerHTML = `<div class="card"><div class="card-title">${ICONS.clock} Schedules</div><div class="table-wrapper"><table><thead><tr><th>Day</th><th>Time</th><th>Group</th></tr></thead><tbody>${(list || []).map(s => `<tr><td>${s.day}</td><td>${s.time}</td><td>${s.group}</td></tr>`).join('')}</tbody></table></div></div>`; 
+}
 
 // ============================================= STUDENT PAGES =============================================
-async function loadStudentDashboard() { const d = await api('student/dashboard', { id: STATE.userId }); if(!d) return; document.getElementById('sec_studentDashboard').innerHTML = `<div class="stats-grid">${statCard('chart', (d.attRate || 85) + '%', t('attendance'))}${statCard('star', d.avgGrade || '-', t('average'), 'gold')}${statCard('star', d.rank || '-', t('ranking'), 'info')}</div><div class="card"><div class="card-title">${ICONS.chart} ${t('chart')}</div><div class="chart-container"><canvas id="gradeChart"></canvas></div></div>`; if(d.chartData) { new Chart(document.getElementById('gradeChart'), { type: 'line', data: { labels: ['S1', 'S2', 'S3', 'Final'], datasets: [{ label: 'Your Grades', data: [d.chartData.s1, d.chartData.s2, d.chartData.s3, d.chartData.final], borderColor: '#10b981', tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false } }); } }
+async function loadStudentDashboard() { const d = await api('student/dashboard', { id: STATE.userId }); if(!d) return; document.getElementById('sec_studentDashboard').innerHTML = `<div class="stats-grid">${statCard('chart', (d.attRate || 85) + '%', 'Attendance Rate')}${statCard('star', d.avgGrade || '-', 'Average', 'gold')}${statCard('star', d.rank || '-', 'Rank', 'chart')}</div><div class="card"><div class="card-title">${ICONS.chart} Performance</div><div class="chart-container"><canvas id="gradeChart"></canvas></div></div>`; if(d.chartData) { new Chart(document.getElementById('gradeChart'), { type: 'line', data: { labels: ['S1', 'S2', 'S3', 'Final'], datasets: [{ label: 'Grades', data: [d.chartData.s1, d.chartData.s2, d.chartData.s3, d.chartData.final], borderColor: '#10b981', tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false } }); } }
 async function loadStudentProfile() { const p = await api('student/profile', { id: STATE.userId }); document.getElementById('sec_studentProfile').innerHTML = `<div class="card"><div class="card-title">Profile</div><div style="text-align:center;margin-bottom:20px"><div class="user-avatar" style="width:80px;height:80px;margin:0 auto;font-size:30px" id="profImg">${STATE.user.charAt(0)}</div><br><input type="file" id="photoUpload" accept="image/*" onchange="uploadPhoto(this)"></div><div class="form-group"><label>Name</label><input class="form-input" id="profName" value="${p.name}"></div><button class="btn btn-primary" onclick="updateProfile()">Update</button></div>`; if(p.photo) document.getElementById('profImg').innerHTML = `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`; }
 async function uploadPhoto(input) { if (input.files && input.files[0]) { var reader = new FileReader(); reader.onload = function (e) { document.getElementById('profImg').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`; STATE.cache.newPhoto = e.target.result; }; reader.readAsDataURL(input.files[0]); } }
-async function updateProfile() { const name = getVal('profName'); const photo = STATE.cache.newPhoto; await api('student/updateProfile', { id: STATE.userId, name, photo }); showToast(t('save')); STATE.user = name; document.getElementById('userName').textContent = name; if(photo) document.getElementById('userAvatar').innerHTML = `<img src="${photo}" alt="avatar">`; }
-async function loadStudentGrades() { const g = await api('student/grades', { id: STATE.userId }); document.getElementById('sec_studentGrades').innerHTML = `<div class="card"><div class="card-title">${ICONS.star} ${t('grades')}</div>${!g || !g.length ? emptyState(t('noData')) : `<table class="table-wrapper"><tr><th>S1</th><th>S2</th><th>S3</th><th>Final</th></tr><tr><td>${g[0].exam1}</td><td>${g[0].exam2}</td><td>${g[0].exam3}</td><td>${g[0].exam4}</td></tr></table>`}</div>`; }
-async function loadStudentPayments() { const p = await api('student/payments', { id: STATE.userId }); document.getElementById('sec_studentPayments').innerHTML = `<div class="card"><div class="card-title">${ICONS.money} ${t('payments')}</div>${!p || !p.length ? emptyState(t('noData')) : `<div class="table-wrapper"><table><thead><tr><th>Month</th><th>Amount</th><th>Status</th></tr></thead><tbody>${p.map(r => `<tr><td>${r.month}</td><td>${r.paid}</td><td>${badge(r.status, r.status === 'Complete' ? 'badge-success' : 'badge-warn')}</td></tr>`).join('')}</tbody></table></div>`}</div>`; }
-async function loadStudentAttendance() { const a = await api('student/attendance', { id: STATE.userId }); document.getElementById('sec_studentAttendance').innerHTML = `<div class="card"><div class="card-title">${ICONS.check} ${t('attendance')}</div>${!a || !a.length ? emptyState(t('noData')) : `<div class="table-wrapper"><table><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody>${a.map(r => `<tr><td>${r.date}</td><td>${badge(r.status, r.status === 'Present' ? 'badge-success' : 'badge-danger')}</td></tr>`).join('')}</tbody></table></div>`}</div>`; }
-async function loadStudentExcuse() { document.getElementById('sec_studentExcuse').innerHTML = `<div class="card"><div class="card-title">${ICONS.mail} ${t('sendExcuse')}</div><div class="form-group"><textarea class="form-input" id="excuseReason" placeholder="${t('reason')}"></textarea></div><button class="btn btn-primary" onclick="sendExcuse()">Send</button></div><div class="card" style="margin-top:20px"><div class="card-title">History</div><div id="excuseHistory"></div></div>`; const history = await api('student/excuses', { id: STATE.userId }); document.getElementById('excuseHistory').innerHTML = (history || []).map(e => `<div style="padding:10px;border-bottom:1px solid var(--border)"><b>${e.status}</b><br>${e.reason}<br><small>${e.reply || ''}</small></div>`).join('') || 'No history'; }
-async function sendExcuse() { const reason = getVal('excuseReason'); if(!reason) return; await api('excuses/add', { studentId: STATE.userId, reason }); showToast(t('save')); loadStudentExcuse(); }
+async function updateProfile() { await api('student/updateProfile', { id: STATE.userId, name: document.getElementById('profName').value, photo: STATE.cache.newPhoto }); showToast('Updated'); }
+async function loadStudentGrades() { const g = await api('student/grades', { id: STATE.userId }); document.getElementById('sec_studentGrades').innerHTML = `<div class="card"><div class="card-title">${ICONS.star} Grades</div><div class="table-wrapper"><table><tr><th>S1</th><th>S2</th><th>S3</th><th>Final</th></tr><tr><td>${g[0]?.exam1||'-'}</td><td>${g[0]?.exam2||'-'}</td><td>${g[0]?.exam3||'-'}</td><td>${g[0]?.exam4||'-'}</td></tr></table></div></div>`; }
+async function loadStudentPayments() { const p = await api('student/payments', { id: STATE.userId }); document.getElementById('sec_studentPayments').innerHTML = `<div class="card"><div class="card-title">${ICONS.money} Payments</div><div class="table-wrapper"><table><thead><tr><th>Month</th><th>Amount</th><th>Status</th></tr></thead><tbody>${(p||[]).map(r => `<tr><td>${r.month}</td><td>${r.paid}</td><td>${badge(r.status, r.status === 'Complete' ? 'badge-success' : 'badge-warn')}</td></tr>`).join('')}</tbody></table></div></div>`; }
+async function loadStudentAttendance() { const a = await api('student/attendance', { id: STATE.userId }); document.getElementById('sec_studentAttendance').innerHTML = `<div class="card"><div class="card-title">${ICONS.check} Attendance</div><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody>${(a||[]).map(r => `<tr><td>${r.date}</td><td>${badge(r.status, r.status === 'Present' ? 'badge-success' : 'badge-danger')}</td></tr>`).join('')}</tbody></table></div></div>`; }
+async function loadStudentExcuse() { document.getElementById('sec_studentExcuse').innerHTML = `<div class="card"><div class="card-title">${ICONS.mail} Submit Excuse</div><textarea class="form-input" id="excuseReason" placeholder="Reason" style="height:100px"></textarea><br><br><button class="btn btn-primary" onclick="sendExcuse()">Send</button></div><div class="card" style="margin-top:20px"><div class="card-title">History</div><div id="excuseHistory"></div></div>`; const history = await api('student/excuses', { id: STATE.userId }); document.getElementById('excuseHistory').innerHTML = (history || []).map(e => `<div style="padding:10px;border-bottom:1px solid var(--border)"><b>${e.status}</b><br>${e.reason}</div>`).join('') || 'No history'; }
+async function sendExcuse() { await api('excuses/add', { studentId: STATE.userId, reason: document.getElementById('excuseReason').value }); showToast('Sent'); loadStudentExcuse(); }
 
 // Init
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin(); });
 document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+window.addEventListener('resize', () => { if(window.innerWidth <= 900) document.getElementById('hamburger').style.display = 'flex'; else document.getElementById('hamburger').style.display = 'none'; });
+window.dispatchEvent(new Event('resize'));
 </script>
 </body>
 </html>
