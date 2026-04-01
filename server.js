@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 // ═══════════════════════════════════════════════════════════════
 // GOOGLE APPS SCRIPT API URL
 // ═══════════════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLP1sK4m6-8JUv6CXYheJA1M4gaagR-X4XkOrI1EYhy10Kos2jMPSxix_k3DpoxZ4/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvcLxgtP-Zu7Vx-G2Xo3lI34xTnUbL-JmFarVu1R003bqJ1zdJoMdI2lFYi2AeJrM8/exec';
 
 // ═══════════════════════════════════════════════════════════════
 // MIDDLEWARE
@@ -163,6 +163,12 @@ app.post('/api/payments/add', async (req, res) => {
   res.json(result);
 });
 
+// Edit Payment endpoint
+app.post('/api/payments/edit', async (req, res) => {
+  const result = await callAppsScript('updatePayment', req.body, 'POST');
+  res.json(result);
+});
+
 // ═══════════════════════════════════════════════════════════════
 // GRADES API
 // ═══════════════════════════════════════════════════════════════
@@ -223,8 +229,9 @@ app.get('/api/student/profile', async (req, res) => {
   res.json(result);
 });
 
+// Profile Update Route (Name & Photo)
 app.post('/api/student/updateProfile', async (req, res) => {
-  // passing the whole body which includes id, name, photo
+  // req.body contains { id, name, photo (base64 string) }
   const result = await callAppsScript('updateStudentProfile', req.body, 'POST');
   res.json(result);
 });
@@ -234,8 +241,8 @@ app.get('/api/student/grades', async (req, res) => {
   res.json(result);
 });
 
+// Student Payments - now uses ID for backend lookup
 app.get('/api/student/payments', async (req, res) => {
-  // Changed to use ID for more reliable fetching
   const result = await callAppsScript('studentPayments', { id: req.query.id });
   res.json(result);
 });
@@ -259,7 +266,7 @@ app.get('/api/student/excuses', async (req, res) => {
 // NOTIFICATIONS API
 // ═══════════════════════════════════════════════════════════════
 app.get('/api/student/notifications', async (req, res) => {
-  const result = await callAppsScript('getNotifications', { id: req.query.id });
+  const result = await callAppsScript('getNotifications', { studentId: req.query.id });
   res.json(result);
 });
 
