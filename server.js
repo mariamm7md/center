@@ -8,20 +8,26 @@ const morgan = require('morgan');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Google Apps Script Web App URL
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVhw-KDIW20UHx2dcHn25AowFwpNGdc90j2_xTwnB9CgMYB2neJC1qByyzgLxBqDG6/exec';
+// ═══════════════════════════════════════════════════════════════
+// GOOGLE APPS SCRIPT API URL
+// ═══════════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKGwkHY6WSsF2fAU4KUSYvbgsH2wDA3P7t6hWFNY6r5-G2QXVnvMmnTcsxDsfCd2a-/exec';
 
-// Middleware
+// ═══════════════════════════════════════════════════════════════
+// MIDDLEWARE
+// ═══════════════════════════════════════════════════════════════
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 app.use(compression());
 app.use(morgan('combined'));
-app.use(express.json({ limit: '10mb' })); // Increased for base64 image uploads
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helper function to call Google Apps Script
+// ═══════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
 async function callAppsScript(action, params = {}, method = 'GET') {
   try {
     let url = APPS_SCRIPT_URL;
@@ -46,8 +52,8 @@ async function callAppsScript(action, params = {}, method = 'GET') {
     try {
       return JSON.parse(text);
     } catch (parseError) {
-      console.error('JSON Parse Error:', text.substring(0, 200));
-      return { success: false, message: 'Invalid JSON response from Apps Script' };
+      console.error('JSON Parse Error:', text.substring(0, 100));
+      return { success: false, message: 'Invalid JSON response from Apps Script', raw: text };
     }
   } catch (error) {
     console.error('[API Error]', error.message);
@@ -55,20 +61,21 @@ async function callAppsScript(action, params = {}, method = 'GET') {
   }
 }
 
-// ====================== ROUTES ======================
-
-// Home Page
+// ═══════════════════════════════════════════════════════════════
+// ROUTES
+// ═══════════════════════════════════════════════════════════════
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Test Endpoint
 app.get('/api/test', async (req, res) => {
   const result = await callAppsScript('test');
   res.json(result);
 });
 
-// Login
+// ═══════════════════════════════════════════════════════════════
+// LOGIN API
+// ═══════════════════════════════════════════════════════════════
 app.post('/api/verifyLogin', async (req, res) => {
   try {
     const { role, user, pass } = req.body;
@@ -86,14 +93,21 @@ app.post('/api/verifyLogin', async (req, res) => {
       return res.json({ success: false, message: 'Invalid credentials' });
     }
 
-    // Student Login
-    const result = await callAppsScript('verifyLogin', { studentId: user, code: pass });
+    const result = await callAppsScript('verifyLogin', {
+      studentId: user,
+      code: pass
+    });
     res.json(result);
+
   } catch (error) {
     console.error('Login Error:', error.message);
     res.json({ success: false, message: error.message });
   }
 });
+
+// ═══════════════════════════════════════════════════════════════
+// PROXY ROUTES
+// ═══════════════════════════════════════════════════════════════
 
 // Dashboard
 app.get('/api/dashboard', async (req, res) => {
@@ -106,17 +120,14 @@ app.get('/api/students', async (req, res) => {
   const result = await callAppsScript('getStudents');
   res.json(result);
 });
-
 app.post('/api/students/add', async (req, res) => {
   const result = await callAppsScript('addStudent', req.body, 'POST');
   res.json(result);
 });
-
 app.post('/api/students/update', async (req, res) => {
   const result = await callAppsScript('updateStudent', req.body, 'POST');
   res.json(result);
 });
-
 app.post('/api/students/delete', async (req, res) => {
   const result = await callAppsScript('deleteStudent', req.body, 'POST');
   res.json(result);
@@ -127,13 +138,11 @@ app.get('/api/payments', async (req, res) => {
   const result = await callAppsScript('getPayments');
   res.json(result);
 });
-
 app.post('/api/payments/add', async (req, res) => {
   const result = await callAppsScript('addPayment', req.body, 'POST');
   res.json(result);
 });
-
-app.post('/api/payments/edit', async (req, res) => {
+app.post('/api/payments/update', async (req, res) => {
   const result = await callAppsScript('updatePayment', req.body, 'POST');
   res.json(result);
 });
@@ -143,15 +152,22 @@ app.get('/api/grades', async (req, res) => {
   const result = await callAppsScript('getGrades');
   res.json(result);
 });
-
 app.post('/api/grades/update', async (req, res) => {
   const result = await callAppsScript('updateGrade', req.body, 'POST');
+  res.json(result);
+});
+app.post('/api/grades/add', async (req, res) => {
+  const result = await callAppsScript('addGrade', req.body, 'POST');
   res.json(result);
 });
 
 // Schedules
 app.get('/api/schedules', async (req, res) => {
   const result = await callAppsScript('getSchedules');
+  res.json(result);
+});
+app.post('/api/schedules/add', async (req, res) => {
+  const result = await callAppsScript('addSchedule', req.body, 'POST');
   res.json(result);
 });
 
@@ -166,14 +182,26 @@ app.get('/api/excuses', async (req, res) => {
   const result = await callAppsScript('getExcuses');
   res.json(result);
 });
-
 app.post('/api/excuses/add', async (req, res) => {
   const result = await callAppsScript('addExcuse', req.body, 'POST');
   res.json(result);
 });
-
 app.post('/api/excuses/update', async (req, res) => {
   const result = await callAppsScript('updateExcuse', req.body, 'POST');
+  res.json(result);
+});
+
+// Notifications
+app.get('/api/notifications', async (req, res) => {
+  const result = await callAppsScript('getNotifications', { studentId: req.query.studentId });
+  res.json(result);
+});
+app.post('/api/notifications/read', async (req, res) => {
+  const result = await callAppsScript('readNotification', req.body, 'POST');
+  res.json(result);
+});
+app.post('/api/notifications/readAll', async (req, res) => {
+  const result = await callAppsScript('readAllNotifications', req.body, 'POST');
   res.json(result);
 });
 
@@ -182,55 +210,42 @@ app.get('/api/student/dashboard', async (req, res) => {
   const result = await callAppsScript('studentDashboard', { id: req.query.id });
   res.json(result);
 });
-
 app.get('/api/student/profile', async (req, res) => {
   const result = await callAppsScript('studentProfile', { id: req.query.id });
   res.json(result);
 });
-
+app.post('/api/student/profile/update', async (req, res) => {
+  const result = await callAppsScript('updateStudentProfile', req.body, 'POST');
+  res.json(result);
+});
 app.get('/api/student/grades', async (req, res) => {
   const result = await callAppsScript('studentGrades', { id: req.query.id });
   res.json(result);
 });
-
 app.get('/api/student/payments', async (req, res) => {
   const result = await callAppsScript('studentPayments', { id: req.query.id });
   res.json(result);
 });
-
 app.get('/api/student/attendance', async (req, res) => {
   const result = await callAppsScript('studentAttendance', { id: req.query.id });
   res.json(result);
 });
-
 app.get('/api/student/excuses', async (req, res) => {
   const result = await callAppsScript('studentExcuses', { id: req.query.id });
   res.json(result);
 });
-
+app.get('/api/student/schedules', async (req, res) => {
+  const result = await callAppsScript('getSchedules'); // Reuse admin schedule
+  res.json(result);
+});
 app.get('/api/student/rank', async (req, res) => {
   const result = await callAppsScript('studentRank', { id: req.query.id });
   res.json(result);
 });
 
-// Profile Update (Name + Photo)
-app.post('/api/student/updateProfile', async (req, res) => {
-  const result = await callAppsScript('updateStudentProfile', req.body, 'POST');
-  res.json(result);
-});
-
-// Notifications
-app.get('/api/student/notifications', async (req, res) => {
-  const result = await callAppsScript('getNotifications', { studentId: req.query.id });
-  res.json(result);
-});
-
-app.post('/api/notifications/read', async (req, res) => {
-  const result = await callAppsScript('readNotification', req.body, 'POST');
-  res.json(result);
-});
-
-// Error Handling
+// ═══════════════════════════════════════════════════════════════
+// ERROR HANDLING & START
+// ═══════════════════════════════════════════════════════════════
 app.use((err, req, res, next) => {
   console.error('Server Error:', err.message);
   res.status(500).json({ success: false, message: 'Internal server error' });
@@ -240,15 +255,12 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Endpoint not found' });
 });
 
-// Start Server
 app.listen(PORT, () => {
   console.log('');
   console.log('═════════════════════════════════════════════════════');
   console.log(' 🚀 Smart Educational Center Server');
   console.log('═════════════════════════════════════════════════════');
   console.log(` 📡 Port: ${PORT}`);
-  console.log(` 🔗 Connected to Google Apps Script`);
-  console.log(` 👤 Admin Login: ${process.env.ADMIN_USER || 'admin'}`);
+  console.log(` 👤 Admin: ${process.env.ADMIN_USER || 'admin'}`);
   console.log('═════════════════════════════════════════════════════');
-  console.log('');
 });
