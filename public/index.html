@@ -336,7 +336,7 @@ tbody tr:last-child td{border-bottom:none}
   <div class="login-pattern"></div>
   <div class="login-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
-  <!-- Theme & Lang controls -->
+  <!-- Theme & Lang controls on login page (Req #9) -->
   <div class="login-controls">
     <button class="lc-btn" onclick="toggleTheme()" id="loginThemeBtn">
       <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
@@ -571,6 +571,7 @@ const IC = {
   edit:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
   trophy:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 10.82C5.84 10.4 5 9.3 5 8V7h2v3.82zM19 8c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>'
 };
+
 function icon(k) { return IC[k] || ''; }
 
 // ════════════════ UI HELPERS ════════════════
@@ -626,7 +627,7 @@ async function api(action, data, method) {
   }
 }
 
-// ════════════════ THEME & LANG ════════════════
+// ════════════════ THEME & LANG (Req #9) ════════════════
 function toggleTheme() {
   STATE.theme = STATE.theme==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme',STATE.theme);
@@ -640,6 +641,7 @@ function toggleTheme() {
     ? '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>'
     : '<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>';
 }
+
 function toggleLang() {
   STATE.lang = STATE.lang==='ar'?'en':'ar';
   document.documentElement.lang = STATE.lang;
@@ -649,6 +651,7 @@ function toggleLang() {
   const active = document.querySelector('.section.active');
   if(active) navigateTo(active.id.replace('sec_',''));
 }
+
 function updateLabels() {
   const m = { loginTitle:'appName', sbTitle:'appName', loginSubtitle:'appSub',
     tabAdmin:'admin', tabStudent:'student', labelUser:'username', labelPass:'password',
@@ -666,6 +669,7 @@ function setLoginRole(r) {
   document.getElementById('studentLogin').style.display = r==='student'?'block':'none';
   document.getElementById('loginError').style.display   = 'none';
 }
+
 async function doLogin() {
   const btn=document.getElementById('btnLogin'); btn.disabled=true;
   const payload={role:loginRole};
@@ -687,6 +691,7 @@ async function doLogin() {
     navigateTo(STATE.role==='student'?'studentDashboard':'dashboard');
   }
 }
+function showError(msg) { const el=document.getElementById('loginError'); el.textContent=msg; el.style.display='block'; }
 function logout() { location.reload(); }
 
 // ════════════════ NAV ════════════════
@@ -711,6 +716,7 @@ const NAV_ITEMS = {
     {id:'studentExcuses',    icon:'mail',      key:'myExcuses',    cat:'mainMenu'}
   ]
 };
+
 function buildNav() {
   const nav=NAV_ITEMS[STATE.role]||NAV_ITEMS.admin;
   let html='', lastCat='';
@@ -720,6 +726,7 @@ function buildNav() {
   });
   document.getElementById('sbNav').innerHTML=html;
 }
+
 function navigateTo(id) {
   const sec=document.getElementById('sec_'+id); if(!sec) return;
   const roles=(sec.getAttribute('data-role')||'').split(',');
@@ -792,7 +799,7 @@ async function markAllRead() {
 // ADMIN PAGES
 // ════════════════════════════════════════
 
-// ─── DASHBOARD ───
+// ─── DASHBOARD ─── (Req #1)
 async function loadDashboard() {
   const d=await api('dashboard'); if(!d) return;
   let html=`<div class="stats-grid">`;
@@ -804,6 +811,7 @@ async function loadDashboard() {
   html+=statCard('check', d.presentToday||0,  t('presentToday'));
   html+=statCard('x',     d.absentToday||0,   t('absentToday'),  'danger');
   html+=statCard('clock', d.currentMonth||getCurrentMonth(), t('currentMonth'), 'info');
+  if(d.unreadNotif>0) html+=statCard('bell', d.unreadNotif, t('notifications'), 'purple');
   html+=`</div>`;
   html+=`<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.dashboard}</div>${t('quickActions')}</div></div><div class="quick-grid">`;
   html+=`<button class="quick-btn" onclick="navigateTo('students')">${IC.userPlus}<span>${t('addStudent')}</span></button>`;
@@ -857,6 +865,7 @@ async function loadStudents() {
   document.getElementById('sec_students').innerHTML=html;
   renderStudentsTable(STATE.cache.students);
 }
+
 function renderStudentsTable(list) {
   const tb=document.getElementById('studentsTableBody'); if(!tb) return;
   if(!list.length) { tb.innerHTML=`<tr><td colspan="8">${emptyState('users',t('noData'))}</td></tr>`; return; }
@@ -889,3 +898,698 @@ async function editStudent(id) {
     </div><div class="form-row">
       <div class="form-group"><label class="form-label">${t('group')}</label><select class="form-input" id="editGroup">${buildOptions(CONFIG.groups,s.group)}</select></div>
       <div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="editSub" type="number" value="${safeVal(s.subscription)}"></div>
+    </div><div class="form-row">
+      <div class="form-group"><label class="form-label">${t('status')}</label><select class="form-input" id="editStatus"><option value="نشط"${s.status==='نشط'?' selected':''}>${t('active')}</option><option value="غير نشط"${s.status==='غير نشط'?' selected':''}>${t('inactive')}</option></select></div>
+      <div class="form-group"><label class="form-label">${t('notes')}</label><input class="form-input" id="editNotes" value="${safeVal(s.notes)}"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="width:auto" onclick="saveStudent('${id}')">${t('save')}</button>
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+    </div>`);
+}
+async function saveStudent(id) {
+  await api('students/update',{id,name:getVal('editName'),phone:getVal('editPhone'),group:getVal('editGroup'),subscription:+getVal('editSub'),status:getVal('editStatus'),notes:getVal('editNotes')});
+  closeModal(); showToast('تم الحفظ'); loadStudents();
+}
+async function deleteStudent(id) { if(await confirmDialog(t('confirmDelete'))) { await api('students/delete',{id}); showToast('تم الحذف'); loadStudents(); } }
+
+// ─── PAYMENTS (Req #2) ───
+async function loadPayments() {
+  const students=await api('students')||[];
+  const payments=await api('payments')||[];
+  STATE.cache.payments=payments;
+
+  let html=`<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.money}</div>${t('addPayment')}</div></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">${t('name')}</label>
+        <select class="form-input" id="payStudent" onchange="onPayStudentChange()">
+          <option value="">--</option>${students.map(s=>`<option value="${s.id}" data-sub="${s.subscription}" data-name="${s.name}">${s.name}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">${t('month')}</label><select class="form-input" id="payMonth">${buildOptions(getMonths(),getCurrentMonth())}</select></div>
+      <div class="form-group"><label class="form-label">${t('year')}</label><select class="form-input" id="payYear">${[2024,2025,2026].map(y=>`<option${y===getCurrentYear()?' selected':''}>${y}</option>`).join('')}</select></div>
+    </div><div class="form-row">
+      <div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="paySub" type="number" readonly></div>
+      <div class="form-group"><label class="form-label">${t('amount')}</label><input class="form-input" id="payAmount" type="number" placeholder="0"></div>
+    </div>
+    <button class="btn btn-primary" style="width:auto;padding:12px 28px" onclick="addPayment()">${IC.money}<span>${t('add')}</span></button>
+  </div>`;
+
+  html+=`<div class="card">
+    <div class="card-header">
+      <div class="card-title"><div class="card-icon gold">${IC.money}</div>${t('payments')}</div>
+      <div class="search-box"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input class="form-input" placeholder="${t('search')}" oninput="filterPayments(this.value)">
+      </div>
+    </div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>${t('name')}</th><th>${t('month')}/${t('year')}</th>
+      <th>${t('subscription')}</th><th>${t('paid')}</th><th>${t('remaining')}</th>
+      <th>${t('status')}</th><th></th>
+    </tr></thead><tbody id="paymentsTableBody"></tbody></table></div>
+  </div>`;
+  document.getElementById('sec_payments').innerHTML=html;
+  renderPaymentsTable(payments);
+}
+
+function onPayStudentChange() {
+  const sel=document.getElementById('payStudent');
+  const opt=sel.options[sel.selectedIndex];
+  document.getElementById('paySub').value=opt.dataset.sub||'';
+}
+
+function renderPaymentsTable(list) {
+  const tb=document.getElementById('paymentsTableBody'); if(!tb) return;
+  if(!list.length) { tb.innerHTML=`<tr><td colspan="7">${emptyState('money',t('noData'))}</td></tr>`; return; }
+  tb.innerHTML=list.map(p=>{
+    const pct = p.subscription>0 ? Math.min(100,Math.round((p.paid/p.subscription)*100)) : 0;
+    const st  = p.status==='مكتمل' ? badge(t('complete'),'badge-success') : badge(t('incomplete'),'badge-warn');
+    return `<tr>
+      <td style="font-weight:600">${safeVal(p.name)}</td>
+      <td>${safeVal(p.monthYear)}</td>
+      <td>${formatNum(p.subscription)}</td>
+      <td style="color:var(--accent);font-weight:700">${formatNum(p.paid)}</td>
+      <td>
+        <div>${formatNum(p.remaining)}</div>
+        <div class="remaining-bar"><div class="remaining-fill" style="width:${pct}%"></div></div>
+      </td>
+      <td>${st}</td>
+      <td><button class="btn btn-sm btn-secondary" onclick="editPayment(${p.rowIndex},'${p.name}','${p.monthYear}',${p.subscription},${p.paid},'${p.notes||''}')">${IC.edit}</button></td>
+    </tr>`;
+  }).join('');
+}
+function filterPayments(q) {
+  q=q.toLowerCase();
+  renderPaymentsTable((STATE.cache.payments||[]).filter(p=>(safeVal(p.name)+' '+safeVal(p.monthYear)).toLowerCase().includes(q)));
+}
+async function addPayment() {
+  const sel=document.getElementById('payStudent');
+  const studentId=sel.value; if(!studentId){showToast(t('name')+'!','error');return;}
+  const studentName=sel.options[sel.selectedIndex].text;
+  const paid=+getVal('payAmount'); if(!paid){showToast(t('amount')+'!','error');return;}
+  const res=await api('payments/add',{studentId,studentName,month:getVal('payMonth'),year:getVal('payYear'),subscription:+getVal('paySub'),paid});
+  if(res) {
+    const msg = res.status==='مكتمل' ? `✅ مكتمل! إجمالي: ${res.totalPaid}` : `📥 إجمالي: ${res.totalPaid}/${res.subscription}`;
+    showToast('تم تسجيل الدفعة - '+msg);
+    loadPayments();
+  }
+}
+function editPayment(rowIndex,name,monthYear,subscription,paid,notes) {
+  showModal(`<div class="modal-title">${IC.edit}تعديل دفعة - ${name}</div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px">الشهر: ${monthYear}</p>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">${t('subscription')}</label><input class="form-input" id="epSub" type="number" value="${subscription}"></div>
+      <div class="form-group"><label class="form-label">المدفوع الإجمالي (تعديل مباشر)</label><input class="form-input" id="epPaid" type="number" value="${paid}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">${t('notes')}</label><input class="form-input" id="epNotes" value="${notes||''}"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="width:auto" onclick="savePayment(${rowIndex})">${t('save')}</button>
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+    </div>`);
+}
+async function savePayment(rowIndex) {
+  await api('payments/update',{rowIndex,subscription:+getVal('epSub'),paid:+getVal('epPaid'),notes:getVal('epNotes')});
+  closeModal(); showToast('تم الحفظ'); loadPayments();
+}
+
+// ─── GRADES (Req #3) ───
+async function loadGrades() {
+  const list=await api('grades')||[];
+  STATE.cache.grades=list;
+  const subjects=['الكل',...new Set(list.map(g=>g.subject).filter(Boolean))];
+
+  let html=`<div class="card">
+    <div class="card-header">
+      <div class="card-title"><div class="card-icon accent">${IC.star}</div>${t('grades')}</div>
+      <div class="btn-group">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input class="form-input" placeholder="${t('search')}" oninput="filterGrades(this.value)">
+        </div>
+        <select class="form-input" style="min-width:140px" id="gradeSubjectFilter" onchange="filterGrades(document.querySelector('.search-box input').value||'')">
+          ${subjects.map(s=>`<option>${s}</option>`).join('')}
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="showAddGradeModal()">${IC.userPlus} ${t('addGrade')}</button>
+      </div>
+    </div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>ID</th><th>${t('name')}</th><th>${t('subject')}</th>
+      <th>E1</th><th>E2</th><th>E3</th><th>E4</th>
+      <th>HW1</th><th>HW2</th><th>HW3</th>
+      <th>${t('average')}</th><th>${t('rating')}</th><th></th>
+    </tr></thead><tbody id="gradesTableBody"></tbody></table></div>
+  </div>`;
+  document.getElementById('sec_grades').innerHTML=html;
+  renderGradesTable(list);
+}
+function renderGradesTable(list) {
+  const filter=getVal('gradeSubjectFilter')||'الكل';
+  const filtered=filter==='الكل'?list:list.filter(g=>g.subject===filter);
+  const tb=document.getElementById('gradesTableBody'); if(!tb) return;
+  if(!filtered.length) { tb.innerHTML=`<tr><td colspan="13">${emptyState('star',t('noData'))}</td></tr>`; return; }
+  tb.innerHTML=filtered.map((g,i)=>{
+    const keys=['exam1','exam2','exam3','exam4','hw1','hw2','hw3'];
+    const inputs=keys.map((k,j)=>`<td><input class="grade-input" value="${g[k]!==undefined?g[k]:''}" id="gr_${i}_${j}" onchange="calcRowAvg(${i})"></td>`).join('');
+    const avg=parseFloat(g.avg)||0; const avgColor=avg>=50?'var(--accent)':'var(--danger)';
+    return `<tr>
+      <td>${safeVal(g.id)}</td>
+      <td style="font-weight:600">${safeVal(g.name)}</td>
+      <td>${safeVal(g.subject)||'-'}</td>
+      ${inputs}
+      <td id="grAvg_${i}" style="font-weight:800;color:${avgColor}">${avg||'-'}</td>
+      <td><input class="grade-input" style="width:64px" value="${safeVal(g.grade)}" id="grRating_${i}"></td>
+      <td><button class="btn btn-xs btn-primary" onclick="saveGradeRow(${i},'${g.id}')">${IC.check}</button></td>
+    </tr>`;
+  }).join('');
+  STATE.cache.gradesFiltered=filtered;
+}
+function filterGrades(q) {
+  q=q.toLowerCase();
+  const subFilter=getVal('gradeSubjectFilter')||'الكل';
+  let filtered=STATE.cache.grades||[];
+  if(q) filtered=filtered.filter(g=>(safeVal(g.name)+' '+safeVal(g.id)).toLowerCase().includes(q));
+  if(subFilter!=='الكل') filtered=filtered.filter(g=>g.subject===subFilter);
+  STATE.cache.gradesFiltered=filtered;
+  const tb=document.getElementById('gradesTableBody'); if(!tb) return;
+  if(!filtered.length) { tb.innerHTML=`<tr><td colspan="13">${emptyState('star',t('noData'))}</td></tr>`; return; }
+  const keys=['exam1','exam2','exam3','exam4','hw1','hw2','hw3'];
+  tb.innerHTML=filtered.map((g,i)=>{
+    const inputs=keys.map((k,j)=>`<td><input class="grade-input" value="${g[k]!==undefined?g[k]:''}" id="gr_${i}_${j}" onchange="calcRowAvg(${i})"></td>`).join('');
+    const avg=parseFloat(g.avg)||0;
+    return `<tr>
+      <td>${safeVal(g.id)}</td><td style="font-weight:600">${safeVal(g.name)}</td><td>${safeVal(g.subject)||'-'}</td>
+      ${inputs}
+      <td id="grAvg_${i}" style="font-weight:800;color:${avg>=50?'var(--accent)':'var(--danger)'}">${avg||'-'}</td>
+      <td><input class="grade-input" style="width:64px" value="${safeVal(g.grade)}" id="grRating_${i}"></td>
+      <td><button class="btn btn-xs btn-primary" onclick="saveGradeRow(${i},'${g.id}')">${IC.check}</button></td>
+    </tr>`;
+  }).join('');
+}
+function calcRowAvg(i) {
+  const vals=[]; for(let j=0;j<7;j++){ const v=parseFloat(document.getElementById(`gr_${i}_${j}`)?.value); if(!isNaN(v)) vals.push(v); }
+  const el=document.getElementById(`grAvg_${i}`); if(!el) return;
+  const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'';
+  el.textContent=avg; el.style.color=vals.length&&avg>=50?'var(--accent)':'var(--danger)';
+}
+async function saveGradeRow(i,id) {
+  const data={id};
+  ['exam1','exam2','exam3','exam4','hw1','hw2','hw3'].forEach((k,j)=>{ data[k]=document.getElementById(`gr_${i}_${j}`)?.value||''; });
+  data.avg  = document.getElementById(`grAvg_${i}`)?.textContent||'';
+  data.grade= document.getElementById(`grRating_${i}`)?.value||'';
+  const filtered=STATE.cache.gradesFiltered||STATE.cache.grades||[];
+  data.subject = filtered[i]?.subject||'';
+  await api('grades/update',data); showToast('تم حفظ الدرجات');
+}
+function showAddGradeModal() {
+  const students=STATE.cache.students||[];
+  showModal(`<div class="modal-title">${IC.star}${t('addGrade')}</div>
+    <div class="form-group"><label class="form-label">${t('name')}</label>
+      <select class="form-input" id="addGradeStudent">
+        <option value="">--</option>
+        ${students.map(s=>`<option value="${s.id}" data-name="${s.name}">${s.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">${t('subject')}</label>
+      <select class="form-input" id="addGradeSubject">${buildOptions(CONFIG.subjects)}</select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="width:auto" onclick="addGradeRow()">${t('add')}</button>
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+    </div>`);
+}
+async function addGradeRow() {
+  const sel=document.getElementById('addGradeStudent');
+  if(!sel.value){showToast(t('name')+'!','error');return;}
+  const opt=sel.options[sel.selectedIndex];
+  await api('grades/add',{studentId:sel.value,studentName:opt.dataset.name||opt.text,subject:getVal('addGradeSubject')});
+  closeModal(); showToast('تمت الإضافة'); loadGrades();
+}
+
+// ─── SCHEDULES ───
+async function loadSchedules() {
+  const list=await api('schedules')||[];
+  let html=`<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.clock}</div>${t('schedules')}</div>
+    <button class="btn btn-secondary btn-sm" onclick="showAddScheduleModal()">${IC.calendar} ${t('add')}</button></div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>${t('day')}</th><th>${t('time')}</th><th>${t('group')}</th><th>${t('subject')}</th><th>${t('status')}</th>
+    </tr></thead><tbody id="schedulesBody"></tbody></table></div>
+  </div>`;
+  document.getElementById('sec_schedules').innerHTML=html;
+  const tb=document.getElementById('schedulesBody'); if(!tb) return;
+  if(!list.length) { tb.innerHTML=`<tr><td colspan="5">${emptyState('clock',t('noData'))}</td></tr>`; return; }
+  tb.innerHTML=list.map(s=>`<tr>
+    <td>${safeVal(s.day)}</td><td>${safeVal(s.time)}</td>
+    <td>${safeVal(s.group)}</td><td>${safeVal(s.subject)}</td>
+    <td>${badge(s.status||t('active'),s.status==='نشط'||!s.status?'badge-success':'badge-danger')}</td>
+  </tr>`).join('');
+}
+function showAddScheduleModal() {
+  const days=getDays();
+  showModal(`<div class="modal-title">${IC.calendar}${t('add')} ${t('schedules')}</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">${t('day')}</label><select class="form-input" id="schDay">${buildOptions(days)}</select></div>
+      <div class="form-group"><label class="form-label">${t('time')}</label><input class="form-input" id="schTime" placeholder="4:00 PM - 6:00 PM"></div>
+    </div><div class="form-row">
+      <div class="form-group"><label class="form-label">${t('group')}</label><select class="form-input" id="schGroup">${buildOptions(CONFIG.groups)}</select></div>
+      <div class="form-group"><label class="form-label">${t('subject')}</label><select class="form-input" id="schSubject">${buildOptions(CONFIG.subjects)}</select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="width:auto" onclick="addSchedule()">${t('save')}</button>
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+    </div>`);
+}
+async function addSchedule() {
+  await api('schedules/add',{day:getVal('schDay'),time:getVal('schTime'),group:getVal('schGroup'),subject:getVal('schSubject')});
+  closeModal(); showToast('تم الحفظ'); loadSchedules();
+}
+
+// ─── EXCUSES ───
+async function loadExcuses() {
+  const list=await api('excuses')||[];
+  let html=`<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.mail}</div>${t('excuses')}</div></div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>#</th><th>${t('name')}</th><th>الرسالة</th><th>${t('status')}</th><th>التاريخ</th><th></th>
+    </tr></thead><tbody id="excusesBody"></tbody></table></div>
+  </div>`;
+  document.getElementById('sec_excuses').innerHTML=html;
+  const tb=document.getElementById('excusesBody'); if(!tb) return;
+  if(!list.length) { tb.innerHTML=`<tr><td colspan="6">${emptyState('mail',t('noData'))}</td></tr>`; return; }
+  tb.innerHTML=list.map(e=>{
+    let st; if(e.status.includes('قيد')) st=badge(t('pending'),'badge-warn'); else if(e.status.includes('مقبول')) st=badge(t('approved'),'badge-success'); else st=badge(t('rejected'),'badge-danger');
+    return `<tr>
+      <td>${safeVal(e.id)}</td>
+      <td style="font-weight:600">${safeVal(e.studentName)}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${safeVal(e.message)}</td>
+      <td>${st}</td><td>${safeVal(e.date)}</td>
+      <td><div class="btn-group">
+        <button class="btn btn-sm btn-secondary" onclick="replyExcuse('${e.id}')">${IC.edit}</button>
+        <button class="btn btn-xs btn-secondary" onclick="approveExcuse('${e.id}','مقبول')" style="background:var(--accent-g);color:var(--accent)">${IC.check}</button>
+        <button class="btn btn-xs btn-danger" onclick="approveExcuse('${e.id}','مرفوض')">${IC.x}</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function replyExcuse(id) {
+  showModal(`<div class="modal-title">${IC.mail}الرد على الاعتذار</div>
+    <div class="form-group"><label class="form-label">${t('adminReply')}</label><textarea class="form-input" id="excuseReplyTxt" placeholder="اكتب ردك هنا..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="width:auto" onclick="approveExcuse('${id}','مقبول')">${IC.check} ${t('approved')}</button>
+      <button class="btn btn-danger" onclick="approveExcuse('${id}','مرفوض')">${IC.x} ${t('rejected')}</button>
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+    </div>`);
+}
+async function approveExcuse(id,status) {
+  const reply=getVal('excuseReplyTxt')||'';
+  await api('excuses/update',{id,status,adminReply:reply});
+  closeModal(); showToast('تم الرد'); loadExcuses();
+}
+
+// ─── ATTENDANCE (Req #4) ───
+async function loadAttendance() {
+  const students=await api('students')||[];
+  const dateStr=today();
+  let html=`<div class="card">
+    <div class="card-header">
+      <div class="card-title"><div class="card-icon accent">${IC.check}</div>${t('attendance')} - ${getCurrentDay()} - ${new Date().toLocaleDateString(STATE.lang==='ar'?'ar-EG':'en-US')}</div>
+      <div class="btn-group">
+        <select class="form-input" style="min-width:140px" id="attGroupFilter" onchange="filterAttendance()"><option value="">${t('all')} ${t('groups')}</option>${CONFIG.groups.map(g=>`<option>${g}</option>`).join('')}</select>
+        <button class="btn btn-secondary btn-sm" onclick="markAllPresent()">تحديد الكل حضور</button>
+      </div>
+    </div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>ID</th><th>${t('name')}</th><th>${t('group')}</th><th>${t('status')}</th><th></th>
+    </tr></thead><tbody id="attendanceBody"></tbody></table></div>
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+      <span id="attPresCount" style="color:var(--accent);font-weight:700">حاضر: 0</span>
+      <span id="attAbsCount" style="color:var(--danger);font-weight:700">غائب: 0</span>
+    </div>
+  </div>`;
+  document.getElementById('sec_attendance').innerHTML=html;
+  STATE.cache.attStudents=students; STATE.cache.attStatus={};
+  renderAttendanceTable(students, dateStr);
+}
+function renderAttendanceTable(list,dateStr) {
+  const filter=getVal('attGroupFilter');
+  const filtered=filter?list.filter(s=>s.group===filter):list;
+  const tb=document.getElementById('attendanceBody'); if(!tb) return;
+  if(!filtered.length) { tb.innerHTML=`<tr><td colspan="5">${emptyState('users',t('noData'))}</td></tr>`; return; }
+  tb.innerHTML=filtered.map(s=>{
+    const st=STATE.cache.attStatus[s.id];
+    const badge_=st?st==='حاضر'?`<span class="badge badge-success">${t('present')}</span>`:`<span class="badge badge-danger">${t('absent')}</span>`:`<span class="badge badge-info">-</span>`;
+    return `<tr id="attRow_${s.id}">
+      <td>${safeVal(s.id)}</td><td style="font-weight:600">${safeVal(s.name)}</td>
+      <td>${safeVal(s.group)}</td><td id="attSt_${s.id}">${badge_}</td>
+      <td><div class="btn-group">
+        <button class="btn btn-sm btn-secondary" onclick="markAtt('${s.id}','حاضر','${dateStr}')" style="background:var(--accent-g);color:var(--accent)">${IC.check}</button>
+        <button class="btn btn-sm btn-danger" onclick="markAtt('${s.id}','غائب','${dateStr}')">${IC.x}</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function filterAttendance() { renderAttendanceTable(STATE.cache.attStudents||[],today()); }
+async function markAtt(studentId,status,date) {
+  STATE.cache.attStatus[studentId]=status;
+  const el=document.getElementById(`attSt_${studentId}`);
+  if(el) el.innerHTML=status==='حاضر'?`<span class="badge badge-success">${t('present')}</span>`:`<span class="badge badge-danger">${t('absent')}</span>`;
+  await api('attendance/mark',{studentId,status,date});
+  updateAttCounts();
+}
+function updateAttCounts() {
+  const s=STATE.cache.attStatus||{};
+  const pres=Object.values(s).filter(v=>v==='حاضر').length;
+  const abs=Object.values(s).filter(v=>v==='غائب').length;
+  const pc=document.getElementById('attPresCount'); if(pc) pc.textContent=`حاضر: ${pres}`;
+  const ac=document.getElementById('attAbsCount'); if(ac) ac.textContent=`غائب: ${abs}`;
+}
+async function markAllPresent() {
+  const filter=getVal('attGroupFilter');
+  const students=(STATE.cache.attStudents||[]).filter(s=>!filter||s.group===filter);
+  const dateStr=today();
+  for(const s of students) await markAtt(s.id,'حاضر',dateStr);
+  showToast('تم تسجيل الجميع حضور');
+}
+
+// ─── ADMIN NOTIFICATIONS ───
+async function loadAdminNotifications() {
+  const list=await api('notifications')||[];
+  let html=`<div class="card">
+    <div class="card-header">
+      <div class="card-title"><div class="card-icon accent">${IC.bell}</div>${t('notifications')}</div>
+      <button class="btn btn-secondary btn-sm" onclick="markAllRead()">${t('readAll')}</button>
+    </div>`;
+  if(!list.length) { html+=emptyState('bell',t('noData')); }
+  else {
+    const icons={'grade':'📊','attendance':'📅','excuse':'📩','payment':'💰','general':'🔔'};
+    html+=list.map(n=>`
+      <div class="excuse-item${n.read?'':' unread-card'}" style="${n.read?'':'border-color:var(--accent)'}">
+        <div class="excuse-item-header">
+          <span style="font-size:18px">${icons[n.type]||'🔔'}</span>
+          <strong>${n.title}</strong>
+          ${n.read?badge('مقروء','badge-success'):badge('جديد','badge-warn')}
+        </div>
+        <div class="excuse-msg">${n.message}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">${n.date} · طالب #${n.studentId}</div>
+      </div>`).join('');
+  }
+  html+=`</div>`;
+  document.getElementById('sec_notifications').innerHTML=html;
+}
+
+// ─── DOWNLOADS ───
+async function loadDownloads() {
+  let html=`<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.download}</div>${t('downloads')}</div></div><div class="quick-grid">`;
+  html+=`<a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/export?format=xlsx" target="_blank" class="quick-btn">${IC.download}<span>${t('exportExcel')}</span></a>`;
+  html+=`<a href="https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/edit" target="_blank" class="quick-btn">${IC.calendar}<span>Google Sheets</span></a>`;
+  html+=`</div></div>`;
+  document.getElementById('sec_downloads').innerHTML=html;
+}
+
+// ════════════════════════════════════════
+// STUDENT PAGES
+// ════════════════════════════════════════
+
+// ─── STUDENT DASHBOARD (Req #5 - rank) ───
+async function loadStudentDashboard() {
+  const d=await api('student/dashboard',{id:STATE.userId})||{};
+  const rank=await api('student/rank',{id:STATE.userId})||{};
+
+  let html=`<div class="stats-grid">`;
+  html+=statCard('check',  (d.attRate||0)+'%',    t('attendanceRate'));
+  html+=statCard('star',   d.avgGrade||'-',        t('average'),     'gold');
+  html+=`</div>`;
+
+  // Rank Cards
+  if(rank.rankGroup||rank.rankAll) {
+    html+=`<div class="rank-grid">
+      <div class="rank-card"><div class="rank-num">${rank.rankGroup||'-'}</div><div><span class="rank-sep">/</span><span class="rank-total">${rank.totalGroup||'?'}</span></div><div class="rank-label-sm">${t('rankInGroup')}</div></div>
+      <div class="rank-card"><div class="rank-num">${rank.rankAll||'-'}</div><div><span class="rank-sep">/</span><span class="rank-total">${rank.totalAll||'?'}</span></div><div class="rank-label-sm">${t('rankInAll')}</div></div>
+    </div>`;
+  }
+
+  // Today's schedule
+  html+=`<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.calendar}</div>${t('todaySchedule')}</div></div><div id="todaySched"></div></div>`;
+
+  // Group ranking chart
+  if(rank.groupChart&&rank.groupChart.length) {
+    html+=`<div class="card"><div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.chart}</div>ترتيبك في المجموعة</div></div><div class="chart-wrap"><canvas id="rankChartCanvas"></canvas></div></div>`;
+  }
+
+  document.getElementById('sec_studentDashboard').innerHTML=html;
+
+  // Load schedule
+  const schedules=await api('student/schedules',{id:STATE.userId})||[];
+  const today=getCurrentDay();
+  const todaySch=schedules.filter(s=>s.day===today);
+  const listEl=document.getElementById('todaySched');
+  if(listEl) {
+    if(!todaySch.length) listEl.innerHTML=emptyState('clock',t('noData'));
+    else listEl.innerHTML=`<div class="table-wrapper"><table><thead><tr><th>${t('time')}</th><th>${t('group')}</th><th>${t('subject')}</th></tr></thead><tbody>${todaySch.map(s=>`<tr><td>${safeVal(s.time)}</td><td>${safeVal(s.group)}</td><td>${safeVal(s.subject)}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+
+  // Group ranking chart
+    if(rank.groupChart&&rank.groupChart.length) {
+    const ctx = document.getElementById('rankChartCanvas').getContext('2d');
+    if(STATE.gradeChart) STATE.gradeChart.destroy();
+    STATE.gradeChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rank.groupChart.map(r => r.name === STATE.user ? t('name') : t('student') + ' ' + r.id),
+        datasets: [{
+          label: t('average'),
+          data: rank.groupChart.map(r => r.avg),
+          backgroundColor: rank.groupChart.map(r => r.name === STATE.user ? 'rgba(16, 185, 129, 0.8)' : 'rgba(59, 130, 246, 0.5)'),
+          borderColor: rank.groupChart.map(r => r.name === STATE.user ? 'rgba(16, 185, 129, 1)' : 'rgba(59, 130, 246, 1)'),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 100 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+}
+
+// ─── STUDENT PROFILE ───
+async function loadStudentProfile() {
+  const p = await api('student/profile', {id:STATE.userId}) || {};
+  let html = `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.person}</div>${t('myProfile')}</div></div>
+    <div class="profile-photo-wrap">
+      <div class="profile-photo" id="profilePhotoPreview">
+        ${p.photo ? `<img src="${p.photo}" alt="${p.name}">` : `<span class="profile-photo-placeholder">${(p.name||'U').charAt(0)}</span>`}
+      </div>
+      <div class="photo-actions">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('photoInput').click()">${IC.edit} ${t('changePhoto')}</button>
+        <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewPhoto(this)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">${t('name')}</label>
+      <input class="form-input" id="profileName" value="${safeVal(p.name)}">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">${t('studentId')}</label><input class="form-input" value="${safeVal(p.id)}" disabled></div>
+      <div class="form-group"><label class="form-label">${t('group')}</label><input class="form-input" value="${safeVal(p.group)}" disabled></div>
+    </div>
+    <div class="form-row">
+       <div class="form-group"><label class="form-label">${t('phone')}</label><input class="form-input" value="${safeVal(p.phone)}" disabled></div>
+       <div class="form-group"><label class="form-label">${t('grade')}</label><input class="form-input" value="${safeVal(p.grade)}" disabled></div>
+    </div>
+    <button class="btn btn-primary" style="width:auto;padding:12px 28px" onclick="updateMyProfile()">${t('save')}</button>
+  </div>`;
+  document.getElementById('sec_studentProfile').innerHTML = html;
+}
+
+function previewPhoto(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const preview = document.getElementById('profilePhotoPreview');
+      preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+      STATE.cache.newPhoto = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+async function updateMyProfile() {
+  const name = getVal('profileName');
+  const photo = STATE.cache.newPhoto;
+  await api('student/profile/update', {id:STATE.userId, name, photo});
+  showToast(t('save'));
+  if(name) {
+      document.getElementById('userName').textContent = name;
+      STATE.user = name;
+  }
+  if(photo) {
+      const avatar = document.getElementById('userAvatarImg');
+      avatar.src = photo; avatar.style.display = 'block';
+      document.getElementById('userAvatarIcon').style.display = 'none';
+  }
+  STATE.cache.newPhoto = null;
+}
+
+// ─── STUDENT GRADES ───
+async function loadStudentGrades() {
+  const g = await api('student/grades', {id:STATE.userId}) || [];
+  let html = `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.star}</div>${t('myGrades')}</div></div>
+    <div class="chart-wrap"><canvas id="studentGradesChart"></canvas></div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>${t('subject')}</th><th>E1</th><th>E2</th><th>E3</th><th>E4</th><th>HW</th><th>${t('average')}</th><th>${t('rating')}</th>
+    </tr></thead><tbody>`;
+
+  if(!g.length) html += `<tr><td colspan="8">${emptyState('star',t('noData'))}</td></tr>`;
+  else {
+      const labels = []; const data = [];
+      g.forEach(row => {
+          const avg = parseFloat(row.avg) || 0;
+          labels.push(row.subject||'-');
+          data.push(avg);
+          const hw = [row.hw1, row.hw2, row.hw3].filter(Boolean).join(' / ');
+          html += `<tr>
+            <td style="font-weight:600">${safeVal(row.subject)}</td>
+            <td>${safeVal(row.exam1)}</td><td>${safeVal(row.exam2)}</td><td>${safeVal(row.exam3)}</td><td>${safeVal(row.exam4)}</td>
+            <td>${hw||'-'}</td>
+            <td style="font-weight:700;color:${avg>=50?'var(--accent)':'var(--danger)'}">${safeVal(row.avg)}</td>
+            <td>${safeVal(row.grade)}</td>
+          </tr>`;
+      });
+      // Render Chart
+      if(data.length) {
+          setTimeout(() => {
+              const ctx = document.getElementById('studentGradesChart')?.getContext('2d');
+              if(ctx) {
+                  if(STATE.gradeChart) STATE.gradeChart.destroy();
+                  STATE.gradeChart = new Chart(ctx, {
+                      type: 'bar',
+                      data: { labels, datasets: [{ label: t('average'), data, backgroundColor: 'rgba(16, 185, 129, 0.6)', borderColor: 'rgba(16, 185, 129, 1)', borderWidth: 1 }] },
+                      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                  });
+              }
+          }, 100);
+      }
+  }
+
+  html += `</tbody></table></div></div>`;
+  document.getElementById('sec_studentGrades').innerHTML = html;
+}
+
+// ─── STUDENT PAYMENTS ───
+async function loadStudentPayments() {
+  const p = await api('student/payments', {id:STATE.userId}) || [];
+  let html = `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.money}</div>${t('myPayments')}</div></div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>${t('month')}</th><th>${t('subscription')}</th><th>${t('paid')}</th><th>${t('remaining')}</th><th>${t('status')}</th>
+    </tr></thead><tbody>`;
+
+  if(!p.length) html += `<tr><td colspan="5">${emptyState('money',t('noData'))}</td></tr>`;
+  else {
+      p.forEach(row => {
+          const rem = (row.subscription||0) - (row.paid||0);
+          const st = rem <= 0 ? badge(t('complete'),'badge-success') : badge(t('incomplete'),'badge-warn');
+          html += `<tr>
+            <td style="font-weight:600">${safeVal(row.month)}</td>
+            <td>${formatNum(row.subscription)}</td>
+            <td style="color:var(--accent);font-weight:700">${formatNum(row.paid)}</td>
+            <td>${formatNum(rem)}</td>
+            <td>${st}</td>
+          </tr>`;
+      });
+  }
+  html += `</tbody></table></div></div>`;
+  document.getElementById('sec_studentPayments').innerHTML = html;
+}
+
+// ─── STUDENT ATTENDANCE ───
+async function loadStudentAttendance() {
+  const a = await api('student/attendance', {id:STATE.userId}) || [];
+  let html = `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.check}</div>${t('myAttendance')}</div></div>
+    <div class="table-wrapper"><table><thead><tr>
+      <th>${t('day')}</th><th>${t('status')}</th>
+    </tr></thead><tbody>`;
+
+  if(!a.length) html += `<tr><td colspan="2">${emptyState('check',t('noData'))}</td></tr>`;
+  else {
+      a.forEach(row => {
+          const st = row.status === 'حاضر' || row.status === 'Present' ? badge(t('present'),'badge-success') : badge(t('absent'),'badge-danger');
+          html += `<tr><td style="font-weight:600">${safeVal(row.date)}</td><td>${st}</td></tr>`;
+      });
+  }
+  html += `</tbody></table></div></div>`;
+  document.getElementById('sec_studentAttendance').innerHTML = html;
+}
+
+// ─── STUDENT EXCUSES ───
+async function loadStudentExcuses() {
+  const list = await api('student/excuses', {id:STATE.userId}) || [];
+  
+  let html = `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon accent">${IC.mail}</div>${t('sendExcuse')}</div></div>
+    <div class="form-group">
+      <textarea class="form-input" id="excuseText" placeholder="${t('excuseMsg')}..." style="min-height:100px"></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:auto" onclick="sendStudentExcuse()">${IC.mail} ${t('sendExcuse')}</button>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-header"><div class="card-title"><div class="card-icon gold">${IC.mail}</div>${t('myExcuses')}</div></div>
+    <div id="studentExcusesList"></div>
+  </div>`;
+
+  document.getElementById('sec_studentExcuses').innerHTML = html;
+  
+  const listEl = document.getElementById('studentExcusesList');
+  if(!list.length) listEl.innerHTML = emptyState('mail', t('noData'));
+  else {
+      listEl.innerHTML = list.map(e => {
+          let st; 
+          if(e.status.includes('قيد')) st = badge(t('pending'),'badge-warn');
+          else if(e.status.includes('مقبول')) st = badge(t('approved'),'badge-success');
+          else st = badge(t('rejected'),'badge-danger');
+          
+          return `<div class="excuse-item">
+            <div class="excuse-item-header">
+                <span>${safeVal(e.date)}</span>
+                ${st}
+            </div>
+            <div class="excuse-msg">${safeVal(e.message)}</div>
+            ${e.adminReply ? `<div class="excuse-reply"><b>${t('adminReply')}:</b> ${safeVal(e.adminReply)}</div>` : ''}
+          </div>`;
+      }).join('');
+  }
+}
+
+async function sendStudentExcuse() {
+  const msg = getVal('excuseText');
+  if(!msg) { showToast(t('excuseMsg')+'!','error'); return; }
+  await api('excuses/add', {studentId:STATE.userId, message:msg});
+  showToast('تم الإرسال');
+  setVal('excuseText', '');
+  loadStudentExcuses();
+}
+
+// ════════════════ INIT ════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
+});
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+window.addEventListener('resize', () => {
+  if(window.innerWidth <= 900) document.getElementById('hamburger').style.display = 'flex';
+  else document.getElementById('hamburger').style.display = 'none';
+});
+window.dispatchEvent(new Event('resize'));
+
+</script>
+</body>
+</html>
